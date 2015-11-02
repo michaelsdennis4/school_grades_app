@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<% include ./partials/head %>
+
+<% if ((sess.user_id) && (sess.username.length > 1)) { %>
+
+	<body class="dashboard" id="dashboard">
+
+		<div id="main-header">
+
+			<div id="title">
+				<h1>GradeBook</h1>
+			</div>
+
+			<div class="top-selector" id="year-selector">
+				<form action="/year" method="post">
+					<label for="current_year">Current Year</label><br>
+					<input id="current_year" type="number" name="current_year" min="2015" value="<%= current_year %>"/>
+					<input type="hidden" name="_method" value="patch"/>
+					<input class="hidden" id="submit" type="submit"/>
+				</form>
+			</div>
+
+			<div class="top-selector" id="term-selector">
+				<form action="/term" method="post">
+					<label for="current_term">Current Term</label><br>
+					<input id="current_term" type="number" name="current_term" min="1" max="3" value="<%= current_term %>"/>
+					<input type="hidden" name="_method" value="patch"/>
+					<input class="hidden" id="submit" type="submit" />
+				</form>
+			</div>
+
+			<div class="top-button-box">
+				<form action="/users/new">
+					<input type="submit" value="New User"/>
+				</form>
+			</div>
+
+			<div class="top-button-box">
+				<form action="/users/<%= sess.user_id %>/edit">
+					<input type="submit" value="Edit User"/>
+				</form>
+			</div>
+
+			<div id="logged">
+				<h3>You are logged in as: <%= sess.username %></h3>
+			</div>
+
+			<div class="top-button-box">
+				<form action="/logout">
+					<input type="submit" value="Logout"/>
+				</form>
+			</div>
+
+		</div>
+
+		<div id="left-column">
+
+			<div class="box-header">
+				<div class="caption-box">
+					Courses
+				</div>
+				<div class="button-box">
+					<form action="/courses/new">
+						<input type="submit" value="New Course"/>
+					</form>
+				</div>
+				<div class="button-box">
+					<form action="/courses/:id/edit">
+						<input type="submit" value="Edit Course"/>
+					</form>
+				</div>
+			</div>
+
+			<div class= "data-box" id="courses-box"></div>
+
+			<div class="box-header">
+				<div class="caption-box">
+					Assessments
+				</div>
+				<div class="button-box">
+					<form action="/assessments/new">
+						<input type="submit" value="New Assessment"/>
+					</form>
+				</div>
+				<div class="button-box">
+					<form action="/assessments/:id/edit">
+						<input type="submit" value="Edit Assessment"/>
+					</form>
+				</div>
+			</div>
+
+			<div class="data-box" id="assessments-box"></div>
+
+		</div>
+
+		<div id="right-column">
+
+			<div class="box-header">
+				<div class="caption-box">
+					Students
+				</div>
+				<div class="button-box">
+					<form action="/students/new">
+						<input type="submit" value="New Student"/>
+					</form>
+				</div>
+				<div class="button-box">
+					<form action="/students/:id/edit">
+						<input type="submit" value="Edit Student"/>
+					</form>
+				</div>
+			</div>
+
+			<div class="data-box" id="students-box"></div>
+
+			<div id="update-box">
+				<div class="update-label">
+					<label>Course:</label>
+				</div>
+				<div class="update-field">
+					<input class="current" id="current-course" type="text" value="" readonly/>
+					<input type="hidden" id="current-course-id" type="text" value="<%= current_course_id %>"/>
+				</div>
+				<div class="update-label">
+					<label>Assessment:</label>
+				</div>
+				<div class="update-field">
+					<input class="current" id="current-assessment" type="text" value="" readonly/><br>
+					<input type="hidden" id="current-assessment-id" type="text" value=""/>
+				</div>
+				<div class="update-label">
+					<label>Student:</label>
+				</div>
+				<div class="update-field">
+					<input class="current" id="current-student" type="text" value="" readonly/>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+
+<% } else { %>
+
+	<body>
+
+		<div class="toplink">
+			<br>
+		</div>
+
+		<div class="sorry box">
+
+			<h2>You must login to view this page<h2>
+			<h2><a href="/">Login</a></h2>
+
+		</div>
+
+	</body>
+
+<% } %>
+
+
+</html>
