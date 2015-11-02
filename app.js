@@ -54,9 +54,13 @@ console.log('connecting to MongoDB');
 MongoClient.connect(mongoUri, function(error, db) {
   if (error) throw error;
 
-	app.get('stylesheets/style.css', function(req, res) {
-		res.sendFile('stylesheets/style.css');
+	app.get('stylesheets/normalize.css', function(req, res) {
+		res.sendFile('stylesheets/normalize.css');
 	});
+
+  app.get('stylesheets/style.css', function(req, res) {
+    res.sendFile('stylesheets/style.css');
+  });
 
 	app.listen(app.get('port'), function() {
 	  console.log('Node app is running on port', app.get('port'));
