@@ -1,0 +1,19 @@
+{
+  "name": "school_grades_app",
+  "version": "1.0.0",
+  "description": "school grades app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelsdennis4/school_grades_app.git"
+  },
+  "author": "Michael Dennis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelsdennis4/school_grades_app/issues"
+  },
+  "homepage": "https://github.com/michaelsdennis4/school_grades_app#readme"
+}
