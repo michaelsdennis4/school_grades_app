@@ -24,6 +24,7 @@
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "method-override": "^2.3.5",
+    "mongodb": "^2.0.47",
     "morgan": "^1.6.1"
   }
 }

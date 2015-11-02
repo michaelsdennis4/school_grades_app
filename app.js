@@ -24,10 +24,10 @@ app.use(methodOverride(function(req, res){
 
 var bcrypt = require('bcryptjs');
 
-// var MongoDB     = require('mongodb');
-// var MongoClient = MongoDB.MongoClient;
-// var ObjectId    = MongoDB.ObjectID;
-// var mongoUri    = process.env.MONGOLAB_URI;
+var MongoDB     = require('mongodb');
+var MongoClient = MongoDB.MongoClient;
+var ObjectId    = MongoDB.ObjectID;
+var mongoUri    = process.env.MONGOLAB_URI;
 // var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
@@ -50,15 +50,30 @@ var current_term = 0;
 var current_course_id = "";
 var current_assessment_id = "";
 
-app.get('stylesheets/style.css', function(req, res) {
-	res.sendFile('stylesheets/style.css');
-});
+console.log('connecting to MongoDB');
+MongoClient.connect(mongoUri, function(error, db) {
+  if (error) throw error;
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+	app.get('stylesheets/style.css', function(req, res) {
+		res.sendFile('stylesheets/style.css');
+	});
 
-app.get('/', function(req, res){
-  res.render('index')
+	app.listen(app.get('port'), function() {
+	  console.log('Node app is running on port', app.get('port'));
+	});
+
+	app.get('/', function(req, res){
+	  res.render('index')
+	});
+
+
+
+	 // CLEAN UP ---------------------------------------------------
+
+  process.on('exit', function() {
+    db.close();
+  });
+
+
 });
 
