@@ -50,9 +50,9 @@ var current_term = 0;
 var current_course_id = "";
 var current_assessment_id = "";
 
-// app.get('stylesheets/style.css', function(req, res) {
-// 	res.sendFile('stylesheets/style.css');
-// });
+app.get('stylesheets/style.css', function(req, res) {
+	res.sendFile('stylesheets/style.css');
+});
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
