@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-// var mongoUri    = 'mongodb://localhost:27017/school_grades'
+// var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -70,11 +70,6 @@ MongoClient.connect(mongoUri, function(error, db) {
 	  res.render('index')
 	});
 
-	app.get('/dashboard', function(req, res){
-    sess = req.session;
-    res.render('dashboard', {sess: sess, current_year: current_year, current_term: current_term, current_course_id: current_course_id, current_assessment_id: current_assessment_id});
-  });
-
   app.post('/login', function(req, res) {
     db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
       if (users.length == 0) {
@@ -101,96 +96,125 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.get('/logout',function(req, res) {
+    req.session.user_id = null;
+    req.session.username = null;
+    req.session.email = null;
     req.session.destroy(function(err) {
       if (err) {
         console.log(err);
-      }
-      else
-      {
+      } else {
         res.redirect('/');
       };
     });
   });
 
+  app.get('/dashboard', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      res.render('dashboard', {sess: req.session, current_year: current_year, current_term: current_term, current_course_id: current_course_id, current_assessment_id: current_assessment_id});
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.get('/sorry', function(req, res) {
+    res.render('sorry');
+  });
+
   // USERS --------------------------------------------------
 
   app.get('/users/new', function(req, res) {
-    res.render('users/new.ejs');
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      res.render('users/new.ejs');
+    } else {
+      res.redirect('/sorry');
+    }; 
   });
 
   app.get('/users/:id/edit', function(req, res) {
-    db.collection('users').find({_id: ObjectId(req.params.id)}).toArray(function(error, users) {
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      db.collection('users').find({_id: ObjectId(req.params.id)}).toArray(function(error, users) {
       user = users[0];
       res.render('users/edit.ejs', {user: user});
     });
+    } else {
+      res.redirect('/sorry');
+    };  
   });
 
   app.post('/users', function(req, res){
-    db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
-      if (users.length > 0) {
-        res.redirect('/users/new');
-        console.log('the user already exists');
-      } 
-      else if (req.body.password != req.body.password_confirmation) { 
-        res.redirect('/users/new');
-        console.log('passwords do not match');
-      } 
-      else if (req.body.first_name.length === 0) {
-        res.redirect('/users/new');
-        console.log('first name cannot be blank');
-      }
-      else if (req.body.last_name.length === 0) {
-        res.redirect('/users/new');
-        console.log('last name cannot be blank');
-      }
-      else if (req.body.email.length === 0) {
-        res.redirect('/users/new');
-        console.log('email cannot be blank');
-      }
-      else {
-        var salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(req.body.password, salt);
-        db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash}, function(error, results) {
-          var user = results.ops[0];
-          res.json(user);
-        });
-      };
-    });
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
+        if (users.length > 0) {
+          res.redirect('/users/new');
+          console.log('the user already exists');
+        } 
+        else if (req.body.password != req.body.password_confirmation) { 
+          res.redirect('/users/new');
+          console.log('passwords do not match');
+        } 
+        else if (req.body.first_name.length === 0) {
+          res.redirect('/users/new');
+          console.log('first name cannot be blank');
+        }
+        else if (req.body.last_name.length === 0) {
+          res.redirect('/users/new');
+          console.log('last name cannot be blank');
+        }
+        else if (req.body.email.length === 0) {
+          res.redirect('/users/new');
+          console.log('email cannot be blank');
+        }
+        else {
+          var salt = bcrypt.genSaltSync(10);
+          var hash = bcrypt.hashSync(req.body.password, salt);
+          db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash}, function(error, results) {
+            var user = results.ops[0];
+            res.json(user);
+          });
+        };
+      });
+    };
   });
 
   app.patch('/users/:id', function(req, res) {
-    if (req.body.first_name.length === 0) {
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      if (req.body.first_name.length === 0) {
+          res.redirect('/users/'+req.params.id+'/edit');
+          console.log('first name cannot be blank');
+      }
+      else if (req.body.last_name.length === 0) {
         res.redirect('/users/'+req.params.id+'/edit');
-        console.log('first name cannot be blank');
-    }
-    else if (req.body.last_name.length === 0) {
-      res.redirect('/users/'+req.params.id+'/edit');
-      console.log('last name cannot be blank');
-    }
-    else if (req.body.email.length === 0) {
-      res.redirect('/users/'+req.params.id+'/edit');
-      console.log('email cannot be blank');
-    }
-    else {
-      db.collection('users').update({_id: ObjectId(req.params.id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}});
-      res.redirect('/dashboard');
+        console.log('last name cannot be blank');
+      }
+      else if (req.body.email.length === 0) {
+        res.redirect('/users/'+req.params.id+'/edit');
+        console.log('email cannot be blank');
+      }
+      else {
+        db.collection('users').update({_id: ObjectId(req.params.id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}});
+        res.redirect('/dashboard');
+      };
     };
   });
 
   app.patch('/year', function(req, res) {
-    db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}});
-    current_year = req.body.current_year;
-    current_course_id = "";
-    current_assessment_id = "";
-    res.redirect('/dashboard');
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}});
+      current_year = req.body.current_year;
+      current_course_id = "";
+      current_assessment_id = "";
+      res.redirect('/dashboard');
+    };
   });
 
   app.patch('/term', function(req, res) {
-    db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}});
-    current_term = req.body.current_term;
-    current_course_id = "";
-    current_assessment_id = "";
-    res.redirect('/dashboard');
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}});
+      current_term = req.body.current_term;
+      current_course_id = "";
+      current_assessment_id = "";
+      res.redirect('/dashboard');
+    };
   });
 
   //COURSES -----------------------------------------------
@@ -227,7 +251,11 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
   
   app.get('/courses/new', function(req, res) {
-    res.render('courses/new.ejs');
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      res.render('courses/new.ejs');
+    } else {
+      res.redirect('/sorry');
+    }; 
   });
 
   app.post('/courses', function(req, res) {
@@ -305,18 +333,22 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.get('/assessments/new', function(req, res) {
-    if ((current_course_id) && (current_course_id.length > 0)) {
-      db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
-        if ((results.length > 0) && (results[0].courses.length > 0)) {
-          var course = results[0].courses[0];
-          res.render('assessments/new.ejs', {course: course});
-        } else {
-          res.redirect('/dashboard');
-        };
-      });
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      if ((current_course_id) && (current_course_id.length > 0)) {
+        db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
+          if ((results.length > 0) && (results[0].courses.length > 0)) {
+            var course = results[0].courses[0];
+            res.render('assessments/new.ejs', {course: course});
+          } else {
+            res.redirect('/dashboard');
+          };
+        });
+      } else {
+        res.redirect('/dashboard');
+      };
     } else {
-      res.redirect('/dashboard');
-    };
+      res.redirect('/sorry');
+    }; 
   });
 
   app.post('/assessments', function(req, res) {
@@ -345,9 +377,11 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/current_assessment/:id', function(req, res) {
-    current_assessment_id = req.params.id;
-    console.log('current assessment on the server is '+current_assessment_id);
-    res.redirect('/dashboard');
+    if ((req.session.user_id) && (req.session.username.length > 1)) {
+      current_assessment_id = req.params.id;
+      console.log('current assessment on the server is '+current_assessment_id);
+      res.redirect('/dashboard');
+    };
   });
 
 

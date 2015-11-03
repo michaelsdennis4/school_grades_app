@@ -248,7 +248,7 @@ select {
 	height: 20px;
 	color: black;
 	background-color: rgba(0,0,0,0.05);
-	border: solid black 1px;
+	border: solid white 1px;
 }
 
 .highlighted {
