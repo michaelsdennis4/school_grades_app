@@ -131,7 +131,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.get('/users/:id/edit', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').find({_id: ObjectId(req.params.id)}).toArray(function(error, users) {
       user = users[0];
       res.render('users/edit.ejs', {user: user});
@@ -142,7 +142,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/users', function(req, res){
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
         if (users.length > 0) {
           res.redirect('/users/new');
@@ -177,7 +177,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.patch('/users/:id', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
           res.redirect('/users/'+req.params.id+'/edit');
           console.log('first name cannot be blank');
@@ -198,7 +198,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.patch('/year', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}});
       current_year = req.body.current_year;
       current_course_id = "";
@@ -208,7 +208,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.patch('/term', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}});
       current_term = req.body.current_term;
       current_course_id = "";
@@ -220,7 +220,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   //COURSES -----------------------------------------------
 
   app.get('/courses', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id.length > 0)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": current_year, "courses.term": current_term}).toArray(function(error, users) {
         if (users.length > 0) {
           var courses = users[0].courses;
@@ -246,12 +246,12 @@ MongoClient.connect(mongoUri, function(error, db) {
         }
       });
     } else {
-      res.json({});
+      res.redirect('/sorry');
     };
   });
   
   app.get('/courses/new', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       res.render('courses/new.ejs');
     } else {
       res.redirect('/sorry');
@@ -259,7 +259,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/courses', function(req, res) {
-    if ((!req.session) || (req.session.user_id.length <= 1)) {
+    if ((!req.session.user_id) || (req.session.user_id == null)) {
       console.log('user is not logged in');
     }
     else if (req.body.title.length === 0) {
@@ -298,7 +298,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 //ASSESSMENTS --------------------------------------------------
 
   app.get('/assessments', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id.length > 0) && (current_course_id.length > 0)) {
+    if ((req.session.user_id) && (req.session.user_id != null) && (current_course_id.length > 0)) {
       console.log('finding assessments for course '+current_course_id);
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
         console.log('courses found '+results.length);
@@ -333,7 +333,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.get('/assessments/new', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       if ((current_course_id) && (current_course_id.length > 0)) {
         db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
           if ((results.length > 0) && (results[0].courses.length > 0)) {
@@ -352,7 +352,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/assessments', function(req, res) {
-    if ((!req.session) || (req.session.user_id.length <= 1)) {
+    if ((!req.session) || (req.session.user_id == null)) {
         console.log('user is not logged in');
     }
     else if (current_course_id.length === 0) {
@@ -377,7 +377,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/current_assessment/:id', function(req, res) {
-    if ((req.session.user_id) && (req.session.username.length > 1)) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
       current_assessment_id = req.params.id;
       console.log('current assessment on the server is '+current_assessment_id);
       res.redirect('/dashboard');
