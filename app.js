@@ -123,11 +123,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   // USERS --------------------------------------------------
 
   app.get('/users/new', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('users/new.ejs');
-    } else {
-      res.redirect('/sorry');
-    }; 
+    res.render('users/new.ejs'); 
   });
 
   app.get('/users/:id/edit', function(req, res) {
@@ -142,38 +138,43 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/users', function(req, res){
-    if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
-        if (users.length > 0) {
-          res.redirect('/users/new');
-          console.log('the user already exists');
-        } 
-        else if (req.body.password != req.body.password_confirmation) { 
-          res.redirect('/users/new');
-          console.log('passwords do not match');
-        } 
-        else if (req.body.first_name.length === 0) {
-          res.redirect('/users/new');
-          console.log('first name cannot be blank');
-        }
-        else if (req.body.last_name.length === 0) {
-          res.redirect('/users/new');
-          console.log('last name cannot be blank');
-        }
-        else if (req.body.email.length === 0) {
-          res.redirect('/users/new');
-          console.log('email cannot be blank');
-        }
-        else {
-          var salt = bcrypt.genSaltSync(10);
-          var hash = bcrypt.hashSync(req.body.password, salt);
-          db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash}, function(error, results) {
-            var user = results.ops[0];
-            res.json(user);
-          });
-        };
-      });
-    };
+    db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
+      if (users.length > 0) {
+        res.redirect('/users/new');
+        console.log('the user already exists');
+      } 
+      else if (req.body.password != req.body.password_confirmation) { 
+        res.redirect('/users/new');
+        console.log('passwords do not match');
+      } 
+      else if (req.body.first_name.length === 0) {
+        res.redirect('/users/new');
+        console.log('first name cannot be blank');
+      }
+      else if (req.body.last_name.length === 0) {
+        res.redirect('/users/new');
+        console.log('last name cannot be blank');
+      }
+      else if (req.body.email.length === 0) {
+        res.redirect('/users/new');
+        console.log('email cannot be blank');
+      }
+      else {
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(req.body.password, salt);
+        db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: 2015, current_term: 1}, function(error, results) {
+          var user = results.ops[0];
+          sess = req.session;
+          sess.user_id = user._id;
+          sess.email = user.email;
+          sess.username = user.first_name +' '+user.last_name;
+          current_year = user.current_year;
+          current_term = user.current_term;
+          console.log('user logged in!');
+          res.redirect('/dashboard');
+        });
+      };
+    });
   });
 
   app.patch('/users/:id', function(req, res) {
