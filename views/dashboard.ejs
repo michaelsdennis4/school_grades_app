@@ -58,12 +58,12 @@
 			</div>
 			<div class="button-box">
 				<form action="/courses/new">
-					<input type="submit" value="New Course"/>
+					<input type="submit" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/courses/:id/edit">
-					<input type="submit" value="Edit Course"/>
+					<input type="submit" value="Edit"/>
 				</form>
 			</div>
 		</div>
@@ -76,12 +76,12 @@
 			</div>
 			<div class="button-box">
 				<form action="/assessments/new">
-					<input type="submit" value="New Assessment"/>
+					<input type="submit" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/assessments/:id/edit">
-					<input type="submit" value="Edit Assessment"/>
+					<input type="submit" value="Edit"/>
 				</form>
 			</div>
 		</div>
@@ -98,12 +98,12 @@
 			</div>
 			<div class="button-box">
 				<form action="/students/new">
-					<input type="submit" value="New Student"/>
+					<input type="submit" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/students/:id/edit">
-					<input type="submit" value="Edit Student"/>
+					<input type="submit" value="Edit"/>
 				</form>
 			</div>
 		</div>
@@ -129,7 +129,8 @@
 				<label>Student:</label>
 			</div>
 			<div class="update-field">
-				<input class="current" id="current-student" type="text" value="" readonly/>
+				<input class="current" id="current-student" type="text" value="" readonly/><br>
+				<input type="hidden" id="current-student-id" type="text" value=""/>
 			</div>
 		</div>
 

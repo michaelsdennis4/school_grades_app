@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+	<% include ../partials/head %>
+
+<body>
+
+	<div class="toplink">
+		<a href="/dashboard">Dashboard</a>
+	</div>
+
+	<div class="box">
+
+		<h2>New Student<h2>
+
+		<form action="/students" method="post">
+			<label for="first_name">First Name</label><br>
+			<input type="text" name="first_name" placeholder="First Name"/><br>
+			<br>
+			<label for="last_name">Last Name</label><br>
+			<input type="text" name="last_name" placeholder="Last Name"/><br>
+			<br>
+			<label for="email">E-mail</label><br>
+			<input type="text" name="email" placeholder="Email address"/><br>
+			<br>
+			<label for="identification">Identification</label><br>
+			<input type="text" name="identification" placeholder="Student ID"/><br>
+			<br>
+			<label for="grad_year">Graduation Year</label><br>
+			<input type="number" name="grad_year" min="2016" value="2016"/><br>
+			<br>
+			<br>
+			<input type="submit" value="Add Student"/>
+		</form>
+
+	</div>
+
+</body>
+</html>

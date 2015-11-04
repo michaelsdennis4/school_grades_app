@@ -47,8 +47,10 @@ var sess;
 
 var current_year = 0;
 var current_term = 0;
+
 var current_course_id = "";
 var current_assessment_id = "";
+var current_student_id = "";
 
 console.log('connecting to MongoDB');
 MongoClient.connect(mongoUri, function(error, db) {
@@ -110,7 +112,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/dashboard', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('dashboard', {sess: req.session, current_year: current_year, current_term: current_term, current_course_id: current_course_id, current_assessment_id: current_assessment_id});
+      res.render('dashboard', {sess: req.session, current_year: current_year, current_term: current_term, current_course_id: current_course_id, current_assessment_id: current_assessment_id, current_student_id: current_student_id});
     } else {
       res.redirect('/sorry');
     };
@@ -163,7 +165,6 @@ MongoClient.connect(mongoUri, function(error, db) {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
         db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: 2015, current_term: 1}, function(error, results) {
-          var user = results.ops[0];
           sess = req.session;
           sess.user_id = user._id;
           sess.email = user.email;
@@ -204,6 +205,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       current_year = req.body.current_year;
       current_course_id = "";
       current_assessment_id = "";
+      current_student_id = "";
       res.redirect('/dashboard');
     };
   });
@@ -214,6 +216,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       current_term = req.body.current_term;
       current_course_id = "";
       current_assessment_id = "";
+      current_student_id = "";
       res.redirect('/dashboard');
     };
   });
@@ -291,8 +294,9 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/current_course/:id', function(req, res) {
     current_course_id = req.params.id;
     console.log('current course on the server is '+current_course_id);
-    //clear current assessment when changing current course
+    //clear current assessment an student when changing current course
     current_assessment_id = "";
+    current_student_id = "";
     res.redirect('/dashboard');
   });
 
@@ -310,10 +314,10 @@ MongoClient.connect(mongoUri, function(error, db) {
             assessments.sort(function (a, b) {
               if (a.name > b.name) {
                 return 1;
-              }
+              };
               if (a.name < b.name) {
                 return -1;
-              }
+              };
               return 0;
             });
             assessments.map(function(assessment) {
@@ -381,6 +385,74 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       current_assessment_id = req.params.id;
       console.log('current assessment on the server is '+current_assessment_id);
+      res.redirect('/dashboard');
+    };
+  });
+
+
+  // STUDENTS -----------------------------------------------------
+
+  app.get('/students/new', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      res.render('students/new');
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.post('/students', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.body.first_name.length === 0) {
+        res.redirect('/users/new');
+        console.log('first name cannot be blank');
+      }
+      else if (req.body.last_name.length === 0) {
+        res.redirect('/users/new');
+        console.log('last name cannot be blank');
+      } 
+      else {
+        db.collection('students').insert({first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}, function(error, results) {
+            res.redirect('/dashboard');
+        });
+      };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.get('/students', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      db.collection('students').find({}).toArray(function(error, students) {
+        console.log('students found '+students.length);
+        if (students.length > 0) {
+          students.sort(function (a, b) {
+            if (a.last_name > b.last_name) {
+              return 1;
+            };
+            if (a.last_name < b.last_name) {
+              return -1;
+            };
+            return 0;
+          });
+          students.map(function(student) {
+            student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          });
+          console.log('returning json '+students);
+          res.json(students);
+        } else {
+          res.json({});
+        }
+      });
+    } else {
+      res.json({});
+    };
+  });
+
+  app.post('/current_student/:id', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      current_student_id = req.params.id;
+      console.log('current student on the server is '+current_student_id);
       res.redirect('/dashboard');
     };
   });

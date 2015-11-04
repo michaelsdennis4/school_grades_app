@@ -38,7 +38,7 @@ $('document').ready(function() {
     render: function() {
       if (this.state.courses.length > 0) {
     	  return (
-    	    <table className="data-table" id="courses" onClick={this.handleClick}>
+          <table className="data-table" id="courses" onClick={this.handleClick}>
     	      <thead>
     	    		<tr className="table-header">
                 <th className="hidden">Course ID</th>
@@ -174,6 +174,86 @@ $('document').ready(function() {
     }
   });
 
+  var StudentsTable = React.createClass({
+    loadStudentsFromServer: function() {
+      $.ajax({
+        url: this.props.url,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+          this.setState({students: data});
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    },
+    getInitialState: function() {
+      return {students: []};
+    },
+    componentDidMount: function() {
+      this.loadStudentsFromServer();
+      //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
+    },
+    render: function() {
+      if (this.state.students.length > 0) {
+        return (
+          <table className="data-table" id="students">
+            <thead>
+              <tr className="table-header">
+                <th className="hidden">Student ID</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Grad Year</th>
+                <th>Identification</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.students.map(function(student) {
+                return <StudentsTableRow key={student._id} student={student} />;
+              })}
+            </tbody>
+          </table>
+        );
+      } else {
+        return (
+          <table className="data-table" id="students">
+            <thead>
+              <tr className="table-header">
+                <th className="hidden">Student ID</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Grad Year</th>
+                <th>Identification</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        );
+      };
+    }
+  });
+
+  var StudentsTableRow = React.createClass({
+    render: function() {
+      var student_id = this.props.student._id;
+      var first_name = this.props.student.first_name;
+      var last_name = this.props.student.last_name;
+      var grad_year = this.props.student.grad_year.toLocaleString();
+      var identification = this.props.student.identification;
+      return (
+        <tr className="data-row">
+          <td className="hidden">{student_id}</td>
+          <td>{last_name}</td>
+          <td>{first_name}</td>
+          <td>{grad_year}</td>
+          <td>{identification}</td>  
+        </tr>
+      );
+    }
+  });
+
 
   var courses_table = ReactDOM.render(
     <CoursesTable url="/courses" pollInterval={1000} />,
@@ -183,6 +263,11 @@ $('document').ready(function() {
   var assessments_table = ReactDOM.render(
     <AssessmentsTable url="/assessments" pollInterval={1000} />,
     document.getElementById('assessments-box')
+  );
+
+  var students_table = ReactDOM.render(
+    <StudentsTable url="/students" pollInterval={1000} />,
+    document.getElementById('students-box')
   );
 
 
@@ -253,6 +338,21 @@ $('document').ready(function() {
           },
           error: function() {
             console.log('current assessment NOT updated');
+          }
+        });
+      } else if (table.getAttribute('id') === 'students') {
+        //update current student in the DOM
+        document.querySelector('#current-student-id').value = cells[0].textContent;
+        document.querySelector('#current-student').value = cells[1].textContent +', '+cells[2].textContent;
+        //update current assessment on the server
+        $.ajax({
+          url: '/current_student/'+cells[0].textContent,
+          method: 'post',
+          success: function() {
+            console.log('current student updated '+cells[0].textContent);
+          },
+          error: function() {
+            console.log('current student NOT updated');
           }
         });
       }
