@@ -17,8 +17,6 @@
   },
   "homepage": "https://github.com/michaelsdennis4/school_grades_app#readme",
   "dependencies": {
-    "babel-preset-react": "^6.0.15",
-    "babelify": "^7.2.0",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.14.1",
     "connect": "^3.4.0",
