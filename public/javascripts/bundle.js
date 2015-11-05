@@ -28640,6 +28640,7 @@ $('document').ready(function () {
             //clear current assessment fields
             $('#current-assessment').val("");
             $('#current-assessment-id').val("");
+            $('#points').val("");
           },
           error: function () {
             console.log('current course NOT updated');
@@ -28649,6 +28650,7 @@ $('document').ready(function () {
         //update current assessment in the DOM
         document.querySelector('#current-assessment-id').value = cells[0].textContent;
         document.querySelector('#current-assessment').value = cells[1].textContent + ' (' + cells[2].textContent + ')';
+        document.querySelector('#points').value = cells[3].textContent;
         //update current assessment on the server
         $.ajax({
           url: '/current_assessment/' + cells[0].textContent,
@@ -28707,6 +28709,7 @@ $('document').ready(function () {
     //clear current assessment fields
     $('#current-assessment').val("");
     $('#current-assessment-id').val("");
+    $('#points').val("");
     $.ajax({
       url: '/current_student/0',
       method: 'post',
