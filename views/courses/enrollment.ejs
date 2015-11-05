@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<% include ../partials/head %>
+
+<body>
+
+	<div class="toplink">
+		<a href="/dashboard">Back to Dashboard</a>
+	</div>
+
+	<div class="box">
+
+		<h2>Student Enrollment<h2>
+
+		<% course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); %>
+		<h5>Course Title: <%= course.title %></h5>
+		<h5>Section: <%= course.section %></h5>
+
+		<!-- <form action="/courses" method="post">
+			<label for="title">Course Title</label><br>
+			<input type="text" name="title" placeholder="Course Title"/><br>
+			<br>
+			<label for="section">Section</label><br>
+			<input type="number" name="section" min="1" value="1"/><br>
+			<br>
+			<label for="year">Year</label><br>
+			<input type="number" name="year" min="2015" value="2015"/><br>
+			<br>
+			<label for="term">Term</label><br>
+			<input type="number" name="term" min="1" value="1"/><br>
+			<br>
+			<label for="auto">Auto Weighting On?</label><br>
+			<select name="auto">
+			  <option value="true" selected>Yes</option> 
+			  <option value="false">No</option>
+			</select>
+			<br><br>
+			<input type="submit" value="Create Course"/>
+		</form> -->
+
+	</div>
+
+</body>
+</html>

@@ -320,7 +320,10 @@ $('document').ready(function() {
             //clear current assessment fields
             $('#current-assessment').val("");
             $('#current-assessment-id').val("");  
-            $('#points').val("");  
+            $('#points').val(""); 
+            $('#current-student').val("");
+            $('#current-student-id').val("");  
+            students_table.loadStudentsFromServer(); 
           },
           error: function() {
             console.log('current course NOT updated');
@@ -404,6 +407,13 @@ $('document').ready(function() {
     $('#current-student').val("");
     $('#current-student-id').val(""); 
     $(submit).trigger('click');
+  });
+
+  $('#enroll').on('click', function(event) {
+    if ($('#current-course-id').val().length == 0) {
+      window.alert('You must select a course first.');
+      event.preventDefault();
+    };
   });
 
   //INITIALIZATION -----------------------------------------------

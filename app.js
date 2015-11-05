@@ -306,6 +306,21 @@ MongoClient.connect(mongoUri, function(error, db) {
     };
   });
 
+  app.get('/enrollment', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null) && (current_course_id.length > 0)) {
+      db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
+        if ((results.length > 0) && (results[0].courses.length > 0)) {
+          var course = results[0].courses[0];
+          res.render('courses/enrollment.ejs', {course: course});
+        } else {
+          res.redirect('/dashboard');
+        };
+      });
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
 //ASSESSMENTS --------------------------------------------------
 
   app.get('/assessments', function(req, res) {
@@ -432,30 +447,57 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/students', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('students').find({}).toArray(function(error, students) {
-        console.log('students found '+students.length);
-        if (students.length > 0) {
-          students.sort(function (a, b) {
-            if (a.last_name > b.last_name) {
-              return 1;
-            };
-            if (a.last_name < b.last_name) {
-              return -1;
-            };
-            return 0;
-          });
-          students.map(function(student) {
-            student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-          });
-          console.log('returning json '+students);
-          current_course_id = "";
-          current_assessment_id = "";
-          res.json(students);
-        } else {
-          res.json({});
-        }
-      });
+      //if course is selected then need to filter students by course enrolled
+      if (current_course_id.length > 0) {
+        db.collection("students").find({course_ids: {$elemMatch: {id: ObjectId(current_course_id)}}}).toArray(function(error, students) {
+          if (students.length > 0) {
+            students.sort(function (a, b) {
+              if (a.last_name > b.last_name) {
+                return 1;
+              };
+              if (a.last_name < b.last_name) {
+                return -1;
+              };
+              return 0;
+            });
+            students.map(function(student) {
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            });
+            console.log('returning json '+students);
+            current_course_id = "";
+            current_assessment_id = "";
+            res.json(students);
+          } else {
+            res.json({});
+          }
+        });
+      } else {  //all students
+        db.collection('students').find({}).toArray(function(error, students) {
+          console.log('students found '+students.length);
+          if (students.length > 0) {
+            students.sort(function (a, b) {
+              if (a.last_name > b.last_name) {
+                return 1;
+              };
+              if (a.last_name < b.last_name) {
+                return -1;
+              };
+              return 0;
+            });
+            students.map(function(student) {
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            });
+            console.log('returning json '+students);
+            current_course_id = "";
+            current_assessment_id = "";
+            res.json(students);
+          } else {
+            res.json({});
+          }
+        });
+      }
     } else {
       res.json({});
     };
