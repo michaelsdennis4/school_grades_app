@@ -292,12 +292,18 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/current_course/:id', function(req, res) {
-    current_course_id = req.params.id;
-    console.log('current course on the server is '+current_course_id);
-    //clear current assessment an student when changing current course
-    current_assessment_id = "";
-    current_student_id = "";
-    res.redirect('/dashboard');
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.params.id === '0') {
+        current_course_id = "";
+      } else {
+        current_course_id = req.params.id;
+      };
+      console.log('current course on the server is '+current_course_id);
+      //clear current assessment an student when changing current course
+      current_assessment_id = "";
+      current_student_id = "";
+      res.redirect('/dashboard');
+    };
   });
 
 //ASSESSMENTS --------------------------------------------------
@@ -383,7 +389,11 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.post('/current_assessment/:id', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      current_assessment_id = req.params.id;
+      if (req.params.id === '0') {
+        current_assessment_id = "";
+      } else {
+        current_assessment_id = req.params.id;
+      }; 
       console.log('current assessment on the server is '+current_assessment_id);
       res.redirect('/dashboard');
     };
@@ -439,6 +449,8 @@ MongoClient.connect(mongoUri, function(error, db) {
             student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
           });
           console.log('returning json '+students);
+          current_course_id = "";
+          current_assessment_id = "";
           res.json(students);
         } else {
           res.json({});
@@ -451,7 +463,11 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.post('/current_student/:id', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      current_student_id = req.params.id;
+      if (req.params.id === '0') {
+        current_student_id = "";
+      } else {
+        current_student_id = req.params.id;
+      }; 
       console.log('current student on the server is '+current_student_id);
       res.redirect('/dashboard');
     };

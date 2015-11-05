@@ -66,6 +66,9 @@
 					<input type="submit" value="Edit"/>
 				</form>
 			</div>
+			<div class="button-box"></div>
+			<div class="button-box"></div>
+			<div class="button-box"></div>
 		</div>
 
 		<div class= "data-box" id="courses-box"></div>
@@ -84,6 +87,9 @@
 					<input type="submit" value="Edit"/>
 				</form>
 			</div>
+			<div class="button-box"></div>
+			<div class="button-box"></div>
+			<div class="button-box"></div>
 		</div>
 
 		<div class="data-box" id="assessments-box"></div>
@@ -104,6 +110,21 @@
 			<div class="button-box">
 				<form action="/students/:id/edit">
 					<input type="submit" value="Edit"/>
+				</form>
+			</div>
+			<div class="button-box">
+				<form action="/dashboard">
+					<input id="show_all" type="submit" value="Show All"/>
+				</form>
+			</div>
+			<div class="button-box">
+				<form action="">
+					<input type="submit" value="Enrol"/>
+				</form>
+			</div>
+			<div class="button-box">
+				<form action="">
+					<input type="submit" value="UnEnroll"/>
 				</form>
 			</div>
 		</div>
@@ -134,6 +155,20 @@
 			</div>
 		</div>
 
+		<div id="grade-box">
+			<div class="grade-label">
+				<label>Grade:</label>
+			</div>
+			<div class="grade-field">
+				<input class="grade" id="grade" type="text" value="" readonly/>
+			</div>
+			<div class="grade-label">
+				<label>Points:</label>
+			</div>
+			<div class="grade-field">
+				<input class="grade" id="points" type="text" value="" readonly/>
+			</div>
+		</div>
 	</div>
 
 </body>
