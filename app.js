@@ -311,7 +311,26 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
         if ((results.length > 0) && (results[0].courses.length > 0)) {
           var course = results[0].courses[0];
-          res.render('courses/enrollment.ejs', {course: course});
+          db.collection("students").find({}).toArray(function(error, students) {
+            if (students.length > 0) {
+              students.sort(function (a, b) {
+                if (a.last_name > b.last_name) {
+                  return 1;
+                };
+                if (a.last_name < b.last_name) {
+                  return -1;
+                };
+                return 0;
+              });
+              students.map(function(student) {
+                student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              });
+            } else {
+              students = []
+            };
+            res.render('courses/enrollment.ejs', {course: course, students: students});
+          });   
         } else {
           res.redirect('/dashboard');
         };
