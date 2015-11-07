@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body>
+<body id="enrollment">
 
 	<div class="toplink">
 		<a href="/dashboard">Back to Dashboard</a>
@@ -17,9 +17,9 @@
 		<h5>Course Title: <%= course.title %></h5>
 		<h5>Section: <%= course.section %></h5>
 
-		<form action="" method="post">
+		<div class="enrollment">
 			<% students.forEach(function(student) { %>
-				<input type="checkbox" id="<%= student._id %>" value="<%= student._id %>"	
+				<input type="checkbox" class="enroll" id="<%= student._id %>" value="<%= student._id %>"	
 				<% var enrolled = false %>
 				<% if (student.course_ids) {
 						student.course_ids.forEach(function(course) {
@@ -33,11 +33,10 @@
 				 	checked
 				<% }; %>
 				/> <%= student.last_name %>, <%= student.first_name %>
-				<%= student.grad_year %><br>
+				(<%= student.grad_year %>)<br>
 			<% }); %>
 			<br><br>
-			<input type="submit" value="Enroll"/>
-		</form>
+		</div>
 
 	</div>
 

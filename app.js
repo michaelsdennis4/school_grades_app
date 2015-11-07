@@ -316,10 +316,10 @@ MongoClient.connect(mongoUri, function(error, db) {
               students.sort(function (a, b) {
                 if (a.last_name > b.last_name) {
                   return 1;
-                };
+                }
                 if (a.last_name < b.last_name) {
                   return -1;
-                };
+                }
                 return 0;
               });
               students.map(function(student) {
@@ -473,10 +473,10 @@ MongoClient.connect(mongoUri, function(error, db) {
             students.sort(function (a, b) {
               if (a.last_name > b.last_name) {
                 return 1;
-              };
+              }
               if (a.last_name < b.last_name) {
                 return -1;
-              };
+              }
               return 0;
             });
             students.map(function(student) {
