@@ -535,9 +535,13 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.patch('/students/:id/enroll', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (current_course_id.length > 0)) {
       //add course to student
-      var student = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(current_course_id)}}});
-      res.json(student);
-    };
+      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(current_course_id)}}}); 
+      //add student to course
+      db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {$push: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}});
+      res.json(result); //write result object (not used)
+    } else {
+      res.json({});
+    }
   });
 
 

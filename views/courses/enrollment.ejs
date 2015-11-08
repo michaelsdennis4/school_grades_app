@@ -23,11 +23,8 @@
 				<% var enrolled = false %>
 				<% if ((student.course_ids) && (student.course_ids.length > 0)) {
 						student.course_ids.forEach(function(course_id) {
-							console.log('the course id is '+course_id.id);
-							console.log('the current course id is '+course._id);
-							if (course_id.id == course._id) {
+							if (course_id.id.toString() == course._id.toString()) {
 								enrolled = true;
-								console.log('enrolled '+enrolled);
 							};
 						});
 					};
