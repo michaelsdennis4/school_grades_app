@@ -45,6 +45,7 @@ $('document').ready(function() {
       	    			<th>Course Title</th>
       	    			<th>Section</th>
       	    			<th>Auto Weight</th>
+                  <th>Students</th>
       	    		</tr>
               </thead>
               <tbody>
@@ -63,6 +64,7 @@ $('document').ready(function() {
                   <th>Course Title</th>
                   <th>Section</th>
                   <th>Auto Weight</th>
+                  <th>Students</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,12 +85,17 @@ $('document').ready(function() {
       	} else {
       		var auto = 'Off'
       	};
+        var num_students = 0;
+        if (this.props.course.student_ids) {
+          num_students = this.props.course.student_ids.length;
+        };
         return (
           <tr className="data-row">
             <td className="hidden">{course_id}</td>
             <td>{title}</td>
             <td>{section}</td>
-            <td>{auto}</td>  
+            <td>{auto}</td> 
+            <td>{num_students}</td> 
           </tr>
         );
       }

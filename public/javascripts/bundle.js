@@ -28200,6 +28200,11 @@ $('document').ready(function () {
                   'th',
                   null,
                   'Auto Weight'
+                ),
+                React.createElement(
+                  'th',
+                  null,
+                  'Students'
                 )
               )
             ),
@@ -28240,6 +28245,11 @@ $('document').ready(function () {
                   'th',
                   null,
                   'Auto Weight'
+                ),
+                React.createElement(
+                  'th',
+                  null,
+                  'Students'
                 )
               )
             ),
@@ -28258,6 +28268,10 @@ $('document').ready(function () {
           var auto = 'On';
         } else {
           var auto = 'Off';
+        };
+        var num_students = 0;
+        if (this.props.course.student_ids) {
+          num_students = this.props.course.student_ids.length;
         };
         return React.createElement(
           'tr',
@@ -28281,6 +28295,11 @@ $('document').ready(function () {
             'td',
             null,
             auto
+          ),
+          React.createElement(
+            'td',
+            null,
+            num_students
           )
         );
       }
@@ -28759,12 +28778,21 @@ $('document').ready(function () {
     $('.student_enroll').on('click', function (event) {
       var student_id = event.target.getAttribute('id');
       var enrolled = event.target.checked;
-      console.log('clicked');
-      console.log(student_id);
-      console.log(enrolled);
       if (enrolled === true) {
         $.ajax({
           url: '/students/' + student_id + '/enroll',
+          method: 'patch',
+          dataType: 'json',
+          success: function () {
+            console.log('enrollment updated');
+          },
+          error: function () {
+            console.log('enrollment NOT updated');
+          }
+        });
+      } else {
+        $.ajax({
+          url: '/students/' + student_id + '/unenroll',
           method: 'patch',
           dataType: 'json',
           success: function () {

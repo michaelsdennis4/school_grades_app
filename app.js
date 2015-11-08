@@ -544,6 +544,19 @@ MongoClient.connect(mongoUri, function(error, db) {
     }
   });
 
+  app.patch('/students/:id/unenroll', function(req, res) {
+    //this route needs to be protected once students have grades entered
+    if ((req.session.user_id) && (req.session.user_id != null) && (current_course_id.length > 0)) {
+      //remove course from student
+      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$pull: {course_ids: {id: ObjectId(current_course_id)}}}); 
+      //remove student from course
+      db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id)}, {$pull: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}});
+      res.json(result); //write result object (not used)
+    } else {
+      res.json({});
+    }
+  });
+
 
 
 	 // CLEAN UP ---------------------------------------------------
