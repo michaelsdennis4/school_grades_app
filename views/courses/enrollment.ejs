@@ -19,12 +19,15 @@
 
 		<div class="enrollment">
 			<% students.forEach(function(student) { %>
-				<input type="checkbox" class="enroll" id="<%= student._id %>" value="<%= student._id %>"	
+				<input type="checkbox" class="student_enroll" id="<%= student._id %>" value="enrolled"	
 				<% var enrolled = false %>
-				<% if (student.course_ids) {
-						student.course_ids.forEach(function(course) {
-							if (course.id === course._id) {
+				<% if ((student.course_ids) && (student.course_ids.length > 0)) {
+						student.course_ids.forEach(function(course_id) {
+							console.log('the course id is '+course_id.id);
+							console.log('the current course id is '+course._id);
+							if (course_id.id == course._id) {
 								enrolled = true;
+								console.log('enrolled '+enrolled);
 							};
 						});
 					};

@@ -28756,10 +28756,25 @@ $('document').ready(function () {
     };
   } else if (document.body.id === 'enrollment') {
 
-    $('.enroll').on('click', function (event) {
-      event.preventDefault();
+    $('.student_enroll').on('click', function (event) {
       var student_id = event.target.getAttribute('id');
-      window.alert('clicked!');
+      var enrolled = event.target.checked;
+      console.log('clicked');
+      console.log(student_id);
+      console.log(enrolled);
+      if (enrolled === true) {
+        $.ajax({
+          url: '/students/' + student_id + '/enroll',
+          method: 'patch',
+          dataType: 'json',
+          success: function () {
+            console.log('enrollment updated');
+          },
+          error: function () {
+            console.log('enrollment NOT updated');
+          }
+        });
+      };
     });
   };
 });

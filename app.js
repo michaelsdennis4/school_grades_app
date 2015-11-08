@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-// var mongoUri    = 'mongodb://localhost:27017/school_grades'
+// var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -340,6 +340,7 @@ MongoClient.connect(mongoUri, function(error, db) {
     };
   });
 
+
 //ASSESSMENTS --------------------------------------------------
 
   app.get('/assessments', function(req, res) {
@@ -483,9 +484,6 @@ MongoClient.connect(mongoUri, function(error, db) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
-            console.log('returning json '+students);
-            current_course_id = "";
-            current_assessment_id = "";
             res.json(students);
           } else {
             res.json({});
@@ -531,6 +529,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       }; 
       console.log('current student on the server is '+current_student_id);
       res.redirect('/dashboard');
+    };
+  });
+
+  app.patch('/students/:id/enroll', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null) && (current_course_id.length > 0)) {
+      //add course to student
+      var student = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(current_course_id)}}});
+      res.json(student);
     };
   });
 
