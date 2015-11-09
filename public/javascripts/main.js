@@ -423,6 +423,26 @@ $('document').ready(function() {
       };
     });
 
+    $('#score').on('keypress', function(event) {
+      event.preventDefault();
+      if ((event.keyCode === 13) && (current_course_id.length > 0) && (current_assessment_id.length > 0) && (current_student_id.length > 0)) {
+        var score = parseFloat(event.target.value);
+        var points = parseInt($('#points').val());
+        $.ajax({
+          url: '/grade',
+          type: 'post',
+          data: {},
+          dataType: 'json',
+          success: function() {
+            console.log('grade entered');
+          },
+          error: function() {
+            console.log('grade NOT entered');
+          }
+        })
+      };
+    });
+
    
     //INITIALIZATION -----------------------------------------------
 

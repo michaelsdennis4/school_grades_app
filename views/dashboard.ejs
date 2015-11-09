@@ -14,7 +14,7 @@
 		<div class="top-selector" id="year-selector">
 			<form action="/year" method="post">
 				<label for="current_year">Current Year</label><br>
-				<input id="current_year" type="number" name="current_year" min="2015" value="<%= current_year %>"/>
+				<input id="current_year" type="number" name="current_year" min="2015" value="<%= sess.current_year %>"/>
 				<input type="hidden" name="_method" value="patch"/>
 				<input class="hidden" id="submit" type="submit"/>
 			</form>
@@ -23,7 +23,7 @@
 		<div class="top-selector" id="term-selector">
 			<form action="/term" method="post">
 				<label for="current_term">Current Term</label><br>
-				<input id="current_term" type="number" name="current_term" min="1" max="3" value="<%= current_term %>"/>
+				<input id="current_term" type="number" name="current_term" min="1" max="3" value="<%= sess.current_term %>"/>
 				<input type="hidden" name="_method" value="patch"/>
 				<input class="hidden" id="submit" type="submit" />
 			</form>
@@ -141,7 +141,7 @@
 			</div>
 			<div class="update-field">
 				<input class="current" id="current-course" type="text" value="" readonly/>
-				<input type="hidden" id="current-course-id" type="text" value="<%= current_course_id %>"/>
+				<input type="hidden" id="current-course-id" type="text" value="<%= sess.current_course_id %>"/>
 			</div>
 			<div class="update-label">
 				<label>Assessment:</label>
@@ -164,7 +164,7 @@
 				<label>Grade:</label>
 			</div>
 			<div class="grade-field">
-				<input class="grade" id="grade" type="text" value=""/>
+				<input class="grade" id="score" type="text" value=""/>
 			</div>
 			<div class="grade-label">
 				<label>Points:</label>
