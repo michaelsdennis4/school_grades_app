@@ -512,7 +512,6 @@ MongoClient.connect(mongoUri, function(error, db) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
-            console.log('returning json '+students);
             req.session.current_course_id = "";
             req.session.current_assessment_id = "";
             res.json(students);
@@ -566,15 +565,15 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0) && (req.session.current_student_id.length > 0)) {
       var score = req.body.score;
       var points = req.body.points;
+      var weight = req.body.weight;
       var frac_score = (score / points);
       console.log('the score is '+score);
       console.log('the points is '+points);
       res.json({});
 
       // //add score to student
-      // db.collection('students').update({_id: ObjectId(current_student_id)}, 
-      //   {$push: {assessments: {assessment_id: ObjectId(current_assessment_id),
-      //     score: score}}});
+      db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, 
+        {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}});
 
       // //add student score to course/assessment
       // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id), "courses.assessments._id": ObjectId(current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(current_student_id), score: }}});

@@ -28509,7 +28509,7 @@ $('document').ready(function () {
                 React.createElement(
                   'th',
                   null,
-                  'Identification'
+                  'Score'
                 )
               )
             ),
@@ -28554,7 +28554,7 @@ $('document').ready(function () {
                 React.createElement(
                   'th',
                   null,
-                  'Identification'
+                  'Score'
                 )
               )
             ),
@@ -28570,7 +28570,16 @@ $('document').ready(function () {
         var first_name = this.props.student.first_name;
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
-        var identification = this.props.student.identification;
+        var assessment_id = $('#current-assessment-id').val();
+        var score = "";
+        if (this.props.student.scores && this.props.student.scores.length > 0) {
+          for (var i = 0; i < this.props.student.scores.length; i++) {
+            if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
+              score = this.props.student.scores[i].score;
+              break;
+            };
+          };
+        };
         return React.createElement(
           'tr',
           { className: 'data-row' },
@@ -28597,69 +28606,17 @@ $('document').ready(function () {
           React.createElement(
             'td',
             null,
-            identification
+            score
           )
         );
       }
     });
-
-    // var UpdateBox = React.createClass({
-    //   loadCurrentSelectionsFromServer: function() {
-    //     $.ajax({
-    //       url: this.props.url,
-    //       dataType: 'json',
-    //       cache: false,
-    //       success: function(data) {
-    //         this.setState({selections: data});
-    //       }.bind(this),
-    //       error: function(xhr, status, err) {
-    //         console.error(this.props.url, status, err.toString());
-    //       }.bind(this)
-    //     });
-    //   },
-    //   getInitialState: function() {
-    //     return {selections: []};
-    //   },
-    //   componentDidMount: function() {
-    //     this.loadCurrentSelectionsFromServer();
-    //   },
-    //   render: function() {
-    //     var current_course = this.props.course;
-    //     var current_assessment = this.props.assessment;
-    //     var current_student = this.props.student;
-    //     return (
-    //       <div className="update-label">
-    //         <label>Course:</label>
-    //       </div>
-    //       <div className="update-field">
-    //         <input className="current" id="current-course" type="text" value="{current_course}" readonly />
-    //       </div>
-    //       <div className="update-label">
-    //         <label>Assessment:</label>
-    //       </div>
-    //       <div className="update-field">
-    //         <input className="current" id="current-assessment" type="text" value="{current_assessment}" readonly/><br>
-    //       </div>
-    //       <div className="update-label">
-    //         <label>Student:</label>
-    //       </div>
-    //       <div className="update-field">
-    //         <input className="current" id="current-student" type="text" value="{current_student}" readonly/><br>
-    //       </div>
-    //     );
-    //   }
-    // });
 
     var courses_table = ReactDOM.render(React.createElement(CoursesTable, { url: '/courses', pollInterval: 1000 }), document.getElementById('courses-box'));
 
     var assessments_table = ReactDOM.render(React.createElement(AssessmentsTable, { url: '/assessments', pollInterval: 1000 }), document.getElementById('assessments-box'));
 
     var students_table = ReactDOM.render(React.createElement(StudentsTable, { url: '/students', pollInterval: 1000 }), document.getElementById('students-box'));
-
-    // var update_box = ReactDOM.render(
-    //   <UpdateBox url="/currentselections" pollInterval={1000} />,
-    //   document.getElementById('update-box')
-    // );
 
     //EVENT LISTENERS ---------------------------------------------
 
@@ -28697,18 +28654,19 @@ $('document').ready(function () {
         $(row).toggleClass('selected', true);
         var cells = row.querySelectorAll('td');
         if (table.getAttribute('id') === 'courses') {
-          //update current course in the DOM
-          document.querySelector('#current-course-id').value = cells[0].textContent;
-          document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
           //update current course on the server
           $.ajax({
             url: '/current_course/' + cells[0].textContent,
             method: 'post',
             success: function () {
               console.log('current course updated ' + cells[0].textContent);
+              //update current course in the DOM
+              document.querySelector('#current-course-id').value = cells[0].textContent;
+              document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
               //clear current assessment fields
               $('#current-assessment').val("");
               $('#current-assessment-id').val("");
+              $('#score').val("");
               $('#points').val("");
               $('#current-student').val("");
               $('#current-student-id').val("");
@@ -28719,31 +28677,35 @@ $('document').ready(function () {
             }
           });
         } else if (table.getAttribute('id') === 'assessments') {
-          //update current assessment in the DOM
-          document.querySelector('#current-assessment-id').value = cells[0].textContent;
-          document.querySelector('#current-assessment').value = cells[1].textContent + ' (' + cells[2].textContent + ')';
-          document.querySelector('#points').value = cells[3].textContent;
           //update current assessment on the server
           $.ajax({
             url: '/current_assessment/' + cells[0].textContent,
             method: 'post',
             success: function () {
               console.log('current assessment updated ' + cells[0].textContent);
+              //update current assessment in the DOM
+              $('#current-assessment-id').val(cells[0].textContent);
+              $('#current-assessment').val(cells[1].textContent + ' (' + cells[2].textContent + ')');
+              $('#points').val(cells[3].textContent);
+              $('#weight').val(cells[4].textContent);
+              $('#score').val("");
+              students_table.loadStudentsFromServer();
             },
             error: function () {
               console.log('current assessment NOT updated');
             }
           });
         } else if (table.getAttribute('id') === 'students') {
-          //update current student in the DOM
-          document.querySelector('#current-student-id').value = cells[0].textContent;
-          document.querySelector('#current-student').value = cells[1].textContent + ', ' + cells[2].textContent;
           //update current student on the server
           $.ajax({
             url: '/current_student/' + cells[0].textContent,
             method: 'post',
             success: function () {
               console.log('current student updated ' + cells[0].textContent);
+              //update current student in the DOM
+              $('#current-student-id').val(cells[0].textContent);
+              $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
+              $('#score').val(cells[4].textContent);
             },
             error: function () {
               console.log('current student NOT updated');
@@ -28809,10 +28771,12 @@ $('document').ready(function () {
       if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
         var score = parseFloat(event.target.value);
         var points = parseInt($('#points').val());
+        var weight = parseInt($('#weight').val());
         console.log('score ' + score);
         console.log('points ' + points);
-        if (score != NaN) {
-          var data = { score: score, points: points };
+        console.log('weight ' + weight);
+        if (score != NaN && score <= points) {
+          var data = { score: score, points: points, weight: weight };
           $.ajax({
             url: '/grade',
             type: 'post',
@@ -28821,6 +28785,7 @@ $('document').ready(function () {
             dataType: 'json',
             success: function () {
               console.log('grade entered');
+              students_table.loadStudentsFromServer();
             },
             error: function () {
               console.log('grade NOT entered');
