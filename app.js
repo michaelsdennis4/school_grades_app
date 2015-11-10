@@ -103,7 +103,11 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.get('/logout',function(req, res) {
     req.session.user_id = null;
     req.session.username = null;
-    req.session.email = null;
+    req.session.current_year = null;
+    req.session.current_term = null;
+    req.session.current_course_id = null;
+    req.session.current_assessment_id = null;
+    req.session.current_student_id = null;
     req.session.destroy(function(err) {
       if (err) {
         console.log(err);
@@ -529,7 +533,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_student_id = req.params.id;
       }; 
-      console.log('current student on the server is '+current_student_id);
       res.redirect('/dashboard');
     };
   });
@@ -561,8 +564,8 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.post('/grade', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0) && (req.session.current_student_id.length > 0)) {
-      var score = req.params.score;
-      var points = req.params.points;
+      var score = req.body.score;
+      var points = req.body.points;
       var frac_score = (score / points);
       console.log('the score is '+score);
       console.log('the points is '+points);
