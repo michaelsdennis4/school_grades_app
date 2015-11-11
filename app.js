@@ -27,7 +27,7 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-// var mongoUri    = process.env.MONGOLAB_URI;
+//var mongoUri    = process.env.MONGOLAB_URI;
 var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
@@ -478,10 +478,10 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection("students").find({course_ids: {$elemMatch: {id: ObjectId(req.session.current_course_id)}}}).toArray(function(error, students) {
           if (students.length > 0) {
             students.sort(function (a, b) {
-              if (a.last_name > b.last_name) {
+              if (a.last_name+a.first_name > b.last_name+b.first_name) {
                 return 1;
               }
-              if (a.last_name < b.last_name) {
+              if (a.last_name+a.first_name < b.last_name+b.first_name) {
                 return -1;
               }
               return 0;
@@ -566,21 +566,25 @@ MongoClient.connect(mongoUri, function(error, db) {
       var score = req.body.score;
       var points = req.body.points;
       var weight = req.body.weight;
-      var frac_score = (score / points);
-      console.log('the score is '+score);
-      console.log('the points is '+points);
+      //var frac_score = (score / points);
+      //first check if there is already a score
+      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
+          if (results.length === 0) {
+            //add score to student
+            db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, 
+                {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}});
+            //add student score to course/assessment
+            // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id), "courses.assessments._id": ObjectId(current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(current_student_id), score: }}});
+
+          } else {
+            //edit score
+
+          };
+      });
+     
+      
       res.json({});
-
-      // //add score to student
-      db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, 
-        {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}});
-
-      // //add student score to course/assessment
-      // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id), "courses.assessments._id": ObjectId(current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(current_student_id), score: }}});
-
     };
-
-
   });
 
 

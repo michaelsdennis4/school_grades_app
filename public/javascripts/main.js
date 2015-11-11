@@ -43,9 +43,10 @@ $('document').ready(function() {
       	    		<tr className="table-header">
                   <th className="hidden">Course ID</th>
       	    			<th>Course Title</th>
-      	    			<th>Section</th>
-      	    			<th>Auto Weight</th>
-                  <th>Students</th>
+      	    			<th className="right">Section</th>
+      	    			<th className="right">Auto Weight</th>
+                  <th className="right"># Students</th>
+                  <th className="right"># Assessments</th>
       	    		</tr>
               </thead>
               <tbody>
@@ -62,9 +63,10 @@ $('document').ready(function() {
                 <tr className="table-header">
                   <th className="hidden">Course ID</th>
                   <th>Course Title</th>
-                  <th>Section</th>
-                  <th>Auto Weight</th>
-                  <th>Students</th>
+                  <th className="right">Section</th>
+                  <th className="right">Auto Weight</th>
+                  <th className="right">Students</th>
+                  <th className="right"># Assessments</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,13 +91,18 @@ $('document').ready(function() {
         if (this.props.course.student_ids) {
           num_students = this.props.course.student_ids.length;
         };
+        var num_assessments = 0;
+        if (this.props.course.assessments) {
+          num_assessments = this.props.course.assessments.length;
+        };
         return (
-          <tr className="data-row">
+          <tr className="data-row" id="course">
             <td className="hidden">{course_id}</td>
             <td>{title}</td>
-            <td>{section}</td>
-            <td>{auto}</td> 
-            <td>{num_students}</td> 
+            <td className="right">{section}</td>
+            <td className="right">{auto}</td> 
+            <td className="right">{num_students}</td> 
+            <td className="right">{num_assessments}</td> 
           </tr>
         );
       }
@@ -123,42 +130,24 @@ $('document').ready(function() {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       render: function() {
-        if (this.state.assessments.length > 0) {
-          return (
-            <table className="data-table" id="assessments">
-              <thead>
-                <tr className="table-header">
-                  <th className="hidden">Assessment ID</th>
-                  <th>Assessment Name</th>
-                  <th>Type</th>
-                  <th>Points</th>
-                  <th>Weight</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.assessments.map(function(assessment) {
-                  return <AssessmentsTableRow key={assessment._id} assessment={assessment} />;
-                })}
-              </tbody>
-            </table>
-          );
-        } else {
-          return (
-            <table className="data-table" id="assessments">
-              <thead>
-                <tr className="table-header">
-                  <th className="hidden">Assessment ID</th>
-                  <th>Assessment Name</th>
-                  <th>Type</th>
-                  <th>Points</th>
-                  <th>Weight</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          );
-        };
+        return (
+          <table className="data-table" id="assessments">
+            <thead>
+              <tr className="table-header">
+                <th className="hidden">Assessment ID</th>
+                <th>Assessment Name</th>
+                <th>Type</th>
+                <th className="right">Points</th>
+                <th className="right">Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.assessments.map(function(assessment) {
+                return <AssessmentsTableRow key={assessment._id} assessment={assessment} />;
+              })}
+            </tbody>
+          </table>
+        );  
       }
     });
 
@@ -170,12 +159,12 @@ $('document').ready(function() {
         var points = this.props.assessment.points.toLocaleString();
         var weight = this.props.assessment.weight.toLocaleString();
         return (
-          <tr className="data-row">
+          <tr className="data-row" id="assessment">
             <td className="hidden">{assessment_id}</td>
             <td>{name}</td>
             <td>{type}</td>
-            <td>{points}</td>
-            <td>{weight}</td>  
+            <td className="right">{points}</td>
+            <td className="right">{weight}</td>  
           </tr>
         );
       }
@@ -203,42 +192,25 @@ $('document').ready(function() {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       render: function() {
-        if (this.state.students.length > 0) {
-          return (
-            <table className="data-table" id="students">
-              <thead>
-                <tr className="table-header">
-                  <th className="hidden">Student ID</th>
-                  <th>Last Name</th>
-                  <th>First Name</th>
-                  <th>Grad Year</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.students.map(function(student) {
-                  return <StudentsTableRow key={student._id} student={student} />;
-                })}
-              </tbody>
-            </table>
-          );
-        } else {
-          return (
-            <table className="data-table" id="students">
-              <thead>
-                <tr className="table-header">
-                  <th className="hidden">Student ID</th>
-                  <th>Last Name</th>
-                  <th>First Name</th>
-                  <th>Grad Year</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          );
-        };
+        return (
+          <table className="data-table" id="students">
+            <thead>
+              <tr className="table-header">
+                <th className="hidden">Student ID</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th className="right">Grad Year</th>
+                <th className="right">Score</th>
+                <th className="right">% Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.students.map(function(student) {
+                return <StudentsTableRow key={student._id} student={student} />;
+              })}
+            </tbody>
+          </table>
+        );
       }
     });
 
@@ -249,22 +221,29 @@ $('document').ready(function() {
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
         var assessment_id = $('#current-assessment-id').val();  
-        var score = "";
         if ((this.props.student.scores) && (this.props.student.scores.length > 0)) {
           for (var i=0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
-              score = this.props.student.scores[i].score;
+              var score = this.props.student.scores[i].score;
+              var points = this.props.student.scores[i].points;
+              if (points > 0) {
+                var percent = ((score / points) * 100).toLocaleString();
+              } else {
+                var percent = 'NA';
+              };
+              score = score.toLocaleString();
               break;
             };
           };
         };
         return (
-          <tr className="data-row">
+          <tr className="data-row" id="student">
             <td className="hidden">{student_id}</td>
             <td>{last_name}</td>
             <td>{first_name}</td>
-            <td>{grad_year}</td>
-            <td>{score}</td>  
+            <td className="right">{grad_year}</td>
+            <td className="right">{score}</td>  
+            <td className="right">{percent}</td>  
           </tr>
         );
       }
@@ -285,6 +264,9 @@ $('document').ready(function() {
       <StudentsTable url="/students" pollInterval={1000} />,
       document.getElementById('students-box')
     );
+
+
+
 
   
     //EVENT LISTENERS ---------------------------------------------
@@ -442,10 +424,8 @@ $('document').ready(function() {
         var score = parseFloat(event.target.value);
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
-        console.log('score '+score);
-        console.log('points '+points);
-        console.log('weight '+weight);
-        if ((score != NaN) && (score <= points)) {
+        //also X for no score
+        if (score != NaN) {
           var data = {score: score, points: points, weight: weight};
           $.ajax({
             url: '/grade',
@@ -456,16 +436,27 @@ $('document').ready(function() {
             success: function() {
               console.log('grade entered');
               students_table.loadStudentsFromServer();
-              //need to select the next row in the students table, if there is one
-              
             },
             error: function() {
               console.log('grade NOT entered');
             }
           });
         };
+        var current_student_id = $('#current-student-id').val();
+        var data_rows = document.querySelector('table#students').rows;
+        for (var i=0; i < data_rows.length; i++) {
+          var cell = data_rows[i].children[0];
+          if ((cell.textContent == current_student_id) && (i < (data_rows.length-1))) {
+            $(data_rows[i+1].children[0]).trigger('click');
+            break;
+          };
+        };
       };
     });
+
+
+
+
 
    
     //INITIALIZATION -----------------------------------------------
@@ -481,13 +472,18 @@ $('document').ready(function() {
         data_rows = courses_table.rows;
         for (var i=0; i < data_rows.length; i++) {
           var cell = data_rows[i].children[0];
-          if (cell.textContent === current_course_id) {
+          if (cell.textContent == current_course_id) {
             $(cell).trigger('click');
           };
         };
       };
-      setTimeout(get_data_rows, 1000);
+      setTimeout(get_data_rows, 100);
     };
+
+
+
+
+
 
   } else if (document.body.id === 'enrollment') {
 

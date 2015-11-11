@@ -28193,18 +28193,23 @@ $('document').ready(function () {
                 ),
                 React.createElement(
                   'th',
-                  null,
+                  { className: 'right' },
                   'Section'
                 ),
                 React.createElement(
                   'th',
-                  null,
+                  { className: 'right' },
                   'Auto Weight'
                 ),
                 React.createElement(
                   'th',
-                  null,
-                  'Students'
+                  { className: 'right' },
+                  '# Students'
+                ),
+                React.createElement(
+                  'th',
+                  { className: 'right' },
+                  '# Assessments'
                 )
               )
             ),
@@ -28238,18 +28243,23 @@ $('document').ready(function () {
                 ),
                 React.createElement(
                   'th',
-                  null,
+                  { className: 'right' },
                   'Section'
                 ),
                 React.createElement(
                   'th',
-                  null,
+                  { className: 'right' },
                   'Auto Weight'
                 ),
                 React.createElement(
                   'th',
-                  null,
+                  { className: 'right' },
                   'Students'
+                ),
+                React.createElement(
+                  'th',
+                  { className: 'right' },
+                  '# Assessments'
                 )
               )
             ),
@@ -28273,9 +28283,13 @@ $('document').ready(function () {
         if (this.props.course.student_ids) {
           num_students = this.props.course.student_ids.length;
         };
+        var num_assessments = 0;
+        if (this.props.course.assessments) {
+          num_assessments = this.props.course.assessments.length;
+        };
         return React.createElement(
           'tr',
-          { className: 'data-row' },
+          { className: 'data-row', id: 'course' },
           React.createElement(
             'td',
             { className: 'hidden' },
@@ -28288,18 +28302,23 @@ $('document').ready(function () {
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             section
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             auto
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             num_students
+          ),
+          React.createElement(
+            'td',
+            { className: 'right' },
+            num_assessments
           )
         );
       }
@@ -28327,91 +28346,50 @@ $('document').ready(function () {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       render: function () {
-        if (this.state.assessments.length > 0) {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'assessments' },
+        return React.createElement(
+          'table',
+          { className: 'data-table', id: 'assessments' },
+          React.createElement(
+            'thead',
+            null,
             React.createElement(
-              'thead',
-              null,
+              'tr',
+              { className: 'table-header' },
               React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Assessment ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Assessment Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Type'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Points'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Weight'
-                )
+                'th',
+                { className: 'hidden' },
+                'Assessment ID'
+              ),
+              React.createElement(
+                'th',
+                null,
+                'Assessment Name'
+              ),
+              React.createElement(
+                'th',
+                null,
+                'Type'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Points'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Weight'
               )
-            ),
-            React.createElement(
-              'tbody',
-              null,
-              this.state.assessments.map(function (assessment) {
-                return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment });
-              })
             )
-          );
-        } else {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'assessments' },
-            React.createElement(
-              'thead',
-              null,
-              React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Assessment ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Assessment Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Type'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Points'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Weight'
-                )
-              )
-            ),
-            React.createElement('tbody', null)
-          );
-        };
+          ),
+          React.createElement(
+            'tbody',
+            null,
+            this.state.assessments.map(function (assessment) {
+              return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment });
+            })
+          )
+        );
       }
     });
 
@@ -28424,7 +28402,7 @@ $('document').ready(function () {
         var weight = this.props.assessment.weight.toLocaleString();
         return React.createElement(
           'tr',
-          { className: 'data-row' },
+          { className: 'data-row', id: 'assessment' },
           React.createElement(
             'td',
             { className: 'hidden' },
@@ -28442,12 +28420,12 @@ $('document').ready(function () {
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             points
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             weight
           )
         );
@@ -28476,91 +28454,55 @@ $('document').ready(function () {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       render: function () {
-        if (this.state.students.length > 0) {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'students' },
+        return React.createElement(
+          'table',
+          { className: 'data-table', id: 'students' },
+          React.createElement(
+            'thead',
+            null,
             React.createElement(
-              'thead',
-              null,
+              'tr',
+              { className: 'table-header' },
               React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Student ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Last Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'First Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Grad Year'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Score'
-                )
+                'th',
+                { className: 'hidden' },
+                'Student ID'
+              ),
+              React.createElement(
+                'th',
+                null,
+                'Last Name'
+              ),
+              React.createElement(
+                'th',
+                null,
+                'First Name'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Grad Year'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Score'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                '% Score'
               )
-            ),
-            React.createElement(
-              'tbody',
-              null,
-              this.state.students.map(function (student) {
-                return React.createElement(StudentsTableRow, { key: student._id, student: student });
-              })
             )
-          );
-        } else {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'students' },
-            React.createElement(
-              'thead',
-              null,
-              React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Student ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Last Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'First Name'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Grad Year'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Score'
-                )
-              )
-            ),
-            React.createElement('tbody', null)
-          );
-        };
+          ),
+          React.createElement(
+            'tbody',
+            null,
+            this.state.students.map(function (student) {
+              return React.createElement(StudentsTableRow, { key: student._id, student: student });
+            })
+          )
+        );
       }
     });
 
@@ -28571,18 +28513,24 @@ $('document').ready(function () {
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
         var assessment_id = $('#current-assessment-id').val();
-        var score = "";
         if (this.props.student.scores && this.props.student.scores.length > 0) {
           for (var i = 0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
-              score = this.props.student.scores[i].score;
+              var score = this.props.student.scores[i].score;
+              var points = this.props.student.scores[i].points;
+              if (points > 0) {
+                var percent = (score / points * 100).toLocaleString();
+              } else {
+                var percent = 'NA';
+              };
+              score = score.toLocaleString();
               break;
             };
           };
         };
         return React.createElement(
           'tr',
-          { className: 'data-row' },
+          { className: 'data-row', id: 'student' },
           React.createElement(
             'td',
             { className: 'hidden' },
@@ -28600,13 +28548,18 @@ $('document').ready(function () {
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             grad_year
           ),
           React.createElement(
             'td',
-            null,
+            { className: 'right' },
             score
+          ),
+          React.createElement(
+            'td',
+            { className: 'right' },
+            percent
           )
         );
       }
@@ -28772,10 +28725,8 @@ $('document').ready(function () {
         var score = parseFloat(event.target.value);
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
-        console.log('score ' + score);
-        console.log('points ' + points);
-        console.log('weight ' + weight);
-        if (score != NaN && score <= points) {
+        //also X for no score
+        if (score != NaN) {
           var data = { score: score, points: points, weight: weight };
           $.ajax({
             url: '/grade',
@@ -28791,6 +28742,15 @@ $('document').ready(function () {
               console.log('grade NOT entered');
             }
           });
+        };
+        var current_student_id = $('#current-student-id').val();
+        var data_rows = document.querySelector('table#students').rows;
+        for (var i = 0; i < data_rows.length; i++) {
+          var cell = data_rows[i].children[0];
+          if (cell.textContent == current_student_id && i < data_rows.length - 1) {
+            $(data_rows[i + 1].children[0]).trigger('click');
+            break;
+          };
         };
       };
     });
@@ -28808,12 +28768,12 @@ $('document').ready(function () {
         data_rows = courses_table.rows;
         for (var i = 0; i < data_rows.length; i++) {
           var cell = data_rows[i].children[0];
-          if (cell.textContent === current_course_id) {
+          if (cell.textContent == current_course_id) {
             $(cell).trigger('click');
           };
         };
       };
-      setTimeout(get_data_rows, 1000);
+      setTimeout(get_data_rows, 100);
     };
   } else if (document.body.id === 'enrollment') {
 
