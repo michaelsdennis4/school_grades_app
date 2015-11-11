@@ -28171,101 +28171,60 @@ $('document').ready(function () {
         assessments_table.loadAssessmentsFromServer();
       },
       render: function () {
-        if (this.state.courses.length > 0) {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'courses', onClick: this.handleClick },
+        return React.createElement(
+          'table',
+          { className: 'data-table', id: 'courses', onClick: this.handleClick },
+          React.createElement(
+            'thead',
+            null,
             React.createElement(
-              'thead',
-              null,
+              'tr',
+              { className: 'table-header' },
               React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Course ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Course Title'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  'Section'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  'Auto Weight'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  '# Students'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  '# Assessments'
-                )
+                'th',
+                { className: 'hidden' },
+                'Course ID'
+              ),
+              React.createElement(
+                'th',
+                null,
+                'Course Title'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Sec.'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Auto Wt.'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                '# Students'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                '# Assess.'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Class Avg.'
               )
-            ),
-            React.createElement(
-              'tbody',
-              null,
-              this.state.courses.map(function (course) {
-                return React.createElement(CoursesTableRow, { key: course._id, course: course });
-              })
             )
-          );
-        } else {
-          return React.createElement(
-            'table',
-            { className: 'data-table', id: 'courses' },
-            React.createElement(
-              'thead',
-              null,
-              React.createElement(
-                'tr',
-                { className: 'table-header' },
-                React.createElement(
-                  'th',
-                  { className: 'hidden' },
-                  'Course ID'
-                ),
-                React.createElement(
-                  'th',
-                  null,
-                  'Course Title'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  'Section'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  'Auto Weight'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  'Students'
-                ),
-                React.createElement(
-                  'th',
-                  { className: 'right' },
-                  '# Assessments'
-                )
-              )
-            ),
-            React.createElement('tbody', null)
-          );
-        };
+          ),
+          React.createElement(
+            'tbody',
+            null,
+            this.state.courses.map(function (course) {
+              return React.createElement(CoursesTableRow, { key: course._id, course: course });
+            })
+          )
+        );
       }
     });
 
@@ -28319,7 +28278,8 @@ $('document').ready(function () {
             'td',
             { className: 'right' },
             num_assessments
-          )
+          ),
+          React.createElement('td', { className: 'right' })
         );
       }
     });
@@ -28379,6 +28339,16 @@ $('document').ready(function () {
                 'th',
                 { className: 'right' },
                 'Weight'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                '% Weight'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                '% Class Avg.'
               )
             )
           ),
@@ -28427,7 +28397,9 @@ $('document').ready(function () {
             'td',
             { className: 'right' },
             weight
-          )
+          ),
+          React.createElement('td', { className: 'right' }),
+          React.createElement('td', { className: 'right' })
         );
       }
     });
@@ -28481,7 +28453,7 @@ $('document').ready(function () {
               React.createElement(
                 'th',
                 { className: 'right' },
-                'Grad Year'
+                'Grad Yr.'
               ),
               React.createElement(
                 'th',
@@ -28492,6 +28464,11 @@ $('document').ready(function () {
                 'th',
                 { className: 'right' },
                 '% Score'
+              ),
+              React.createElement(
+                'th',
+                { className: 'right' },
+                'Course %'
               )
             )
           ),
@@ -28560,7 +28537,8 @@ $('document').ready(function () {
             'td',
             { className: 'right' },
             percent
-          )
+          ),
+          React.createElement('td', { className: 'right' })
         );
       }
     });

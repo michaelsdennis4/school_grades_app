@@ -36,44 +36,26 @@ $('document').ready(function() {
         assessments_table.loadAssessmentsFromServer();
       },
       render: function() {
-        if (this.state.courses.length > 0) {
-      	  return (
-            <table className="data-table" id="courses" onClick={this.handleClick}>
-      	      <thead>
-      	    		<tr className="table-header">
-                  <th className="hidden">Course ID</th>
-      	    			<th>Course Title</th>
-      	    			<th className="right">Section</th>
-      	    			<th className="right">Auto Weight</th>
-                  <th className="right"># Students</th>
-                  <th className="right"># Assessments</th>
-      	    		</tr>
-              </thead>
-              <tbody>
-                {this.state.courses.map(function(course) {
-                  return <CoursesTableRow key={course._id} course={course} />;
-                })}
-              </tbody>
-      	    </table>
-      	  );
-        } else {
-          return (
-            <table className="data-table" id="courses">
-              <thead>
-                <tr className="table-header">
-                  <th className="hidden">Course ID</th>
-                  <th>Course Title</th>
-                  <th className="right">Section</th>
-                  <th className="right">Auto Weight</th>
-                  <th className="right">Students</th>
-                  <th className="right"># Assessments</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          );
-        };
+    	  return (
+          <table className="data-table" id="courses" onClick={this.handleClick}>
+    	      <thead>
+    	    		<tr className="table-header">
+                <th className="hidden">Course ID</th>
+    	    			<th>Course Title</th>
+    	    			<th className="right">Sec.</th>
+    	    			<th className="right">Auto Wt.</th>
+                <th className="right"># Students</th>
+                <th className="right"># Assess.</th>
+                <th className="right">Class Avg.</th>
+    	    		</tr>
+            </thead>
+            <tbody>
+              {this.state.courses.map(function(course) {
+                return <CoursesTableRow key={course._id} course={course} />;
+              })}
+            </tbody>
+    	    </table>
+    	  );
       }
     });
 
@@ -103,6 +85,7 @@ $('document').ready(function() {
             <td className="right">{auto}</td> 
             <td className="right">{num_students}</td> 
             <td className="right">{num_assessments}</td> 
+            <td className="right"></td> 
           </tr>
         );
       }
@@ -139,6 +122,8 @@ $('document').ready(function() {
                 <th>Type</th>
                 <th className="right">Points</th>
                 <th className="right">Weight</th>
+                <th className="right">% Weight</th>
+                <th className="right">% Class Avg.</th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +149,9 @@ $('document').ready(function() {
             <td>{name}</td>
             <td>{type}</td>
             <td className="right">{points}</td>
-            <td className="right">{weight}</td>  
+            <td className="right">{weight}</td> 
+            <td className="right"></td> 
+            <td className="right"></td> 
           </tr>
         );
       }
@@ -199,9 +186,10 @@ $('document').ready(function() {
                 <th className="hidden">Student ID</th>
                 <th>Last Name</th>
                 <th>First Name</th>
-                <th className="right">Grad Year</th>
+                <th className="right">Grad Yr.</th>
                 <th className="right">Score</th>
                 <th className="right">% Score</th>
+                <th className="right">Course %</th>
               </tr>
             </thead>
             <tbody>
@@ -243,7 +231,8 @@ $('document').ready(function() {
             <td>{first_name}</td>
             <td className="right">{grad_year}</td>
             <td className="right">{score}</td>  
-            <td className="right">{percent}</td>  
+            <td className="right">{percent}</td>
+            <td className="right"></td>  
           </tr>
         );
       }

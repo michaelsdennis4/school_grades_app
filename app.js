@@ -234,15 +234,16 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/courses', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, users) {
-        if (users.length > 0) {
-          var courses = users[0].courses;
-          if ((courses) && (courses.length > 0)) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, results) { 
+        var courses = [];
+        if (results.length > 0) {
+          courses = results[0].courses;
+          if (courses.length > 0) {
             courses.sort(function (a, b) {
-              if (a.title > b.title) {
+              if (a.title+a.section > b.title+b.section) {
                 return 1;
               }
-              if (a.title < b.title) {
+              if (a.title+a.section < b.title+b.section) {
                 return -1;
               }
               return 0;
@@ -250,16 +251,13 @@ MongoClient.connect(mongoUri, function(error, db) {
             courses.map(function(course) {
               course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
-            res.json(courses);
-          } else {
-            res.json({});
-          };
-        } else {
-          res.json({});
-        }
+          }; 
+        };
+        console.log('returning '+courses.length+' courses');
+        res.json(courses);
       });
     } else {
-      res.redirect('/sorry');
+      res.json([]);
     };
   });
   
@@ -354,11 +352,10 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.get('/assessments', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
-        console.log('courses found '+results.length);
+        var assessments = [];
         if ((results.length > 0) && (results[0].courses[0].assessments)) {
-          var assessments = results[0].courses[0].assessments;
+          assessments = results[0].courses[0].assessments;
           if (assessments.length > 0) {
-            console.log('assessments found '+assessments.length);
             assessments.sort(function (a, b) {
               if (a.name > b.name) {
                 return 1;
@@ -371,17 +368,13 @@ MongoClient.connect(mongoUri, function(error, db) {
             assessments.map(function(assessment) {
               assessment.name = assessment.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
-            console.log('returning json '+assessments);
-            res.json(assessments);
-          } else {
-            res.json({});
           };
-        } else {
-          res.json({});
-        }
+        };
+        console.log('returning '+assessments.length+' assessments');
+        res.json(assessments);
       });
     } else {
-      res.json({});
+      res.json([]);
     };
   });
 
@@ -443,6 +436,61 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   // STUDENTS -----------------------------------------------------
 
+  app.get('/students', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      //if course is selected then need to filter students by course enrolled
+      if (req.session.current_course_id.length > 0) {
+        db.collection("students").find({course_ids: {$elemMatch: {id: ObjectId(req.session.current_course_id)}}}).toArray(function(error, results) {
+          var students = [];
+          if (results.length > 0) {
+            students = results;
+            students.sort(function (a, b) {
+              if (a.last_name+a.first_name > b.last_name+b.first_name) {
+                return 1;
+              }
+              if (a.last_name+a.first_name < b.last_name+b.first_name) {
+                return -1;
+              }
+              return 0;
+            });
+            students.map(function(student) {
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            });
+          };
+          console.log('returning '+students.length+' students');
+          res.json(students);
+        });
+      } else {  //all students
+        db.collection('students').find({}).toArray(function(error, results) {
+          var students = [];
+          if (results.length > 0) {
+            students = results;
+            students.sort(function (a, b) {
+              if (a.last_name > b.last_name) {
+                return 1;
+              };
+              if (a.last_name < b.last_name) {
+                return -1;
+              };
+              return 0;
+            });
+            students.map(function(student) {
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            });
+            req.session.current_course_id = "";
+            req.session.current_assessment_id = "";
+          }; 
+          console.log('returning '+students.length+' students');
+          res.json(students);
+        });
+      };
+    } else {
+      res.json([]);
+    };
+  });
+
   app.get('/students/new', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       res.render('students/new');
@@ -468,60 +516,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       };
     } else {
       res.redirect('/sorry');
-    };
-  });
-
-  app.get('/students', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null)) {
-      //if course is selected then need to filter students by course enrolled
-      if (req.session.current_course_id.length > 0) {
-        db.collection("students").find({course_ids: {$elemMatch: {id: ObjectId(req.session.current_course_id)}}}).toArray(function(error, students) {
-          if (students.length > 0) {
-            students.sort(function (a, b) {
-              if (a.last_name+a.first_name > b.last_name+b.first_name) {
-                return 1;
-              }
-              if (a.last_name+a.first_name < b.last_name+b.first_name) {
-                return -1;
-              }
-              return 0;
-            });
-            students.map(function(student) {
-              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            });
-            res.json(students);
-          } else {
-            res.json({});
-          }
-        });
-      } else {  //all students
-        db.collection('students').find({}).toArray(function(error, students) {
-          console.log('students found '+students.length);
-          if (students.length > 0) {
-            students.sort(function (a, b) {
-              if (a.last_name > b.last_name) {
-                return 1;
-              };
-              if (a.last_name < b.last_name) {
-                return -1;
-              };
-              return 0;
-            });
-            students.map(function(student) {
-              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            });
-            req.session.current_course_id = "";
-            req.session.current_assessment_id = "";
-            res.json(students);
-          } else {
-            res.json({});
-          }
-        });
-      }
-    } else {
-      res.json({});
     };
   });
 
@@ -566,16 +560,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       var score = req.body.score;
       var points = req.body.points;
       var weight = req.body.weight;
-      //var frac_score = (score / points);
       //first check if there is already a score
       db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
           if (results.length === 0) {
             //add score to student
             db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, 
                 {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}});
-            //add student score to course/assessment
-            // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(current_course_id), "courses.assessments._id": ObjectId(current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(current_student_id), score: }}});
-
+            //add student score to course/assessment (not currently working)
+            // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id), "courses.$.assessments._id": ObjectId(req.session.current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(req.session.current_student_id), score: score, points: points, weight: weight}}});
           } else {
             //edit score
 
