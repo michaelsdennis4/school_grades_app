@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-//var mongoUri    = process.env.MONGOLAB_URI;
-var mongoUri    = 'mongodb://localhost:27017/school_grades'
+var mongoUri    = process.env.MONGOLAB_URI;
+//var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -356,15 +356,15 @@ MongoClient.connect(mongoUri, function(error, db) {
         if ((results.length > 0) && (results[0].courses[0].assessments)) {
           assessments = results[0].courses[0].assessments;
           if (assessments.length > 0) {
-            assessments.sort(function (a, b) {
-              if (a.name > b.name) {
-                return 1;
-              };
-              if (a.name < b.name) {
-                return -1;
-              };
-              return 0;
-            });
+            // assessments.sort(function (a, b) {
+            //   if (a.name > b.name) {
+            //     return 1;
+            //   };
+            //   if (a.name < b.name) {
+            //     return -1;
+            //   };
+            //   return 0;
+            // });
             assessments.map(function(assessment) {
               assessment.name = assessment.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
@@ -562,20 +562,23 @@ MongoClient.connect(mongoUri, function(error, db) {
       var weight = req.body.weight;
       //first check if there is already a score
       db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
-          if (results.length === 0) {
-            //add score to student
-            db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, 
-                {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}});
-            //add student score to course/assessment (not currently working)
-            // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id), "courses.$.assessments._id": ObjectId(req.session.current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(req.session.current_student_id), score: score, points: points, weight: weight}}});
-          } else {
-            //edit score
+          if ((results) && (results.length > 0)) {
+            //edit existing score
 
-          };
-      });
-     
-      
-      res.json({});
+            res.json([]);
+
+          } else {
+            //add score to student
+            db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}}, function(error, result) {
+                console.log('grade entered '+ result);
+                res.json(result); //write result
+            });
+          };   
+        //add student score to course/assessment (not currently working)
+        // db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id), "courses.$.assessments._id": ObjectId(req.session.current_assessment_id)}, {$push: {"courses.assessments.$.student_scores": {student_id: ObjectId(req.session.current_student_id), score: score, points: points, weight: weight}}});
+      }); 
+    } else {
+      res.json([]);
     };
   });
 

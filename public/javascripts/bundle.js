@@ -28169,6 +28169,7 @@ $('document').ready(function () {
       },
       handleClick: function () {
         assessments_table.loadAssessmentsFromServer();
+        students_table.loadStudentsFromServer();
       },
       render: function () {
         return React.createElement(
@@ -28305,10 +28306,13 @@ $('document').ready(function () {
         this.loadAssessmentsFromServer();
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
+      handleClick: function () {
+        students_table.loadStudentsFromServer();
+      },
       render: function () {
         return React.createElement(
           'table',
-          { className: 'data-table', id: 'assessments' },
+          { className: 'data-table', id: 'assessments', onClick: this.handleClick },
           React.createElement(
             'thead',
             null,
@@ -28588,59 +28592,46 @@ $('document').ready(function () {
           //update current course on the server
           $.ajax({
             url: '/current_course/' + cells[0].textContent,
-            method: 'post',
-            success: function () {
-              console.log('current course updated ' + cells[0].textContent);
-              //update current course in the DOM
-              document.querySelector('#current-course-id').value = cells[0].textContent;
-              document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
-              //clear current assessment fields
-              $('#current-assessment').val("");
-              $('#current-assessment-id').val("");
-              $('#score').val("");
-              $('#points').val("");
-              $('#current-student').val("");
-              $('#current-student-id').val("");
-              students_table.loadStudentsFromServer();
-            },
-            error: function () {
-              console.log('current course NOT updated');
-            }
+            method: 'post'
+          }).done(function () {
+            console.log('current course updated ' + cells[0].textContent);
+            //update current course in the DOM
+            document.querySelector('#current-course-id').value = cells[0].textContent;
+            document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
+            //clear current assessment fields
+            $('#current-assessment').val("");
+            $('#current-assessment-id').val("");
+            $('#score').val("");
+            $('#points').val("");
+            $('#weight').val("");
+            $('#current-student').val("");
+            $('#current-student-id').val("");
           });
         } else if (table.getAttribute('id') === 'assessments') {
           //update current assessment on the server
           $.ajax({
             url: '/current_assessment/' + cells[0].textContent,
-            method: 'post',
-            success: function () {
-              console.log('current assessment updated ' + cells[0].textContent);
-              //update current assessment in the DOM
-              $('#current-assessment-id').val(cells[0].textContent);
-              $('#current-assessment').val(cells[1].textContent + ' (' + cells[2].textContent + ')');
-              $('#points').val(cells[3].textContent);
-              $('#weight').val(cells[4].textContent);
-              $('#score').val("");
-              students_table.loadStudentsFromServer();
-            },
-            error: function () {
-              console.log('current assessment NOT updated');
-            }
+            method: 'post'
+          }).done(function () {
+            console.log('current assessment updated ' + cells[0].textContent);
+            //update current assessment in the DOM
+            $('#current-assessment-id').val(cells[0].textContent);
+            $('#current-assessment').val(cells[1].textContent + ' (' + cells[2].textContent + ')');
+            $('#points').val(cells[3].textContent);
+            $('#weight').val(cells[4].textContent);
+            $('#score').val("");
           });
         } else if (table.getAttribute('id') === 'students') {
           //update current student on the server
           $.ajax({
             url: '/current_student/' + cells[0].textContent,
-            method: 'post',
-            success: function () {
-              console.log('current student updated ' + cells[0].textContent);
-              //update current student in the DOM
-              $('#current-student-id').val(cells[0].textContent);
-              $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
-              $('#score').val(cells[4].textContent);
-            },
-            error: function () {
-              console.log('current student NOT updated');
-            }
+            method: 'post'
+          }).done(function () {
+            console.log('current student updated ' + cells[0].textContent);
+            //update current student in the DOM
+            $('#current-student-id').val(cells[0].textContent);
+            $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
+            $('#score').val(cells[4].textContent);
           });
         }
       };
@@ -28648,47 +28639,38 @@ $('document').ready(function () {
 
     $('#show_all').on('click', function (event) {
       event.preventDefault();
+
       $.ajax({
         url: '/current_course/0',
-        method: 'post',
-        success: function () {
-          console.log('current course updated');
-        },
-        error: function () {
-          console.log('current course NOT updated');
-        }
+        method: 'post'
+      }).done(function () {
+        //clear current course fields
+        $('#current-course').val("");
+        $('#current-course-id').val("");
+        console.log('current course deleted');
       });
-      //clear current course fields
-      $('#current-course').val("");
-      $('#current-course-id').val("");
+
       $.ajax({
         url: '/current_assessment/0',
-        method: 'post',
-        success: function () {
-          console.log('current assessment updated');
-        },
-        error: function () {
-          console.log('current assessment NOT updated');
-        }
+        method: 'post'
+      }).done(function () {
+        //clear current assessment fields
+        $('#current-assessment').val("");
+        $('#current-assessment-id').val("");
+        $('#points').val("");
+        console.log('current assessment deleted');
       });
-      //clear current assessment fields
-      $('#current-assessment').val("");
-      $('#current-assessment-id').val("");
-      $('#points').val("");
+
       $.ajax({
         url: '/current_student/0',
-        method: 'post',
-        success: function () {
-          console.log('current student updated');
-        },
-        error: function () {
-          console.log('current student NOT updated');
-        }
+        method: 'post'
+      }).done(function () {
+        //clear current student fields
+        $('#current-student').val("");
+        $('#current-student-id').val("");
+        $(submit).trigger('click');
+        console.log('current student deleted');
       });
-      //clear current student fields
-      $('#current-student').val("");
-      $('#current-student-id').val("");
-      $(submit).trigger('click');
     });
 
     $('#enroll').on('click', function (event) {
@@ -28699,7 +28681,8 @@ $('document').ready(function () {
     });
 
     $('#score').on('keydown', function (event) {
-      if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
+      var current_student_id = $('#current-student-id').val();
+      if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && current_student_id.length > 0) {
         var score = parseFloat(event.target.value);
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
@@ -28711,24 +28694,23 @@ $('document').ready(function () {
             type: 'post',
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: 'json',
-            success: function () {
-              console.log('grade entered');
-              students_table.loadStudentsFromServer();
-            },
-            error: function () {
-              console.log('grade NOT entered');
-            }
+            dataType: 'json'
+          }).done(function () {
+            console.log('grade entered');
+            students_table.loadStudentsFromServer();
+            //select next row in table
+            var data_rows = document.querySelector('.data-table#students').rows;
+            console.log(data_rows);
+            var current_student_id = $('#current-student-id').val();
+            var data_rows = document.querySelector('table#students').rows;
+            for (var i = 1; i < data_rows.length; i++) {
+              var cell = data_rows[i].children[0];
+              if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
+                $(data_rows[i + 1].children[1]).trigger('click');
+                break;
+              };
+            };
           });
-        };
-        var current_student_id = $('#current-student-id').val();
-        var data_rows = document.querySelector('table#students').rows;
-        for (var i = 0; i < data_rows.length; i++) {
-          var cell = data_rows[i].children[0];
-          if (cell.textContent == current_student_id && i < data_rows.length - 1) {
-            $(data_rows[i + 1].children[0]).trigger('click');
-            break;
-          };
         };
       };
     });
