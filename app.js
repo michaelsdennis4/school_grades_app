@@ -305,9 +305,10 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_course_id = req.params.id;
       };
-      //clear current assessment an student when changing current course
+      //clear current assessment and student when changing current course
       req.session.current_assessment_id = "";
       req.session.current_student_id = "";
+      console.log("current course updated "+req.session.current_course_id);
       res.redirect('/dashboard');
     };
   });
@@ -429,6 +430,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_assessment_id = req.params.id;
       }; 
+      console.log("current assessment updated "+req.session.current_assessment_id);
       res.redirect('/dashboard');
     };
   });
@@ -526,14 +528,16 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_student_id = req.params.id;
       }; 
-      res.redirect('/dashboard');
+      console.log("current student updated "+req.session.current_student_id);
+      res.json({});
+      //res.redirect('/dashboard');
     };
   });
 
   app.patch('/students/:id/enroll', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
       //add course to student
-      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(req.session.current_course_id)}}}); 
+      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(req.session.current_course_id)}}});
       //add student to course
       db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}});
       res.json(result); //write result object (not used)
@@ -561,9 +565,10 @@ MongoClient.connect(mongoUri, function(error, db) {
       var points = req.body.points;
       var weight = req.body.weight;
       //first check if there is already a score
-      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
+      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}).toArray(function(error, results) {
           if ((results) && (results.length > 0)) {
             //edit existing score
+            console.log('grade already exists for '+results[0].first_name);
 
             res.json([]);
 

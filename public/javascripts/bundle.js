@@ -28586,7 +28586,6 @@ $('document').ready(function () {
         for (var i = 0; i < rows.length; i++) {
           $(rows[i]).toggleClass('selected', false);
         };
-        $(row).toggleClass('selected', true);
         var cells = row.querySelectorAll('td');
         if (table.getAttribute('id') === 'courses') {
           //update current course on the server
@@ -28598,14 +28597,15 @@ $('document').ready(function () {
             //update current course in the DOM
             document.querySelector('#current-course-id').value = cells[0].textContent;
             document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
-            //clear current assessment fields
+            //clear current student and assessment fields
             $('#current-assessment').val("");
             $('#current-assessment-id').val("");
+            $('#current-student').val("");
+            $('#current-student-id').val("");
             $('#score').val("");
             $('#points').val("");
             $('#weight').val("");
-            $('#current-student').val("");
-            $('#current-student-id').val("");
+            $(row).toggleClass('selected', true);
           });
         } else if (table.getAttribute('id') === 'assessments') {
           //update current assessment on the server
@@ -28620,6 +28620,7 @@ $('document').ready(function () {
             $('#points').val(cells[3].textContent);
             $('#weight').val(cells[4].textContent);
             $('#score').val("");
+            $(row).toggleClass('selected', true);
           });
         } else if (table.getAttribute('id') === 'students') {
           //update current student on the server
@@ -28632,14 +28633,14 @@ $('document').ready(function () {
             $('#current-student-id').val(cells[0].textContent);
             $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
             $('#score').val(cells[4].textContent);
+            $(row).toggleClass('selected', true);
           });
-        }
+        };
       };
     });
 
     $('#show_all').on('click', function (event) {
       event.preventDefault();
-
       $.ajax({
         url: '/current_course/0',
         method: 'post'
@@ -28648,8 +28649,8 @@ $('document').ready(function () {
         $('#current-course').val("");
         $('#current-course-id').val("");
         console.log('current course deleted');
+        courses_table.loadCoursesFromServer();
       });
-
       $.ajax({
         url: '/current_assessment/0',
         method: 'post'
@@ -28657,10 +28658,9 @@ $('document').ready(function () {
         //clear current assessment fields
         $('#current-assessment').val("");
         $('#current-assessment-id').val("");
-        $('#points').val("");
         console.log('current assessment deleted');
+        assessments_table.loadAssessmentsFromServer();
       });
-
       $.ajax({
         url: '/current_student/0',
         method: 'post'
@@ -28668,9 +28668,12 @@ $('document').ready(function () {
         //clear current student fields
         $('#current-student').val("");
         $('#current-student-id').val("");
-        $(submit).trigger('click');
         console.log('current student deleted');
+        students_table.loadStudentsFromServer();
       });
+      $('#score').val("");
+      $('#points').val("");
+      $('#weight').val("");
     });
 
     $('#enroll').on('click', function (event) {
@@ -28681,8 +28684,7 @@ $('document').ready(function () {
     });
 
     $('#score').on('keydown', function (event) {
-      var current_student_id = $('#current-student-id').val();
-      if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && current_student_id.length > 0) {
+      if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
         var score = parseFloat(event.target.value);
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
@@ -28696,20 +28698,21 @@ $('document').ready(function () {
             contentType: "application/json",
             dataType: 'json'
           }).done(function () {
-            console.log('grade entered');
+            console.log('grade posted');
             students_table.loadStudentsFromServer();
             //select next row in table
-            var data_rows = document.querySelector('.data-table#students').rows;
-            console.log(data_rows);
-            var current_student_id = $('#current-student-id').val();
-            var data_rows = document.querySelector('table#students').rows;
-            for (var i = 1; i < data_rows.length; i++) {
-              var cell = data_rows[i].children[0];
-              if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
-                $(data_rows[i + 1].children[1]).trigger('click');
-                break;
+            var select_next_row = function () {
+              var current_student_id = $('#current-student-id').val();
+              var data_rows = document.querySelector('table#students').rows;
+              for (var i = 1; i < data_rows.length; i++) {
+                var cell = data_rows[i].children[0];
+                if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
+                  data_rows[i + 1].children[1].click();
+                  break;
+                };
               };
             };
+            setTimeout(select_next_row, 100);
           });
         };
       };
