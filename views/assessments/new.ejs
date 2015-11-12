@@ -14,8 +14,8 @@
 		<h2>Enter New Assessment<h2>
 
 		<% course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); %>
-		<h5>Course Title: <%= course.title %></h5>
-		<h5>Section: <%= course.section %></h5>
+		<h3>Course Title: <%= course.title %></h3>
+		<h3>Section: <%= course.section %></h3>
 
 		<hr>
 
@@ -23,7 +23,7 @@
 			<label for="name">Assessment Name</label><br>
 			<input type="text" name="name" placeholder="Assessment Title"/><br>
 			<br>
-			<label for="type">Type</label><br>
+			<label for="type">Type</label><br><br>
 			<select name="type">
 			  <option value="Test" selected>Test</option> 
 			  <option value="Quiz">Quiz</option>
@@ -31,13 +31,16 @@
 			  <option value="Project">Project</option>
 			  <option value="Other">Other</option>
 			</select>
-			<br>
+			<br><br>
 			<label for="points">Points</label><br>
 			<input type="number" name="points" min="1" value="1"/><br>
+			<% if (course.auto === false) { %>
+				<label for="weight">Weight</label><br>
+				<input type="number" name="weight" min="1" value="1"/><br>
+			<% } else { %>
+				<h4>Auto Weighting is ON for this course.</h4>
+			<% } %>
 			<br>
-			<label for="weight">Weight</label><br>
-			<input type="number" name="weight" min="1" value="1"/><br>
-			<br><br>
 			<input type="submit" value="Create Assessment"/>
 		</form>
 
