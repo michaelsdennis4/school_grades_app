@@ -47,7 +47,7 @@ $('document').ready(function() {
     	    			<th className="right">Auto Wt.</th>
                 <th className="right"># Students</th>
                 <th className="right"># Assess.</th>
-                <th className="right">Class Avg.</th>
+                <th className="right">% Class Avg.</th>
     	    		</tr>
             </thead>
             <tbody>
@@ -117,6 +117,10 @@ $('document').ready(function() {
         students_table.loadStudentsFromServer();
       },
       render: function() {
+        var total_weight = 0;
+        this.state.assessments.forEach(function(assessment) {
+          total_weight += parseInt(assessment.weight);
+        });
         return (
           <table className="data-table" id="assessments" onClick={this.handleClick}>
             <thead>
@@ -132,7 +136,7 @@ $('document').ready(function() {
             </thead>
             <tbody>
               {this.state.assessments.map(function(assessment) {
-                return <AssessmentsTableRow key={assessment._id} assessment={assessment} />;
+                return <AssessmentsTableRow key={assessment._id} assessment={assessment} total_weight={total_weight}/>;
               })}
             </tbody>
           </table>
@@ -147,6 +151,10 @@ $('document').ready(function() {
         var type = this.props.assessment.type;
         var points = this.props.assessment.points.toLocaleString();
         var weight = this.props.assessment.weight.toLocaleString();
+        var percentage_weight = '0';
+        if (this.props.total_weight > 0) {
+          percentage_weight = ((this.props.assessment.weight / this.props.total_weight) * 100).toLocaleString();
+        };
         return (
           <tr className="data-row" id="assessment">
             <td className="hidden">{assessment_id}</td>
@@ -154,7 +162,7 @@ $('document').ready(function() {
             <td>{type}</td>
             <td className="right">{points}</td>
             <td className="right">{weight}</td> 
-            <td className="right"></td> 
+            <td className="right">{percentage_weight}</td> 
             <td className="right"></td> 
           </tr>
         );

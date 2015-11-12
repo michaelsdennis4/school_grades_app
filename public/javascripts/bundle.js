@@ -28214,7 +28214,7 @@ $('document').ready(function () {
               React.createElement(
                 'th',
                 { className: 'right' },
-                'Class Avg.'
+                '% Class Avg.'
               )
             )
           ),
@@ -28310,6 +28310,10 @@ $('document').ready(function () {
         students_table.loadStudentsFromServer();
       },
       render: function () {
+        var total_weight = 0;
+        this.state.assessments.forEach(function (assessment) {
+          total_weight += parseInt(assessment.weight);
+        });
         return React.createElement(
           'table',
           { className: 'data-table', id: 'assessments', onClick: this.handleClick },
@@ -28360,7 +28364,7 @@ $('document').ready(function () {
             'tbody',
             null,
             this.state.assessments.map(function (assessment) {
-              return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment });
+              return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment, total_weight: total_weight });
             })
           )
         );
@@ -28374,6 +28378,10 @@ $('document').ready(function () {
         var type = this.props.assessment.type;
         var points = this.props.assessment.points.toLocaleString();
         var weight = this.props.assessment.weight.toLocaleString();
+        var percentage_weight = '0';
+        if (this.props.total_weight > 0) {
+          percentage_weight = (this.props.assessment.weight / this.props.total_weight * 100).toLocaleString();
+        };
         return React.createElement(
           'tr',
           { className: 'data-row', id: 'assessment' },
@@ -28402,7 +28410,11 @@ $('document').ready(function () {
             { className: 'right' },
             weight
           ),
-          React.createElement('td', { className: 'right' }),
+          React.createElement(
+            'td',
+            { className: 'right' },
+            percentage_weight
+          ),
           React.createElement('td', { className: 'right' })
         );
       }

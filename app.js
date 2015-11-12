@@ -411,7 +411,13 @@ MongoClient.connect(mongoUri, function(error, db) {
       res.redirect('/assessments/new');
     } 
     else {
-      db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: req.body.weight}}}, function(error, results) {
+      var weight;
+      if (req.body.weight) {
+        weight = req.body.weight;
+      } else {
+        weight = req.body.points;
+      };
+      db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
           if (results) {
             console.log('new assessment created');
             res.redirect('/dashboard');
