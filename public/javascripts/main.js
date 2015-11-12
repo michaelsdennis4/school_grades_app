@@ -431,7 +431,7 @@ $('document').ready(function() {
                 };
               };
             };
-            setTimeout(select_next_row, 100);
+            setTimeout(select_next_row, 500);
           });
         };
       };
@@ -463,7 +463,7 @@ $('document').ready(function() {
           };
         };
       };
-      setTimeout(get_data_rows, 100);
+      setTimeout(get_data_rows, 500);
     };
 
 

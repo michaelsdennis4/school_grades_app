@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-//var mongoUri    = 'mongodb://localhost:27017/school_grades'
+//var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -45,13 +45,6 @@ app.set('view engine', 'ejs');
 
 var session;
 
-//these variables to live in the session
-// var current_year = 0;
-// var current_term = 0;
-
-// var current_course_id = "";
-// var current_assessment_id = "";
-// var current_student_id = "";
 
 console.log('connecting to MongoDB');
 MongoClient.connect(mongoUri, function(error, db) {
@@ -119,7 +112,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/dashboard', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('dashboard', {sess: req.session});
+      res.render('dashboard', {session: req.session});
     } else {
       res.redirect('/sorry');
     };
@@ -135,9 +128,9 @@ MongoClient.connect(mongoUri, function(error, db) {
     res.render('users/new.ejs'); 
   });
 
-  app.get('/users/:id/edit', function(req, res) {
+  app.get('/users/edit', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.params.id)}).toArray(function(error, users) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, users) {
       user = users[0];
       res.render('users/edit.ejs', {user: user});
     });
@@ -187,23 +180,24 @@ MongoClient.connect(mongoUri, function(error, db) {
     });
   });
 
-  app.patch('/users/:id', function(req, res) {
+  app.patch('/users', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
-          res.redirect('/users/'+req.params.id+'/edit');
+          res.redirect('/users/edit');
           console.log('first name cannot be blank');
       }
       else if (req.body.last_name.length === 0) {
-        res.redirect('/users/'+req.params.id+'/edit');
+        res.redirect('/users/edit');
         console.log('last name cannot be blank');
       }
       else if (req.body.email.length === 0) {
-        res.redirect('/users/'+req.params.id+'/edit');
+        res.redirect('/users/edit');
         console.log('email cannot be blank');
       }
       else {
-        db.collection('users').update({_id: ObjectId(req.params.id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}});
-        res.redirect('/dashboard');
+        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}});
+        req.session.username = req.body.first_name +' '+req.body.last_name;
+        res.render('dashboard', {session: req.session});
       };
     };
   });
@@ -269,6 +263,25 @@ MongoClient.connect(mongoUri, function(error, db) {
     }; 
   });
 
+  app.get('/courses/edit', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_course_id.length > 0) {
+        db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            var course = results[0].courses[0];
+            res.render('courses/edit.ejs', {course: course});
+          } else {
+            res.redirect('/dashboard');
+          };
+        });
+      } else {
+        res.redirect('/dashboard');
+      };
+    } else {
+      res.redirect('/sorry');
+    }; 
+  });
+
   app.post('/courses', function(req, res) {
     if ((!req.session.user_id) || (req.session.user_id == null)) {
       console.log('user is not logged in');
@@ -278,14 +291,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       console.log('title cannot be blank');
     } 
     else {
-      //need to make sure there are no duplicate courses
+      //make sure there are no duplicate courses
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
         if (results.length > 0) {
           res.redirect('/courses/new');
           console.log('course already exists');
         } else {
           db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, year: req.body.year, term: req.body.term, auto: req.body.auto}}}, function(error, results) {
-              if (results) {
+              if (!error) {
                 console.log('new course created');
                 res.redirect('/dashboard');
               } else {
@@ -295,6 +308,31 @@ MongoClient.connect(mongoUri, function(error, db) {
           });
         };
       });
+    };
+  });
+
+  app.patch('/courses', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
+      if (req.body.title.length === 0) {
+        res.redirect('/courses/edit');
+        console.log('title cannot be blank');
+      } else {
+        //make sure the change does not create a duplicate course
+        db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+          if ((results.length > 0) && (results[0].courses[0]._id.toString() != req.session.current_course_id.toString())) {
+            res.redirect('/courses/edit');
+            console.log('course already exists');
+          } else {
+            db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
+                if (!error) {
+                  res.redirect('/dashboard'); 
+                } else {
+                  res.redirect('/courses/edit');
+                }
+            });
+          };
+        });
+      };
     };
   });
 
