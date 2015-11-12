@@ -195,32 +195,47 @@ MongoClient.connect(mongoUri, function(error, db) {
         console.log('email cannot be blank');
       }
       else {
-        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}});
-        req.session.username = req.body.first_name +' '+req.body.last_name;
-        res.render('dashboard', {session: req.session});
+        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}}, function(error, result) {
+            if (!error) {
+              req.session.username = req.body.first_name +' '+req.body.last_name;
+              res.render('dashboard', {session: req.session});
+            } else {
+              res.redirect('/dashboard');
+            }
+        });     
       };
     };
   });
 
   app.patch('/year', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}});
-      req.session.current_year = req.body.current_year;
-      req.session.current_course_id = "";
-      req.session.current_assessment_id = "";
-      req.session.current_student_id = "";
-      res.redirect('/dashboard');
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}}, function(error, result) {
+        if (!error) {
+          req.session.current_year = req.body.current_year;
+          req.session.current_course_id = "";
+          req.session.current_assessment_id = "";
+          req.session.current_student_id = "";
+          res.render('dashboard', {session: req.session});
+        } else {
+          res.redirect('/dashboard');
+        }
+      });   
     };
   });
 
   app.patch('/term', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}});
-      req.session.current_term = req.body.current_term;
-      req.session.current_course_id = "";
-      req.session.current_assessment_id = "";
-      req.session.current_student_id = "";
-      res.redirect('/dashboard');
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}}, function(error, result) {
+        if (!error) {
+          req.session.current_term = req.body.current_term;
+          req.session.current_course_id = "";
+          req.session.current_assessment_id = "";
+          req.session.current_student_id = "";
+          res.render('dashboard', {session: req.session});
+        } else {
+          res.redirect('/dashboard');
+        }
+      });      
     };
   });
 
@@ -581,26 +596,34 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.patch('/students/:id/enroll', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
       //add course to student
-      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(req.session.current_course_id)}}});
-      //add student to course
-      db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}});
-      res.json(result); //write result object (not used)
-    } else {
-      res.json({});
-    }
+      db.collection("students").update({_id: ObjectId(req.params.id)}, {$push: {course_ids: {id: ObjectId(req.session.current_course_id)}}}, function(error, result) {
+        if (!error) {
+          //add student to course
+          db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}}, function(error, result) {
+            if (!error) {
+              res.json(result); //write result object (not used)
+            };
+          });
+        };
+      });
+    };
   });
 
   app.patch('/students/:id/unenroll', function(req, res) {
     //this route needs to be protected once students have grades entered
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
       //remove course from student
-      var result = db.collection("students").update({_id: ObjectId(req.params.id)}, {$pull: {course_ids: {id: ObjectId(req.session.current_course_id)}}}); 
-      //remove student from course
-      db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}});
-      res.json(result); //write result object (not used)
-    } else {
-      res.json({});
-    }
+      db.collection("students").update({_id: ObjectId(req.params.id)}, {$pull: {course_ids: {id: ObjectId(req.session.current_course_id)}}}, function(error, result) {
+        if (!error) {
+          //remove student from course
+          db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {"courses.$.student_ids": {id: ObjectId(req.params.id)}}}, function(error, result) {
+            if (!error) {
+              res.json(result); //write result object (not used)
+            };
+          });
+        };
+      }); 
+    };
   });
 
   app.post('/grade', function(req, res) {
