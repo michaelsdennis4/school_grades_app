@@ -28168,8 +28168,8 @@ $('document').ready(function () {
         //setInterval(this.loadCoursesFromServer, this.props.pollInterval);
       },
       handleClick: function () {
-        assessments_table.loadAssessmentsFromServer();
-        students_table.loadStudentsFromServer();
+        // assessments_table.loadAssessmentsFromServer();
+        // students_table.loadStudentsFromServer();
       },
       render: function () {
         return React.createElement(
@@ -28307,7 +28307,7 @@ $('document').ready(function () {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       handleClick: function () {
-        students_table.loadStudentsFromServer();
+        //students_table.loadStudentsFromServer();
       },
       render: function () {
         var total_weight = 0;
@@ -28506,15 +28506,18 @@ $('document').ready(function () {
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
         var assessment_id = $('#current-assessment-id').val();
+        var score = "";
+        var points = "";
+        var percent = "";
         if (this.props.student.scores && this.props.student.scores.length > 0) {
           for (var i = 0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
-              var score = this.props.student.scores[i].score;
-              var points = this.props.student.scores[i].points;
+              score = this.props.student.scores[i].score;
+              points = this.props.student.scores[i].points;
               if (points > 0) {
-                var percent = (score / points * 100).toLocaleString();
+                percent = (score / points * 100).toLocaleString();
               } else {
-                var percent = 'NA';
+                percent = "NA";
               };
               score = score.toLocaleString();
               break;
@@ -28547,9 +28550,7 @@ $('document').ready(function () {
           React.createElement(
             'td',
             { className: 'right' },
-            score,
-            '/',
-            points
+            score
           ),
           React.createElement(
             'td',
@@ -28620,6 +28621,9 @@ $('document').ready(function () {
             $('#points').val("");
             $('#weight').val("");
             $(row).toggleClass('selected', true);
+            courses_table.loadCoursesFromServer();
+            assessments_table.loadAssessmentsFromServer();
+            students_table.loadStudentsFromServer();
           });
         } else if (table.getAttribute('id') === 'assessments') {
           //update current assessment on the server
@@ -28635,6 +28639,8 @@ $('document').ready(function () {
             $('#weight').val(cells[4].textContent);
             $('#score').val("");
             $(row).toggleClass('selected', true);
+            assessments_table.loadAssessmentsFromServer();
+            students_table.loadStudentsFromServer();
           });
         } else if (table.getAttribute('id') === 'students') {
           //update current student on the server
@@ -28648,6 +28654,7 @@ $('document').ready(function () {
             $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
             $('#score').val(cells[4].textContent);
             $(row).toggleClass('selected', true);
+            students_table.loadStudentsFromServer();
           });
         };
       };
@@ -28732,7 +28739,7 @@ $('document').ready(function () {
       };
     });
 
-    //INITIALIZATION -----------------------------------------------
+    //DASHBOARD INITIALIZATION -----------------------------------------------
 
     //if already current course then re-select row in courses table
     var current_course_id = $('#current-course-id').val();
@@ -28745,12 +28752,47 @@ $('document').ready(function () {
         data_rows = courses_table.rows;
         for (var i = 0; i < data_rows.length; i++) {
           var cell = data_rows[i].children[0];
-          if (cell.textContent == current_course_id) {
+          if (cell.textContent.toString() == current_course_id.toString()) {
             $(cell).trigger('click');
           };
         };
       };
-      setTimeout(get_data_rows, 500);
+      setTimeout(get_data_rows, 100);
+      //re-select current assessment
+      var current_assessment_id = $('#current-assessment-id').val();
+      console.log('the current assessment id is ' + current_assessment_id);
+      if (current_assessment_id.length > 0) {
+        var assessments_table = document.querySelector('table#assessments');
+        var data_rows = [];
+        //for some reason need a one second delay to get the rows (react)???
+        var get_data_rows = function () {
+          data_rows = assessments_table.rows;
+          for (var i = 0; i < data_rows.length; i++) {
+            var cell = data_rows[i].children[0];
+            if (cell.textContent.toString() == current_assessment_id.toString()) {
+              $(cell).trigger('click');
+            };
+          };
+        };
+        setTimeout(get_data_rows, 100);
+        //reselect current student
+        var current_student_id = $('#current-student-id').val();
+        console.log('the current student id is ' + current_student_id);
+        if (current_student_id.length > 0) {
+          var students_table = document.querySelector('table#students');
+          var data_rows = [];
+          //for some reason need a one second delay to get the rows (react)???
+          var get_data_rows = function () {
+            data_rows = students_table.rows;
+            for (var i = 0; i < data_rows.length; i++) {
+              var cell = data_rows[i].children[0];
+              if (cell.textContent.toString() == current_student_id.toString()) {
+                $(cell).trigger('click');
+              };
+            };
+          };
+        };
+      };
     };
   } else if (document.body.id === 'enrollment') {
 
