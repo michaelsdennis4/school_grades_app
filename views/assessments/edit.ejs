@@ -44,7 +44,7 @@
 			<br><br>
 			<label for="points">Points</label><br>
 			<input type="number" name="points" min="1" value="<%= assessment.points %>"/><br>
-			<% if (course.auto === false) { %>
+			<% if (course.auto === "false") { %>
 				<label for="weight">Weight</label><br>
 				<input type="number" name="weight" min="1" value="<%= assessment.weight %>"/><br>
 			<% } else { %>

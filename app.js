@@ -340,13 +340,13 @@ MongoClient.connect(mongoUri, function(error, db) {
               console.log('course already exists');
             } else {
               db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
-                  if (!error) {
-                    console.log('course updated');
-                    res.redirect('/dashboard'); 
-                  } else {
-                    console.log('error updating course');
-                    res.redirect('/courses/edit');
-                  }
+                if (!error) {
+                  console.log('course updated');
+                  res.redirect('/dashboard'); 
+                } else {
+                  console.log('error updating course');
+                  res.redirect('/courses/edit');
+                };
               });
             };
           });
@@ -763,15 +763,19 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}).toArray(function(error, results) {
           if ((results) && (results.length > 0)) {
             //edit existing score
-            console.log('grade already exists for '+results[0].first_name);
-
-            res.json([]);
-
+            db.collection('students').update({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.score": score, "scores.$.points": points, "scores.$.weight": weight}}, function(error, result) {
+              if (!error) {
+                console.log('grade updated '+ result);
+                res.json(result); //write result
+              };
+            });
           } else {
             //add score to student
             db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$push: {scores: {assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}}, function(error, result) {
+              if (!error) {
                 console.log('grade entered '+ result);
                 res.json(result); //write result
+              };
             });
           };   
         //add student score to course/assessment (not currently working)
