@@ -28505,11 +28505,15 @@ $('document').ready(function () {
         var first_name = this.props.student.first_name;
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
+        var course_id = $('#current-course-id').val();
         var assessment_id = $('#current-assessment-id').val();
         var score = "";
         var points = "";
         var percent = "";
+        var course_percentage = "";
         if (this.props.student.scores && this.props.student.scores.length > 0) {
+          course_percentage = 0;
+          var total_weight = 0;
           for (var i = 0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
               score = this.props.student.scores[i].score;
@@ -28520,8 +28524,16 @@ $('document').ready(function () {
                 percent = "NA";
               };
               score = score.toLocaleString();
-              break;
             };
+            if (this.props.student.scores[i].course_id.toString() == course_id.toString()) {
+              course_percentage += this.props.student.scores[i].score / this.props.student.scores[i].points * this.props.student.scores[i].weight;
+              total_weight += this.props.student.scores[i].weight;
+            };
+          };
+          if (total_weight > 0) {
+            course_percentage = (course_percentage / total_weight * 100).toFixed(1).toLocaleString();
+          } else {
+            course_percentage = "";
           };
         };
         return React.createElement(
@@ -28557,7 +28569,11 @@ $('document').ready(function () {
             { className: 'right' },
             percent
           ),
-          React.createElement('td', { className: 'right' })
+          React.createElement(
+            'td',
+            { className: 'right' },
+            course_percentage
+          )
         );
       }
     });
