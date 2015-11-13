@@ -241,7 +241,7 @@ select {
 }
 
 .table-header {
-	width: 100%;
+	width: 98%;
 	height: 25px;
 	border-top: solid black 1px;
 	border-bottom: solid black 1px;
@@ -252,7 +252,7 @@ select {
 }
 
 .data-table {
-	width: 100%;
+	width: 98%;
 	/*border: solid red 2px;*/
 }
 

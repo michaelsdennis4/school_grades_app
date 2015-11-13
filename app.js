@@ -63,7 +63,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 	});
 
 	app.get('/', function(req, res){
-	  res.render('index')
+	  res.render('index.ejs')
 	});
 
   app.post('/login', function(req, res) {
@@ -198,7 +198,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}}, function(error, result) {
             if (!error) {
               req.session.username = req.body.first_name +' '+req.body.last_name;
-              res.render('dashboard', {session: req.session});
+              res.render('dashboard.ejs', {session: req.session});
             } else {
               res.redirect('/dashboard');
             }
@@ -215,7 +215,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           req.session.current_course_id = "";
           req.session.current_assessment_id = "";
           req.session.current_student_id = "";
-          res.render('dashboard', {session: req.session});
+          res.render('dashboard.ejs', {session: req.session});
         } else {
           res.redirect('/dashboard');
         }
@@ -231,7 +231,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           req.session.current_course_id = "";
           req.session.current_assessment_id = "";
           req.session.current_student_id = "";
-          res.render('dashboard', {session: req.session});
+          res.render('dashboard.ejs', {session: req.session});
         } else {
           res.redirect('/dashboard');
         }
@@ -327,30 +327,37 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.patch('/courses', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
-      if (req.body.title.length === 0) {
-        res.redirect('/courses/edit');
-        console.log('title cannot be blank');
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_course_id.length > 0) {
+        if (req.body.title.length === 0) {
+          res.redirect('/courses/edit');
+          console.log('title cannot be blank');
+        } else {
+          //make sure the change does not create a duplicate course
+          db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+            if ((results.length > 0) && (results[0].courses[0]._id.toString() != req.session.current_course_id.toString())) {
+              res.redirect('/courses/edit');
+              console.log('course already exists');
+            } else {
+              db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
+                  if (!error) {
+                    console.log('course updated');
+                    res.redirect('/dashboard'); 
+                  } else {
+                    console.log('error updating course');
+                    res.redirect('/courses/edit');
+                  }
+              });
+            };
+          });
+        };
       } else {
-        //make sure the change does not create a duplicate course
-        db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
-          if ((results.length > 0) && (results[0].courses[0]._id.toString() != req.session.current_course_id.toString())) {
-            res.redirect('/courses/edit');
-            console.log('course already exists');
-          } else {
-            db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
-                if (!error) {
-                  console.log('course updated');
-                  res.redirect('/dashboard'); 
-                } else {
-                  console.log('error updating course');
-                  res.redirect('/courses/edit');
-                }
-            });
-          };
-        });
-      };
-    };
+        console.log("no course selected");
+        res.redirect('/dashboard');
+      }
+    } else {
+      res.redirect('/sorry');
+    }
   });
 
   app.post('/current_course/:id', function(req, res) {
@@ -536,6 +543,9 @@ MongoClient.connect(mongoUri, function(error, db) {
                 if (!error) {
                   console.log('student scores updated');
                   res.redirect('/dashboard');
+                } else {
+                  console.log('error updating student scores');
+                  res.redirect('/assessments/edit');
                 };
               });
             } else {
@@ -544,7 +554,12 @@ MongoClient.connect(mongoUri, function(error, db) {
             };
           });
         };
+      } else {
+        console.log('no assessment selected');
+        res.redirect('/dashboard');
       };
+    } else {
+      res.redirect('/sorry');
     };
   });
 
@@ -620,7 +635,28 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/students/new', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('students/new');
+      res.render('students/new.ejs');
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.get('/students/edit', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_student_id.length > 0) {
+        db.collection("students").find({_id: ObjectId(req.session.current_student_id)}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            var student = results[0];
+            student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            res.render('students/edit.ejs', {student: student});
+          } else {
+            res.redirect('/dashboard');
+          };
+        });
+      } else {
+        res.redirect('/dashboard');
+      };
     } else {
       res.redirect('/sorry');
     };
@@ -629,17 +665,44 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/students', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
-        res.redirect('/users/new');
         console.log('first name cannot be blank');
-      }
-      else if (req.body.last_name.length === 0) {
-        res.redirect('/users/new');
+        res.redirect('/users/new');   
+      } else if (req.body.last_name.length === 0) {
         console.log('last name cannot be blank');
-      } 
-      else {
+        res.redirect('/users/new');
+      } else {
         db.collection('students').insert({first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}, function(error, results) {
             res.redirect('/dashboard');
         });
+      };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.patch('/students', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_student_id.length > 0) {
+        if (req.body.first_name.length === 0) {
+          res.redirect('/users/new');
+          console.log('first name cannot be blank');
+        } else if (req.body.last_name.length === 0) {
+          res.redirect('/users/new');
+          console.log('last name cannot be blank');
+        } else {
+          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}}, function(error, result) {
+            if (!error) {
+              console.log("student profile updated");
+              res.redirect('/dashboard');
+            } else {
+              console.log('error updating student profile');
+              res.redirect('/students/edit');
+            };
+          });
+        };
+      } else {
+        console.log('no student selected');
+        res.redirect('/dashboard');
       };
     } else {
       res.redirect('/sorry');
@@ -655,7 +718,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       }; 
       console.log("current student updated "+req.session.current_student_id);
       res.json({});
-      //res.redirect('/dashboard');
     };
   });
 

@@ -28741,26 +28741,34 @@ $('document').ready(function () {
 
     //DASHBOARD INITIALIZATION -----------------------------------------------
 
-    //if already current course then re-select row in courses table
     var current_course_id = $('#current-course-id').val();
-    console.log('the current course id is ' + current_course_id);
-    if (current_course_id.length > 0) {
-      var courses_table = document.querySelector('table#courses');
-      var data_rows = [];
-      //for some reason need a one second delay to get the rows (react)???
-      var get_data_rows = function () {
-        data_rows = courses_table.rows;
-        for (var i = 0; i < data_rows.length; i++) {
-          var cell = data_rows[i].children[0];
-          if (cell.textContent.toString() == current_course_id.toString()) {
-            $(cell).trigger('click');
+    var current_assessment_id = $('#current-assessment-id').val();
+    var current_student_id = $('#current-student-id').val();
+
+    var resetCourse = function () {
+      console.log('the current course id is ' + current_course_id);
+      //reselect current course
+      if (current_course_id.length > 0) {
+        var courses_table = document.querySelector('table#courses');
+        var data_rows = [];
+        //for some reason need a one second delay to get the rows (react)???
+        var get_data_rows = function () {
+          data_rows = courses_table.rows;
+          for (var i = 0; i < data_rows.length; i++) {
+            var cell = data_rows[i].children[0];
+            if (cell.textContent.toString() == current_course_id.toString()) {
+              cell.click();
+            };
           };
+          resetAssessment();
         };
+        setTimeout(get_data_rows, 100);
       };
-      setTimeout(get_data_rows, 100);
-      //re-select current assessment
-      var current_assessment_id = $('#current-assessment-id').val();
+    };
+
+    var resetAssessment = function () {
       console.log('the current assessment id is ' + current_assessment_id);
+      //re-select current assessment  
       if (current_assessment_id.length > 0) {
         var assessments_table = document.querySelector('table#assessments');
         var data_rows = [];
@@ -28770,30 +28778,38 @@ $('document').ready(function () {
           for (var i = 0; i < data_rows.length; i++) {
             var cell = data_rows[i].children[0];
             if (cell.textContent.toString() == current_assessment_id.toString()) {
-              $(cell).trigger('click');
+              //$(cell).trigger('click');
+              cell.click();
+            };
+          };
+          resetStudent();
+        };
+        setTimeout(get_data_rows, 100);
+      };
+    };
+
+    var resetStudent = function () {
+      console.log('the current student id is ' + current_student_id);
+      //reselect current student    
+      if (current_student_id.length > 0) {
+        var students_table = document.querySelector('table#students');
+        var data_rows = [];
+        //for some reason need a one second delay to get the rows (react)???
+        var get_data_rows = function () {
+          data_rows = students_table.rows;
+          for (var i = 0; i < data_rows.length; i++) {
+            var cell = data_rows[i].children[0];
+            if (cell.textContent.toString() == current_student_id.toString()) {
+              // $(cell).trigger('click');
+              cell.click();
             };
           };
         };
         setTimeout(get_data_rows, 100);
-        //reselect current student
-        var current_student_id = $('#current-student-id').val();
-        console.log('the current student id is ' + current_student_id);
-        if (current_student_id.length > 0) {
-          var students_table = document.querySelector('table#students');
-          var data_rows = [];
-          //for some reason need a one second delay to get the rows (react)???
-          var get_data_rows = function () {
-            data_rows = students_table.rows;
-            for (var i = 0; i < data_rows.length; i++) {
-              var cell = data_rows[i].children[0];
-              if (cell.textContent.toString() == current_student_id.toString()) {
-                $(cell).trigger('click');
-              };
-            };
-          };
-        };
       };
     };
+
+    resetCourse();
   } else if (document.body.id === 'enrollment') {
 
     $('.student_enroll').on('click', function (event) {
