@@ -531,7 +531,13 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id), "courses.assessments._id": ObjectId(req.session.current_assessment_id)}, {$set: updateNode}, function(error, result) {
             if (!error) {
               console.log('assessment updated');
-              res.redirect('/dashboard');
+              //update points and weight for all student scores for this assessment
+              db.collection("students").update({"scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.points": req.body.points, "scores.$.weight": weight}}, {multi: true}, function(error, result) {
+                if (!error) {
+                  console.log('student scores updated');
+                  res.redirect('/dashboard');
+                };
+              });
             } else {
               console.log('error updating assessment');
               res.redirect('/assessments/edit');

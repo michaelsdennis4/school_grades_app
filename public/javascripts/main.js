@@ -242,7 +242,7 @@ $('document').ready(function() {
             <td>{last_name}</td>
             <td>{first_name}</td>
             <td className="right">{grad_year}</td>
-            <td className="right">{score}</td>  
+            <td className="right">{score}/{points}</td>  
             <td className="right">{percent}</td>
             <td className="right"></td>  
           </tr>
