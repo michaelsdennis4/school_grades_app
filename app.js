@@ -340,8 +340,10 @@ MongoClient.connect(mongoUri, function(error, db) {
           } else {
             db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
                 if (!error) {
+                  console.log('course updated');
                   res.redirect('/dashboard'); 
                 } else {
+                  console.log('error updating course');
                   res.redirect('/courses/edit');
                 }
             });
@@ -410,15 +412,6 @@ MongoClient.connect(mongoUri, function(error, db) {
         if ((results.length > 0) && (results[0].courses[0].assessments)) {
           assessments = results[0].courses[0].assessments;
           if (assessments.length > 0) {
-            // assessments.sort(function (a, b) {
-            //   if (a.name > b.name) {
-            //     return 1;
-            //   };
-            //   if (a.name < b.name) {
-            //     return -1;
-            //   };
-            //   return 0;
-            // });
             assessments.map(function(assessment) {
               assessment.name = assessment.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
@@ -434,11 +427,41 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/assessments/new', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      if ((req.session.current_course_id) && (req.session.current_course_id.length > 0)) {
+      if (req.session.current_course_id.length > 0) {
         db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
           if ((results.length > 0) && (results[0].courses.length > 0)) {
             var course = results[0].courses[0];
             res.render('assessments/new.ejs', {course: course});
+          } else {
+            res.redirect('/dashboard');
+          };
+        });
+      } else {
+        res.redirect('/dashboard');
+      };
+    } else {
+      res.redirect('/sorry');
+    }; 
+  });
+
+  app.get('/assessments/edit', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if ((req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0)) {
+        db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
+          if (results.length > 0) {
+            var course = results[0].courses[0];
+            for (var i=0; i< course.assessments.length; i++) {
+              if (course.assessments[i]._id.toString() == req.session.current_assessment_id.toString()) {
+                var assessment = course.assessments[i];
+                var position = i;
+                break;
+              };
+            };
+            if (assessment) {
+              res.render('assessments/edit.ejs', {course: course, assessment: assessment, position: position});
+            } else {
+              res.redirect('/dashboard');
+            };
           } else {
             res.redirect('/dashboard');
           };
@@ -471,14 +494,51 @@ MongoClient.connect(mongoUri, function(error, db) {
         weight = req.body.points;
       };
       db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
-          if (results) {
-            console.log('new assessment created');
-            res.redirect('/dashboard');
-          } else {
-            console.log('error creating assessment');
-            res.redirect('/assessments/new');
-          };
+        if (!error) {
+          console.log('new assessment created');
+          res.redirect('/dashboard');
+        } else {
+          console.log('error creating assessment');
+          res.redirect('/assessments/new');
+        };
       });
+    };
+  });
+
+  app.patch('/assessments', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if ((req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0)) {
+        if (req.body.name.length === 0) {
+          console.log('name cannot be blank');
+          res.redirect('/assessments/edit');
+        } 
+        else {
+          var weight;
+          if (req.body.weight) {
+            weight = req.body.weight;
+          } else {
+            weight = req.body.points;
+          };
+          var updateNode = {};
+          var key = "courses.$.assessments."+parseInt(req.body.position)+".name";
+          updateNode[key] = req.body.name.toLowerCase();
+          key = "courses.$.assessments."+parseInt(req.body.position)+".type";
+          updateNode[key] = req.body.type;
+          key = "courses.$.assessments."+parseInt(req.body.position)+".points";
+          updateNode[key] = req.body.points;
+          key = "courses.$.assessments."+parseInt(req.body.position)+".weight";
+          updateNode[key] = weight;
+          db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id), "courses.assessments._id": ObjectId(req.session.current_assessment_id)}, {$set: updateNode}, function(error, result) {
+            if (!error) {
+              console.log('assessment updated');
+              res.redirect('/dashboard');
+            } else {
+              console.log('error updating assessment');
+              res.redirect('/assessments/edit');
+            };
+          });
+        };
+      };
     };
   });
 
