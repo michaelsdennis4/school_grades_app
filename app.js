@@ -245,7 +245,7 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, results) { 
         var courses = [];
-        if (results.length > 0) {
+        if ((!error) && (results) && (results.length > 0)) {
           courses = results[0].courses;
           if (courses.length > 0) {
             courses.sort(function (a, b) {
@@ -262,11 +262,23 @@ MongoClient.connect(mongoUri, function(error, db) {
             });
           }; 
         };
-        console.log('returning '+courses.length+' courses');
-        res.json(courses);
+        //get all student scores
+        var student_scores = [];
+        db.collection('students').find({}).toArray(function(error, results) {
+          if ((!error) && (results) && (results.length > 0)) {
+            results.forEach(function(student) {
+              student.scores.forEach(function(score) {
+                  student_scores.push(score);
+              });
+            });
+          }; 
+          console.log('returning '+courses.length+' courses');
+          console.log('returning '+student_scores.length+' student scores');
+          res.json({courses: courses, student_scores: student_scores});
+        });
       });
     } else {
-      res.json([]);
+      res.json({courses: [], student_scores: []});
     };
   });
   
@@ -442,7 +454,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         });
       });
     } else {
-      res.json([]);
+      res.json({assessments: [], student_scores: []});
     };
   });
 

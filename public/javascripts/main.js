@@ -18,7 +18,7 @@ $('document').ready(function() {
           dataType: 'json',
           cache: false,
           success: function(data) {
-            this.setState({courses: data});
+            this.setState({courses: data.courses, student_scores: data.student_scores});
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -26,7 +26,7 @@ $('document').ready(function() {
         });
       },
       getInitialState: function() {
-        return {courses: []};
+        return {courses: [], student_scores: []};
       },
       componentDidMount: function() {
         this.loadCoursesFromServer();
@@ -37,6 +37,7 @@ $('document').ready(function() {
         // students_table.loadStudentsFromServer();
       },
       render: function() {
+        var student_scores = this.state.student_scores;
     	  return (
           <table className="data-table" id="courses" onClick={this.handleClick}>
     	      <thead>
@@ -52,7 +53,7 @@ $('document').ready(function() {
             </thead>
             <tbody>
               {this.state.courses.map(function(course) {
-                return <CoursesTableRow key={course._id} course={course} />;
+                return <CoursesTableRow key={course._id} course={course} student_scores={student_scores} />;
               })}
             </tbody>
     	    </table>
@@ -78,6 +79,39 @@ $('document').ready(function() {
         if (this.props.course.assessments) {
           num_assessments = this.props.course.assessments.length;
         };
+        var class_average = "";
+        var total_score;
+        var count;
+        var average;
+        var averages = [];
+        //iterate through course assessments
+        for (var i=0; i < this.props.course.assessments.length; i++) {
+          var assessment = this.props.course.assessments[i];
+          total_score = 0;
+          count = 0;
+          this.props.student_scores.forEach(function(score) {
+            if (score.assessment_id.toString() == assessment._id.toString()) {
+              if (score.score !== 'X') {
+                total_score += ((score.score / score.points) * 100);
+                count++;
+              };
+            };
+          });
+          if (count > 0) {
+            average = (total_score / count);
+            averages.push({average: average, weight: assessment.weight});
+          };
+        };
+        //calculate overall class average
+        total_score = 0;
+        var total_weight = 0;
+        averages.forEach(function(average) {
+          total_score += (average.average * average.weight);
+          total_weight += parseInt(average.weight);
+        });
+        if (total_weight > 0) {
+          class_average = (total_score / total_weight).toFixed(1).toLocaleString();
+        };
         return (
           <tr className="data-row" id="course">
             <td className="hidden">{course_id}</td>
@@ -86,7 +120,7 @@ $('document').ready(function() {
             <td className="right">{auto}</td> 
             <td className="right">{num_students}</td> 
             <td className="right">{num_assessments}</td> 
-            <td className="right"></td> 
+            <td className="right">{class_average}</td> 
           </tr>
         );
       }
@@ -465,6 +499,7 @@ $('document').ready(function() {
             console.log('grade posted');
             students_table.loadStudentsFromServer();
             assessments_table.loadAssessmentsFromServer();
+            courses_table.loadCoursesFromServer();
             //select next row in table
             var select_next_row = function() {
               var current_student_id = $('#current-student-id').val();

@@ -28153,7 +28153,7 @@ $('document').ready(function () {
           dataType: 'json',
           cache: false,
           success: (function (data) {
-            this.setState({ courses: data });
+            this.setState({ courses: data.courses, student_scores: data.student_scores });
           }).bind(this),
           error: (function (xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -28161,7 +28161,7 @@ $('document').ready(function () {
         });
       },
       getInitialState: function () {
-        return { courses: [] };
+        return { courses: [], student_scores: [] };
       },
       componentDidMount: function () {
         this.loadCoursesFromServer();
@@ -28172,6 +28172,7 @@ $('document').ready(function () {
         // students_table.loadStudentsFromServer();
       },
       render: function () {
+        var student_scores = this.state.student_scores;
         return React.createElement(
           'table',
           { className: 'data-table', id: 'courses', onClick: this.handleClick },
@@ -28222,7 +28223,7 @@ $('document').ready(function () {
             'tbody',
             null,
             this.state.courses.map(function (course) {
-              return React.createElement(CoursesTableRow, { key: course._id, course: course });
+              return React.createElement(CoursesTableRow, { key: course._id, course: course, student_scores: student_scores });
             })
           )
         );
@@ -28246,6 +28247,39 @@ $('document').ready(function () {
         var num_assessments = 0;
         if (this.props.course.assessments) {
           num_assessments = this.props.course.assessments.length;
+        };
+        var class_average = "";
+        var total_score;
+        var count;
+        var average;
+        var averages = [];
+        //iterate through course assessments
+        for (var i = 0; i < this.props.course.assessments.length; i++) {
+          var assessment = this.props.course.assessments[i];
+          total_score = 0;
+          count = 0;
+          this.props.student_scores.forEach(function (score) {
+            if (score.assessment_id.toString() == assessment._id.toString()) {
+              if (score.score !== 'X') {
+                total_score += score.score / score.points * 100;
+                count++;
+              };
+            };
+          });
+          if (count > 0) {
+            average = total_score / count;
+            averages.push({ average: average, weight: assessment.weight });
+          };
+        };
+        //calculate overall class average
+        total_score = 0;
+        var total_weight = 0;
+        averages.forEach(function (average) {
+          total_score += average.average * average.weight;
+          total_weight += parseInt(average.weight);
+        });
+        if (total_weight > 0) {
+          class_average = (total_score / total_weight).toFixed(1).toLocaleString();
         };
         return React.createElement(
           'tr',
@@ -28280,7 +28314,11 @@ $('document').ready(function () {
             { className: 'right' },
             num_assessments
           ),
-          React.createElement('td', { className: 'right' })
+          React.createElement(
+            'td',
+            { className: 'right' },
+            class_average
+          )
         );
       }
     });
@@ -28766,6 +28804,7 @@ $('document').ready(function () {
             console.log('grade posted');
             students_table.loadStudentsFromServer();
             assessments_table.loadAssessmentsFromServer();
+            courses_table.loadCoursesFromServer();
             //select next row in table
             var select_next_row = function () {
               var current_student_id = $('#current-student-id').val();
