@@ -99,7 +99,7 @@ $('document').ready(function() {
           dataType: 'json',
           cache: false,
           success: function(data) {
-            this.setState({assessments: data});
+            this.setState({assessments: data.assessments, student_scores: data.student_scores});
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -107,7 +107,7 @@ $('document').ready(function() {
         });
       },
       getInitialState: function() {
-        return {assessments: []};
+        return {assessments: [], student_scores: []};
       },
       componentDidMount: function() {
         this.loadAssessmentsFromServer();
@@ -118,9 +118,12 @@ $('document').ready(function() {
       },
       render: function() {
         var total_weight = 0;
-        this.state.assessments.forEach(function(assessment) {
-          total_weight += parseInt(assessment.weight);
-        });
+        if (this.state.assessments.length > 0) {
+          this.state.assessments.forEach(function(assessment) {
+            total_weight += parseInt(assessment.weight);
+          });
+        };
+        var student_scores = this.state.student_scores;
         return (
           <table className="data-table" id="assessments" onClick={this.handleClick}>
             <thead>
@@ -136,7 +139,7 @@ $('document').ready(function() {
             </thead>
             <tbody>
               {this.state.assessments.map(function(assessment) {
-                return <AssessmentsTableRow key={assessment._id} assessment={assessment} total_weight={total_weight}/>;
+                return <AssessmentsTableRow key={assessment._id} assessment={assessment} total_weight={total_weight} student_scores={student_scores}/>;
               })}
             </tbody>
           </table>
@@ -155,6 +158,22 @@ $('document').ready(function() {
         if (this.props.total_weight > 0) {
           percentage_weight = ((this.props.assessment.weight / this.props.total_weight) * 100).toFixed(1).toLocaleString();
         };
+        var average_score = "";
+        var total_score = 0;
+        var count = 0;
+        if (this.props.student_scores.length > 0) {
+          this.props.student_scores.forEach(function(score){
+            if (score.assessment_id.toString() == assessment_id.toString()) {
+              if (score.score !== 'X') {
+                total_score += ((score.score / score.points) * 100);
+                count++;
+              };
+            };
+          });
+          if (count > 0) {
+            average_score = (total_score / count).toFixed(1).toLocaleString();
+          };
+        };
         return (
           <tr className="data-row" id="assessment">
             <td className="hidden">{assessment_id}</td>
@@ -163,7 +182,7 @@ $('document').ready(function() {
             <td className="right">{points}</td>
             <td className="right">{weight}</td> 
             <td className="right">{percentage_weight}</td> 
-            <td className="right"></td> 
+            <td className="right">{average_score}</td> 
           </tr>
         );
       }
@@ -445,6 +464,7 @@ $('document').ready(function() {
           }).done(function() {
             console.log('grade posted');
             students_table.loadStudentsFromServer();
+            assessments_table.loadAssessmentsFromServer();
             //select next row in table
             var select_next_row = function() {
               var current_student_id = $('#current-student-id').val();

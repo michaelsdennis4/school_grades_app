@@ -28292,7 +28292,7 @@ $('document').ready(function () {
           dataType: 'json',
           cache: false,
           success: (function (data) {
-            this.setState({ assessments: data });
+            this.setState({ assessments: data.assessments, student_scores: data.student_scores });
           }).bind(this),
           error: (function (xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -28300,7 +28300,7 @@ $('document').ready(function () {
         });
       },
       getInitialState: function () {
-        return { assessments: [] };
+        return { assessments: [], student_scores: [] };
       },
       componentDidMount: function () {
         this.loadAssessmentsFromServer();
@@ -28311,9 +28311,12 @@ $('document').ready(function () {
       },
       render: function () {
         var total_weight = 0;
-        this.state.assessments.forEach(function (assessment) {
-          total_weight += parseInt(assessment.weight);
-        });
+        if (this.state.assessments.length > 0) {
+          this.state.assessments.forEach(function (assessment) {
+            total_weight += parseInt(assessment.weight);
+          });
+        };
+        var student_scores = this.state.student_scores;
         return React.createElement(
           'table',
           { className: 'data-table', id: 'assessments', onClick: this.handleClick },
@@ -28364,7 +28367,7 @@ $('document').ready(function () {
             'tbody',
             null,
             this.state.assessments.map(function (assessment) {
-              return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment, total_weight: total_weight });
+              return React.createElement(AssessmentsTableRow, { key: assessment._id, assessment: assessment, total_weight: total_weight, student_scores: student_scores });
             })
           )
         );
@@ -28381,6 +28384,22 @@ $('document').ready(function () {
         var percentage_weight = '0';
         if (this.props.total_weight > 0) {
           percentage_weight = (this.props.assessment.weight / this.props.total_weight * 100).toFixed(1).toLocaleString();
+        };
+        var average_score = "";
+        var total_score = 0;
+        var count = 0;
+        if (this.props.student_scores.length > 0) {
+          this.props.student_scores.forEach(function (score) {
+            if (score.assessment_id.toString() == assessment_id.toString()) {
+              if (score.score !== 'X') {
+                total_score += score.score / score.points * 100;
+                count++;
+              };
+            };
+          });
+          if (count > 0) {
+            average_score = (total_score / count).toFixed(1).toLocaleString();
+          };
         };
         return React.createElement(
           'tr',
@@ -28415,7 +28434,11 @@ $('document').ready(function () {
             { className: 'right' },
             percentage_weight
           ),
-          React.createElement('td', { className: 'right' })
+          React.createElement(
+            'td',
+            { className: 'right' },
+            average_score
+          )
         );
       }
     });
@@ -28742,6 +28765,7 @@ $('document').ready(function () {
           }).done(function () {
             console.log('grade posted');
             students_table.loadStudentsFromServer();
+            assessments_table.loadAssessmentsFromServer();
             //select next row in table
             var select_next_row = function () {
               var current_student_id = $('#current-student-id').val();

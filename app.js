@@ -414,9 +414,9 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/assessments', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
-        var assessments = [];
-        if ((results.length > 0) && (results[0].courses[0].assessments)) {
+      var assessments = [];
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {  
+        if ((!error) && (results) && (results.length > 0) && (results[0].courses[0].assessments)) {
           assessments = results[0].courses[0].assessments;
           if (assessments.length > 0) {
             assessments.map(function(assessment) {
@@ -424,8 +424,22 @@ MongoClient.connect(mongoUri, function(error, db) {
             });
           };
         };
-        console.log('returning '+assessments.length+' assessments');
-        res.json(assessments);
+        //get all student scores for this course
+        var student_scores = [];
+        db.collection('students').find({}).toArray(function(error, results) {
+          if ((!error) && (results) && (results.length > 0)) {
+            results.forEach(function(student) {
+              student.scores.forEach(function(score) {
+                if (score.course_id.toString() == req.session.current_course_id.toString()) {
+                  student_scores.push(score);
+                };
+              });
+            });
+          }; 
+          console.log('returning '+assessments.length+' assessments');
+          console.log('returning '+student_scores.length+' student scores');
+          res.json({assessments: assessments, student_scores: student_scores});
+        });
       });
     } else {
       res.json([]);
@@ -760,7 +774,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       var points = req.body.points;
       var weight = req.body.weight;
       //first check if there is already a score
-      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}).toArray(function(error, results) {
+      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
         if ((results) && (results.length > 0)) {
           //edit existing score
           db.collection('students').update({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.score": score, "scores.$.points": points, "scores.$.weight": weight}}, function(error, result) {
