@@ -14,8 +14,8 @@
 		<h2>Student Enrollment<h2>
 
 		<% course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); %>
-		<h5>Course Title: <%= course.title %></h5>
-		<h5>Section: <%= course.section %></h5>
+		<h3>Course Title: <%= course.title %></h3>
+		<h3>Section: <%= course.section %></h3>
 
 		<div class="enrollment">
 			<% students.forEach(function(student) { %>
@@ -37,6 +37,10 @@
 			<% }); %>
 			<br><br>
 		</div>
+
+		<form action="/dashboard">
+			<input type="submit" value="Update Enrollment"/>
+		</form>
 
 	</div>
 
