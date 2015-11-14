@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-//var mongoUri    = process.env.MONGOLAB_URI;
-var mongoUri    = 'mongodb://localhost:27017/school_grades'
+var mongoUri    = process.env.MONGOLAB_URI;
+//var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -164,17 +164,23 @@ MongoClient.connect(mongoUri, function(error, db) {
       else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
-        db.collection('users').insert({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: 2015, current_term: 1}, function(error, results) {
-          session = req.session;
-          session.user_id = user._id;
-          session.username = user.first_name +' '+user.last_name;
-          session.current_year = user.current_year;
-          session.current_term = user.current_term;
-          session.current_course_id = "";
-          session.current_assessment_id = "";
-          session.current_student_id = "";
-          console.log('user logged in!');
-          res.redirect('/dashboard');
+        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: 2015, current_term: 1};
+        db.collection('users').insert(new_user, function(error, result) {
+          if ((!error) && (result)) {
+            console.log('new user id is '+new_user._id);
+            session = req.session;
+            session.user_id = new_user._id;
+            session.username = new_user.first_name +' '+new_user.last_name;
+            session.current_year = new_user.current_year;
+            session.current_term = new_user.current_term;
+            session.current_course_id = "";
+            session.current_assessment_id = "";
+            session.current_student_id = "";
+            console.log('user logged in!');
+            res.redirect('/dashboard');
+          } else {
+            res.redirect('/users/new');
+          };
         });
       };
     });
