@@ -131,8 +131,12 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.get('/users/edit', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, users) {
-      user = users[0];
-      res.render('users/edit.ejs', {user: user});
+        if (!error) {
+          user = users[0];
+          res.render('users/edit.ejs', {user: user});
+        } else {
+          res.redirect('/dashboard');
+        };
     });
     } else {
       res.redirect('/sorry');
@@ -634,6 +638,7 @@ MongoClient.connect(mongoUri, function(error, db) {
             students.forEach(function(student) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
           };
           console.log('returning '+students.length+' students');
@@ -655,6 +660,7 @@ MongoClient.connect(mongoUri, function(error, db) {
             students.forEach(function(student) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
             req.session.current_course_id = "";
             req.session.current_assessment_id = "";
@@ -684,6 +690,7 @@ MongoClient.connect(mongoUri, function(error, db) {
             var student = results[0];
             student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             res.render('students/edit.ejs', {student: student});
           } else {
             res.redirect('/dashboard');
@@ -706,17 +713,15 @@ MongoClient.connect(mongoUri, function(error, db) {
         console.log('last name cannot be blank');
         res.redirect('/users/new');
       } else {
-        //check to make sure student isn't duplicated 
-        db.collection('students').find({user_id: req.session.user_id, identification: req.body.identification, grad_year: req.body.grad_year}).toArray(function(error, results) {
-          if ((results) && (results.length > 0)) {
-            console.log("student already exists");
-            res.redirect('/students/new');
-          } else {
-            db.collection('students').insert({user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}, function(error, results) {
+        db.collection('students').insert({user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year}, function(error, results) {
+          if (!error) {
+            console.log('student added');
             res.redirect('/dashboard');
-            });
+          } else {
+            console.log('error adding student');
+            res.redirect('/students/new');
           };
-        });
+        });   
       };
     } else {
       res.redirect('/sorry');
@@ -733,7 +738,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           res.redirect('/users/new');
           console.log('last name cannot be blank');
         } else {
-          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}}, function(error, result) {
+          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year}}, function(error, result) {
             if (!error) {
               console.log("student profile updated");
               res.redirect('/dashboard');

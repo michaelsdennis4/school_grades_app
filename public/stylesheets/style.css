@@ -14,8 +14,9 @@ body.dashboard {
 }
 
 .toplink {
-	margin-top: 20px;
 	height: 30px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .caption {
