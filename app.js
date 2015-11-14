@@ -268,14 +268,16 @@ MongoClient.connect(mongoUri, function(error, db) {
             });
           }; 
         };
-        //get all student scores
+        //get all student scores (for current user only)
         var student_scores = [];
         db.collection('students').find({}).toArray(function(error, results) {
           if ((!error) && (results) && (results.length > 0)) {
             results.forEach(function(student) {
-              student.scores.forEach(function(score) {
-                  student_scores.push(score);
-              });
+              if ((student.scores) && (student.scores.length > 0)) {
+                student.scores.forEach(function(score) {
+                    student_scores.push(score);
+                });
+              };
             });
           }; 
           console.log('returning '+courses.length+' courses');
@@ -447,11 +449,13 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('students').find({}).toArray(function(error, results) {
           if ((!error) && (results) && (results.length > 0)) {
             results.forEach(function(student) {
-              student.scores.forEach(function(score) {
-                if (score.course_id.toString() == req.session.current_course_id.toString()) {
-                  student_scores.push(score);
-                };
-              });
+              if ((student.scores) && (student.scores.length > 0)) {
+                student.scores.forEach(function(score) {
+                  if (score.course_id.toString() == req.session.current_course_id.toString()) {
+                    student_scores.push(score);
+                  };
+                });
+              };
             });
           }; 
           console.log('returning '+assessments.length+' assessments');
@@ -612,10 +616,10 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/students', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
+      var students = [];
       //if course is selected then need to filter students by course enrolled
       if (req.session.current_course_id.length > 0) {
-        db.collection("students").find({course_ids: {$elemMatch: {id: ObjectId(req.session.current_course_id)}}}).toArray(function(error, results) {
-          var students = [];
+        db.collection("students").find({user_id: ObjectId(req.session.user_id), course_ids: {$elemMatch: {id: ObjectId(req.session.current_course_id)}}}).toArray(function(error, results) {
           if (results.length > 0) {
             students = results;
             students.sort(function (a, b) {
@@ -627,7 +631,7 @@ MongoClient.connect(mongoUri, function(error, db) {
               }
               return 0;
             });
-            students.map(function(student) {
+            students.forEach(function(student) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
@@ -636,8 +640,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           res.json(students);
         });
       } else {  //all students
-        db.collection('students').find({}).toArray(function(error, results) {
-          var students = [];
+        db.collection('students').find({user_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
           if (results.length > 0) {
             students = results;
             students.sort(function (a, b) {
@@ -649,7 +652,7 @@ MongoClient.connect(mongoUri, function(error, db) {
               };
               return 0;
             });
-            students.map(function(student) {
+            students.forEach(function(student) {
               student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
               student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             });
@@ -703,8 +706,16 @@ MongoClient.connect(mongoUri, function(error, db) {
         console.log('last name cannot be blank');
         res.redirect('/users/new');
       } else {
-        db.collection('students').insert({first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}, function(error, results) {
+        //check to make sure student isn't duplicated 
+        db.collection('students').find({user_id: req.session.user_id, identification: req.body.identification, grad_year: req.body.grad_year}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            console.log("student already exists");
+            res.redirect('/students/new');
+          } else {
+            db.collection('students').insert({user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, grad_year: req.body.grad_year}, function(error, results) {
             res.redirect('/dashboard');
+            });
+          };
         });
       };
     } else {
