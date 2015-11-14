@@ -28254,32 +28254,34 @@ $('document').ready(function () {
         var average;
         var averages = [];
         //iterate through course assessments
-        for (var i = 0; i < this.props.course.assessments.length; i++) {
-          var assessment = this.props.course.assessments[i];
-          total_score = 0;
-          count = 0;
-          this.props.student_scores.forEach(function (score) {
-            if (score.assessment_id.toString() == assessment._id.toString()) {
-              if (score.score !== 'X') {
-                total_score += score.score / score.points * 100;
-                count++;
+        if (this.props.course.assessments) {
+          for (var i = 0; i < this.props.course.assessments.length; i++) {
+            var assessment = this.props.course.assessments[i];
+            total_score = 0;
+            count = 0;
+            this.props.student_scores.forEach(function (score) {
+              if (score.assessment_id.toString() == assessment._id.toString()) {
+                if (score.score !== 'X') {
+                  total_score += score.score / score.points * 100;
+                  count++;
+                };
               };
+            });
+            if (count > 0) {
+              average = total_score / count;
+              averages.push({ average: average, weight: assessment.weight });
             };
-          });
-          if (count > 0) {
-            average = total_score / count;
-            averages.push({ average: average, weight: assessment.weight });
           };
-        };
-        //calculate overall class average
-        total_score = 0;
-        var total_weight = 0;
-        averages.forEach(function (average) {
-          total_score += average.average * average.weight;
-          total_weight += parseInt(average.weight);
-        });
-        if (total_weight > 0) {
-          class_average = (total_score / total_weight).toFixed(1).toLocaleString();
+          //calculate overall class average
+          total_score = 0;
+          var total_weight = 0;
+          averages.forEach(function (average) {
+            total_score += average.average * average.weight;
+            total_weight += parseInt(average.weight);
+          });
+          if (total_weight > 0) {
+            class_average = (total_score / total_weight).toFixed(1).toLocaleString();
+          };
         };
         return React.createElement(
           'tr',
@@ -28426,7 +28428,7 @@ $('document').ready(function () {
         var average_score = "";
         var total_score = 0;
         var count = 0;
-        if (this.props.student_scores.length > 0) {
+        if (this.props.student_scores && this.props.student_scores.length > 0) {
           this.props.student_scores.forEach(function (score) {
             if (score.assessment_id.toString() == assessment_id.toString()) {
               if (score.score !== 'X') {

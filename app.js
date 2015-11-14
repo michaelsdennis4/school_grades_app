@@ -164,7 +164,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
-        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: 2015, current_term: 1};
+        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: "2015", current_term: "1"};
         db.collection('users').insert(new_user, function(error, result) {
           if ((!error) && (result)) {
             console.log('new user id is '+new_user._id);
