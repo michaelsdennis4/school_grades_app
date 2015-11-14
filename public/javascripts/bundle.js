@@ -28380,7 +28380,7 @@ $('document').ready(function () {
         var weight = this.props.assessment.weight.toLocaleString();
         var percentage_weight = '0';
         if (this.props.total_weight > 0) {
-          percentage_weight = (this.props.assessment.weight / this.props.total_weight * 100).toLocaleString();
+          percentage_weight = (this.props.assessment.weight / this.props.total_weight * 100).toFixed(1).toLocaleString();
         };
         return React.createElement(
           'tr',
@@ -28518,14 +28518,14 @@ $('document').ready(function () {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
               score = this.props.student.scores[i].score;
               points = this.props.student.scores[i].points;
-              if (points > 0) {
+              if (points > 0 && score != 'X') {
                 percent = (score / points * 100).toLocaleString();
               } else {
                 percent = "NA";
               };
               score = score.toLocaleString();
             };
-            if (this.props.student.scores[i].course_id.toString() == course_id.toString()) {
+            if (this.props.student.scores[i].course_id.toString() == course_id.toString() && this.props.student.scores[i].score != 'X') {
               course_percentage += this.props.student.scores[i].score / this.props.student.scores[i].points * this.props.student.scores[i].weight;
               total_weight += this.props.student.scores[i].weight;
             };
@@ -28722,7 +28722,12 @@ $('document').ready(function () {
 
     $('#score').on('keydown', function (event) {
       if (event.keyCode === 13 && $('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
-        var score = parseFloat(event.target.value);
+        var score;
+        if (event.target.value === 'x' || event.target.value === 'X') {
+          score = 'X';
+        } else {
+          score = parseFloat(event.target.value);
+        };
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
         //also X for no score
