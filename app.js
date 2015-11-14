@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-//var mongoUri    = 'mongodb://localhost:27017/school_grades'
+//var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
