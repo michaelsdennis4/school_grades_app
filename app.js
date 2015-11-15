@@ -784,6 +784,47 @@ MongoClient.connect(mongoUri, function(error, db) {
     };
   });
 
+  app.delete('/students', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_student_id.length > 0) {
+        //unenroll from courses
+        db.collection('students').find({_id: ObjectId(req.session.current_student_id)}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            if ((results[0].course_ids) && (results[0].course_ids.length > 0)) {
+              var course_ids = results[0].course_ids;
+              for (var i=0; i < course_ids.length; i++) {
+                var course_id = course_ids[i].id;
+                //remove student from course
+                db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(course_id)}, {$pull: {"courses.$.student_ids": {id: ObjectId(req.session.current_student_id)}}}, function(error, result) {
+                  if (!error) {
+                    console.log('student unenrolled');
+                  } else {
+                    console.log('error unenrolling student');
+                  };
+                });
+              };
+            };
+          };
+        });
+        //delete student, including scores
+        db.collection('students').remove({_id: ObjectId(req.session.current_student_id)}, function(error, result) {
+          if (!error) {
+            console.log('student deleted');
+            res.redirect('/dashboard');
+          } else {
+            console.log('error deleting student');
+            res.redirect('/dashboard');
+          };
+        });
+      } else {
+        console.log('no student selected');
+        res.redirect('/dashboard');
+      };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
   app.post('/current_student/:id', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.params.id === '0') {

@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body>
+<body id="edit">
 
 	<div class="toplink">
 		<a href="/dashboard">Dashboard</a>
@@ -35,6 +35,11 @@
 			<br>
 			<input type="hidden" name="_method" value="patch"/>
 			<input type="submit" value="Update Student"/>
+		</form>
+
+		<form action="/students" method="post">
+			<input type="hidden" name="_method" value="delete"/>
+			<input type="submit" class="delete" id="student-delete" value="Delete Student"/>
 		</form>
 
 	</div>

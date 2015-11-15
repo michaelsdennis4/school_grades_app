@@ -673,6 +673,19 @@ $('document').ready(function() {
       };
     });
 
+
+
+
+  //EDIT EVENT LISTENERS ------------------------------------------------
+
+  } else if (document.body.id === 'edit') {
+
+    $('#student-delete').on('click', function(event) {
+      if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+
   };
 
 
