@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body>
+<body id="edit">
 
 	<div class="toplink">
 		<a href="/dashboard">Back to Dashboard</a>
@@ -11,7 +11,9 @@
 
 	<div class="box">
 
-		<h2>Edit Course<h2>
+		<h2>Edit Course</h2>
+
+		<hr>
 
 		<form action="/courses" method="post">
 			<label for="title">Course Title</label><br>
@@ -40,6 +42,13 @@
 			<br><br><br>
 			<input type="hidden" name="_method" value="patch"/>
 			<input type="submit" value="Update Course"/>
+		</form>
+
+		<hr>
+
+		<form action="/courses" method="post">
+			<input type="hidden" name="_method" value="delete"/>
+			<input type="submit" class="delete" id="course-delete" value="Delete Course"/>
 		</form>
 
 	</div>

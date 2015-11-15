@@ -378,10 +378,48 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         console.log("no course selected");
         res.redirect('/dashboard');
-      }
+      };
     } else {
       res.redirect('/sorry');
-    }
+    };
+  });
+
+  app.delete('/courses', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_course_id.length > 0) {
+        //delete all scores for this course
+        db.collection('students').update({user_id: ObjectId(req.session.user_id), "scores.course_id": ObjectId(req.session.current_course_id)}, {$pull: {scores: {course_id: ObjectId(req.session.current_course_id)}}}, {multi: true}, function(error, result) {
+          if (!error) {
+            console.log('course scores deleted');           
+          } else {
+            console.log('error deleting course scores');
+          };
+        });
+        //delete this course from students enrolled in
+        db.collection('students').update({user_id: ObjectId(req.session.user_id), "course_ids.id": ObjectId(req.session.current_course_id)}, {$pull: {course_ids: {id: ObjectId(req.session.current_course_id)}}}, {multi: true}, function(error, result) {
+          if (!error) {
+            console.log('students unenrolled from course');           
+          } else {
+            console.log('error unenrolling students from course');
+          };
+        });
+        //delete course
+        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {courses: {_id: ObjectId(req.session.current_course_id)}}}, function(error, results) {
+          if (!error) {
+            console.log('course deleted');
+            res.redirect('/dashboard');
+          } else {
+            console.log('error deleting course');
+            res.redirect('/courses/edit');
+          };
+        });
+      } else {
+        console.log("no course selected");
+        res.redirect('/dashboard');
+      };
+    } else {
+      res.redirect('/sorry');
+    };
   });
 
   app.post('/current_course/:id', function(req, res) {

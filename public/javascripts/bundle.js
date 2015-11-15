@@ -28986,6 +28986,12 @@ $('document').ready(function () {
             event.preventDefault();
           };
         });
+
+        $('#course-delete').on('click', function (event) {
+          if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === false) {
+            event.preventDefault();
+          };
+        });
       };
 });
 
