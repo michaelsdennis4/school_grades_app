@@ -28992,6 +28992,12 @@ $('document').ready(function () {
             event.preventDefault();
           };
         });
+
+        $('#user-delete').on('click', function (event) {
+          if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === false) {
+            event.preventDefault();
+          };
+        });
       };
 });
 

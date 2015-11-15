@@ -214,6 +214,33 @@ MongoClient.connect(mongoUri, function(error, db) {
             }
         });     
       };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.delete('/users', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      //delete all this user's students
+      db.collection('students').remove({user_id: ObjectId(req.session.user_id)}, {multi: true}, function(error, results) {
+        if (!error) {
+          console.log("user's students deleted");
+        } else {
+          console.log("error deleting user's students");
+        };
+      });
+      //delete the user
+      db.collection('users').remove({_id: ObjectId(req.session.user_id)}, function(error, result) {
+        if (!error) {
+          console.log('user deleted');
+          res.redirect('/logout');
+        } else {
+          console.log('error deleting user');
+          res.redirect('/users/edit');
+        };
+      });
+    } else {
+      res.redirect('/sorry');
     };
   });
 
