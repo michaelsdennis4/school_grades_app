@@ -28647,24 +28647,110 @@ $('document').ready(function () {
 
     var students_table = ReactDOM.render(React.createElement(StudentsTable, { url: '/students', pollInterval: 1000 }), document.getElementById('students-box'));
 
-    //EVENT LISTENERS ---------------------------------------------
+    //DASHBOARD EVENT LISTENERS ---------------------------------------------
 
     $('#current_year').on('change', function (event) {
       var form = event.target.parentNode;
-      var submit = form.querySelector('#submit');
-      $(submit).trigger('click');
+      $('#submit').trigger('click');
     });
 
     $('#current_term').on('change', function (event) {
       var form = event.target.parentNode;
-      var submit = form.querySelector('#submit');
-      $(submit).trigger('click');
+      $('#submit').trigger('click');
     });
 
     $('.data-table').on('mouseover', function (event) {
       if (event.target.parentNode.getAttribute('class') != 'table-header') {
         $(event.target.parentNode).toggleClass('highlighted', true);
       };
+    });
+
+    $('#course-edit').on('click', function (event) {
+      if ($('#current-course-id').val().length == 0) {
+        event.preventDefault();
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#courses-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      };
+    });
+
+    $('#enroll').on('click', function (event) {
+      if ($('#current-course-id').val().length == 0) {
+        event.preventDefault();
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#courses-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      };
+    });
+
+    $('#assessment-new').on('click', function (event) {
+      if ($('#current-course-id').val().length == 0) {
+        event.preventDefault();
+        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#assessments-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      };
+    });
+
+    $('#assessment-edit').on('click', function (event) {
+      if ($('#current-assessment-id').val().length == 0) {
+        event.preventDefault();
+        $('#assessments-warning').text('You must select an assessment first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#assessments-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      };
+    });
+
+    $('#student-edit').on('click', function (event) {
+      if ($('#current-student-id').val().length == 0) {
+        event.preventDefault();
+        $('#students-warning').text('You must select a student first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#students-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      };
+    });
+
+    $('#show-all-students').on('click', function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/current_course/0',
+        method: 'post'
+      }).done(function () {
+        //clear current course fields
+        $('#current-course').val("");
+        $('#current-course-id').val("");
+        console.log('current course deleted');
+        courses_table.loadCoursesFromServer();
+      });
+      $.ajax({
+        url: '/current_assessment/0',
+        method: 'post'
+      }).done(function () {
+        //clear current assessment fields
+        $('#current-assessment').val("");
+        $('#current-assessment-id').val("");
+        console.log('current assessment deleted');
+        assessments_table.loadAssessmentsFromServer();
+      });
+      $.ajax({
+        url: '/current_student/0',
+        method: 'post'
+      }).done(function () {
+        //clear current student fields
+        $('#current-student').val("");
+        $('#current-student-id').val("");
+        console.log('current student deleted');
+        students_table.loadStudentsFromServer();
+      });
+      $('#score').val("");
+      $('#points').val("");
+      $('#weight').val("");
+      $('.data-row').toggleClass('selected', false);
     });
 
     $('.data-table').on('mouseout', function (event) {
@@ -28736,50 +28822,6 @@ $('document').ready(function () {
             students_table.loadStudentsFromServer();
           });
         };
-      };
-    });
-
-    $('#show_all').on('click', function (event) {
-      event.preventDefault();
-      $.ajax({
-        url: '/current_course/0',
-        method: 'post'
-      }).done(function () {
-        //clear current course fields
-        $('#current-course').val("");
-        $('#current-course-id').val("");
-        console.log('current course deleted');
-        courses_table.loadCoursesFromServer();
-      });
-      $.ajax({
-        url: '/current_assessment/0',
-        method: 'post'
-      }).done(function () {
-        //clear current assessment fields
-        $('#current-assessment').val("");
-        $('#current-assessment-id').val("");
-        console.log('current assessment deleted');
-        assessments_table.loadAssessmentsFromServer();
-      });
-      $.ajax({
-        url: '/current_student/0',
-        method: 'post'
-      }).done(function () {
-        //clear current student fields
-        $('#current-student').val("");
-        $('#current-student-id').val("");
-        console.log('current student deleted');
-        students_table.loadStudentsFromServer();
-      });
-      $('#score').val("");
-      $('#points').val("");
-      $('#weight').val("");
-    });
-
-    $('#enroll').on('click', function (event) {
-      if ($('#current-course-id').val().length == 0) {
-        window.alert('You must select a course first.');
-        event.preventDefault();
       };
     });
 
@@ -28896,38 +28938,40 @@ $('document').ready(function () {
     };
 
     resetCourse();
+
+    //ENROLLMENT EVENT LISTENERS---------------------------------------------
   } else if (document.body.id === 'enrollment') {
 
-    $('.student_enroll').on('click', function (event) {
-      var student_id = event.target.getAttribute('id');
-      var enrolled = event.target.checked;
-      if (enrolled === true) {
-        $.ajax({
-          url: '/students/' + student_id + '/enroll',
-          method: 'patch',
-          dataType: 'json',
-          success: function () {
-            console.log('enrollment updated');
-          },
-          error: function () {
-            console.log('enrollment NOT updated');
-          }
-        });
-      } else {
-        $.ajax({
-          url: '/students/' + student_id + '/unenroll',
-          method: 'patch',
-          dataType: 'json',
-          success: function () {
-            console.log('enrollment updated');
-          },
-          error: function () {
-            console.log('enrollment NOT updated');
-          }
-        });
-      };
-    });
-  };
+      $('.student_enroll').on('click', function (event) {
+        var student_id = event.target.getAttribute('id');
+        var enrolled = event.target.checked;
+        if (enrolled === true) {
+          $.ajax({
+            url: '/students/' + student_id + '/enroll',
+            method: 'patch',
+            dataType: 'json',
+            success: function () {
+              console.log('enrollment updated');
+            },
+            error: function () {
+              console.log('enrollment NOT updated');
+            }
+          });
+        } else {
+          $.ajax({
+            url: '/students/' + student_id + '/unenroll',
+            method: 'patch',
+            dataType: 'json',
+            success: function () {
+              console.log('enrollment updated');
+            },
+            error: function () {
+              console.log('enrollment NOT updated');
+            }
+          });
+        };
+      });
+    };
 });
 
 },{"jQuery":28,"react":158,"react-dom":29}],160:[function(require,module,exports){

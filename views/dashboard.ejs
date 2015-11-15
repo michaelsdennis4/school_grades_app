@@ -52,23 +52,25 @@
 
 	<div id="left-column">
 
+		<div class="invisible warning" id="courses-warning"></div>
+
 		<div class="box-header">
 			<div class="caption-box">
 				Courses
 			</div>
 			<div class="button-box">
 				<form action="/courses/new">
-					<input type="submit" value="New"/>
+					<input type="submit" class="courses-button" id="course-new" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/courses/edit">
-					<input type="submit" value="Edit"/>
+					<input type="submit" class="courses-button" id="course-edit" value="Edit"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/enrollment">
-					<input id="enroll" type="submit" value="Enroll"/>
+					<input type="submit" class="courses-button" id="enroll" value="Enroll"/>
 				</form>
 			</div>
 			<div class="button-box"></div>
@@ -77,18 +79,20 @@
 
 		<div class= "data-box" id="courses-box"></div>
 
+		<div class="invisible warning" id="assessments-warning"></div>
+
 		<div class="box-header">
 			<div class="caption-box">
 				Assessments
 			</div>
 			<div class="button-box">
 				<form action="/assessments/new">
-					<input type="submit" value="New"/>
+					<input type="submit" class="assessments-button" id="assessment-new" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/assessments/edit">
-					<input type="submit" value="Edit"/>
+					<input type="submit" class="assessments-button" id="assessment-edit" value="Edit"/>
 				</form>
 			</div>
 			<div class="button-box"></div>
@@ -102,35 +106,29 @@
 
 	<div id="right-column">
 
+		<div class="invisible warning" id="students-warning"></div>
+
 		<div class="box-header">
 			<div class="caption-box">
 				Students
 			</div>
 			<div class="button-box">
 				<form action="/students/new">
-					<input type="submit" value="New"/>
+					<input type="submit" class="students-button" id="student-new" value="New"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/students/edit">
-					<input type="submit" value="Edit"/>
+					<input type="submit" class="students-button" id="student-edit" value="Edit"/>
 				</form>
 			</div>
 			<div class="button-box">
 				<form action="/dashboard">
-					<input id="show_all" type="submit" value="Show All"/>
+					<input type="submit" class="students-button" id="show-all-students" value="Show All"/>
 				</form>
 			</div>
-			<div class="button-box">
-				<!-- <form action="">
-					<input type="submit" value="Enroll"/>
-				</form> -->
-			</div>
-			<div class="button-box">
-	<!-- 			<form action="">
-					<input type="submit" value="UnEnroll"/>
-				</form> -->
-			</div>
+			<div class="button-box"></div>
+			<div class="button-box"></div>
 		</div>
 
 		<div class="data-box" id="students-box"></div>

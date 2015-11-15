@@ -13,6 +13,10 @@ body.dashboard {
 	display: none;
 }
 
+.invisible {
+	visibility: hidden;
+}
+
 .toplink {
 	height: 30px;
 	margin-top: 20px;
@@ -43,6 +47,22 @@ body.dashboard {
 	text-align: center;
 	color: black;
 	background-color: rgba(100,135,100,0.5);
+}
+
+.warning {
+	margin: 0;
+	float: left;
+	width: 100%;
+	height: 20px;
+	line-height: 20px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: red;
+	color: white;
+	text-align: center;
+	border: solid red 1px;
 }
 
 a {
@@ -174,8 +194,8 @@ select {
 	height: 35px;
 	float: left;
 	padding-top: 7px;
-	margin-top: 20px;
-	margin-bottom: 10px;
+	margin-top: 0;
+	margin-bottom: 0;
 	background-color: rgba(100,135,100,0.5);
 	color: black;
 	border-top: solid gray 2px;
@@ -209,7 +229,7 @@ select {
 .data-box {
 	width: 100%;
 	margin-top: 0;
-	margin-bottom: 10px;
+	margin-bottom: 0;
 	float: left;
 	background-color: white;
 	color: black;
@@ -271,9 +291,9 @@ select {
 
 #update-box {
 	width: 60%;
-	height: 100px;
+	height: 97px;
 	float: left;
-	margin-top: 5px;
+	margin-top: 10px;
 	padding: 2px 10px;
 	border-top: solid gray 2px;
 	border-left: solid gray 2px;
@@ -301,10 +321,10 @@ select {
 
 #grade-box {
 	width: 30%;
-	height: 100px;
+	height: 96px;
 	float: left;
 	margin-left: 20px;
-	margin-top: 5px;
+	margin-top: 10px;
 	padding: 2px 10px;
 	border-top: solid gray 2px;
 	border-left: solid gray 2px;
