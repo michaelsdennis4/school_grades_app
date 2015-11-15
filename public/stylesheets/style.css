@@ -31,11 +31,11 @@ body.dashboard {
 
 .box {
 	width: 30%;
-	min-height: 300px;
-	margin-top: 60px;
+	margin-top: 40px;
 	margin-left: auto;
 	margin-right: auto;	
 	margin-bottom: 60px;
+	padding: 0;
 	border: solid black 1px;
 	background-color: rgba(100,135,100,0.5);
 	color: black;
@@ -80,6 +80,10 @@ label {
 	margin-bottom: 10px;
 }
 
+hr {
+	height: 0;
+}
+
 input[type=text], input[type=password] {
 	width: 80%;
 	height: 25px;
@@ -116,6 +120,7 @@ input[type=submit] {
 input[type=submit].delete {
 	background-color: rgba(255,50,50,1);
 	color: white;
+	margin-top: 10px;
 }
 
 select {

@@ -604,6 +604,36 @@ MongoClient.connect(mongoUri, function(error, db) {
     };
   });
 
+  app.delete('/assessments', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if ((req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0)) {
+        //delete student scores for this assessment
+        db.collection('students').update({user_id: ObjectId(req.session.user_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$pull: {scores: {assessment_id: ObjectId(req.session.current_assessment_id)}}}, {multi: true}, function(error, result) {
+          if (!error) {
+            console.log('student scores deleted');           
+          } else {
+            console.log('error deleting student scores');
+          };
+        });
+        //delete assessment
+        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {"courses.$.assessments": {_id: ObjectId(req.session.current_assessment_id)}}}, function(error, results) {
+          if (!error) {
+            console.log('assessment deleted');
+            res.redirect('/dashboard');
+          } else {
+            console.log('error deleting assessment');
+            res.redirect('/assessments/edit');
+          };
+        });
+      } else {
+        console.log('no assessment selected');
+        res.redirect('/dashboard');
+      };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
   app.post('/current_assessment/:id', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.params.id === '0') {
@@ -813,7 +843,7 @@ MongoClient.connect(mongoUri, function(error, db) {
             res.redirect('/dashboard');
           } else {
             console.log('error deleting student');
-            res.redirect('/dashboard');
+            res.redirect('/students/edit');
           };
         });
       } else {

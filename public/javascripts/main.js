@@ -686,6 +686,14 @@ $('document').ready(function() {
       };
     });
 
+    $('#assessment-delete').on('click', function(event) {
+      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+
+
+
   };
 
 
