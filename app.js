@@ -677,7 +677,18 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/students/new', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('students/new.ejs');
+      if (req.session.current_course_id.length > 0) {
+        db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            var course = results[0].courses[0]; 
+            res.render('students/new.ejs', {course: course});
+          } else {
+            res.render('students/new.ejs', {course: null});
+          }
+        });
+      } else {
+        res.render('students/new.ejs', {course: null});
+      };
     } else {
       res.redirect('/sorry');
     };
@@ -709,14 +720,29 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
         console.log('first name cannot be blank');
-        res.redirect('/users/new');   
+        res.redirect('/students/new');   
       } else if (req.body.last_name.length === 0) {
         console.log('last name cannot be blank');
-        res.redirect('/users/new');
+        res.redirect('/students/new');
       } else {
-        db.collection('students').insert({user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year}, function(error, results) {
+        var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year};
+        db.collection('students').insert(new_student, function(error, results) {
           if (!error) {
             console.log('student added');
+            //enroll student in current course, if selected
+            if (req.body.enroll) {
+              //add course to student
+              db.collection("students").update({_id: ObjectId(new_student._id)}, {$push: {course_ids: {id: ObjectId(req.session.current_course_id)}}}, function(error, result) {
+                if (!error) {
+                  //add student to course
+                  db.collection("users").update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.student_ids": {id: ObjectId(new_student._id)}}}, function(error, result) {
+                    if (!error) {
+                      console.log('student enrolled');
+                    };
+                  });
+                };
+              });
+            };
             res.redirect('/dashboard');
           } else {
             console.log('error adding student');
@@ -733,10 +759,10 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_student_id.length > 0) {
         if (req.body.first_name.length === 0) {
-          res.redirect('/users/new');
+          res.redirect('/students/edit');
           console.log('first name cannot be blank');
         } else if (req.body.last_name.length === 0) {
-          res.redirect('/users/new');
+          res.redirect('/students/edit');
           console.log('last name cannot be blank');
         } else {
           db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year}}, function(error, result) {

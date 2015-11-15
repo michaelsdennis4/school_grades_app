@@ -32,6 +32,12 @@
 			<label for="grad_year">Graduation Year</label><br>
 			<input type="number" name="grad_year" min="2016" value="2016"/><br>
 			<br>
+			<% if (course !== null) { %>
+				<% 
+				course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+				%>
+				<label><input type="checkbox" name="enroll" value="enroll" checked />Enroll this student in <%= course.title %> (Section <%= course.section %>)</label><br>			
+			<% } %>
 			<br>
 			<input type="submit" value="Add Student"/>
 		</form>
