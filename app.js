@@ -67,13 +67,13 @@ MongoClient.connect(mongoUri, function(error, db) {
 	});
 
   app.post('/login', function(req, res) {
-    db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
-      if (users.length == 0) {
+    db.collection('users').find({email: req.body.email}).toArray(function(error, results) {
+      if (results.length == 0) {
         res.redirect('/');
         console.log('user not found');
       } 
       else {
-        user = users[0];
+        var user = results[0];
         if (bcrypt.compareSync(req.body.password, user.password_digest) === true) {
           session = req.session;
           session.user_id = user._id;
@@ -130,9 +130,9 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/users/edit', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, users) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
         if (!error) {
-          user = users[0];
+          var user = results[0];
           res.render('users/edit.ejs', {user: user});
         } else {
           res.redirect('/dashboard');
@@ -214,6 +214,40 @@ MongoClient.connect(mongoUri, function(error, db) {
             }
         });     
       };
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.patch('/users/password', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
+        if ((!error) && (results) && (results.length > 0)) {
+          var user = results[0];
+          if (req.body.new_password != req.body.confirm_new_password) { 
+            console.log('new passwords do not match');
+            res.redirect('/users/edit');
+          } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(req.body.new_password, salt);
+            db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
+              if ((!error) && (result)) {
+                console.log('password changed');
+                res.redirect('/dashboard');
+              } else {
+                console.log('error updating password');
+                res.redirect('/users/edit');
+              };
+            });
+          } else {
+            console.log('incorrect password');
+            res.redirect('/users/edit');
+          };
+        } else {
+          console.log('user not found');
+          res.redirect('/logout');
+        };
+      });
     } else {
       res.redirect('/sorry');
     };

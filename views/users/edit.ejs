@@ -31,6 +31,24 @@
 
 		<hr>
 
+		<h3>Change My Password</h3>
+
+		<form action="/users/password" method="post">
+			<label for="old_password">Password</label><br>
+			<input type="password" name="old_password" placeholder="Current password"/><br>
+			<br>
+			<label for="new_password">New Password</label><br>
+			<input type="password" name="new_password" placeholder="New password"/><br>
+			<br>
+			<label for="confirm_new_password">Confirm New Password</label><br>
+			<input type="password" name="confirm_new_password" placeholder="Confirm new password"/><br>
+			<br>
+			<input type="hidden" name="_method" value="patch"/>
+			<input type="submit" value="Change My Password"/>
+		</form>
+
+		<hr>
+
 		<form action="/users" method="post">
 			<input type="hidden" name="_method" value="delete"/>
 			<input type="submit" class="delete" id="user-delete" value="Delete My Profile"/>
