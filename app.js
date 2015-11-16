@@ -1011,21 +1011,27 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection('students').update({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.score": score, "scores.$.points": points, "scores.$.weight": weight}}, function(error, result) {
             if (!error) {
               console.log('grade updated '+ result);
-              res.json(result); //write result
-            };
+              res.json({status: true});
+            } else {
+              console.log('error updating grade');
+              res.json({status: false});
+            }
           });
         } else {
           //add score to student
           db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$push: {scores: {course_id: ObjectId(req.session.current_course_id), assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}}, function(error, result) {
             if (!error) {
               console.log('grade entered '+ result);
-              res.json(result); //write result
+              res.json({status: true});
+            } else {
+              console.log('error entering grade');
+              res.json({status: false});
             };
           });
         };   
       }); 
     } else {
-      res.json([]);
+      res.json({status: false});
     };
   });
 

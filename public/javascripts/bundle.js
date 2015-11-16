@@ -28579,14 +28579,17 @@ $('document').ready(function () {
           var total_weight = 0;
           for (var i = 0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
-              score = parseFloat(this.props.student.scores[i].score);
+              score = this.props.student.scores[i].score;
+              if (score !== 'X') {
+                score = parseFloat(score);
+              };
               points = parseFloat(this.props.student.scores[i].points);
-              if (points > 0 && score != 'X') {
+              if (points > 0 && score !== 'X') {
                 percent = (score / points * 100).toLocaleString();
+                score = score.toLocaleString();
               } else {
                 percent = "NA";
               };
-              score = score.toLocaleString();
             };
             if (this.props.student.scores[i].course_id.toString() == course_id.toString() && this.props.student.scores[i].score !== 'X') {
               course_percentage += parseFloat(this.props.student.scores[i].score) / parseFloat(this.props.student.scores[i].points) * parseFloat(this.props.student.scores[i].weight);
@@ -28835,8 +28838,8 @@ $('document').ready(function () {
         };
         var points = parseInt($('#points').val());
         var weight = parseInt($('#weight').val());
-        //also X for no score
-        if (score != NaN) {
+        console.log('the score is ' + score);
+        if (!isNaN(score) || score === 'X') {
           var data = { score: score, points: points, weight: weight };
           $.ajax({
             url: '/grade',
@@ -28844,25 +28847,41 @@ $('document').ready(function () {
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: 'json'
-          }).done(function () {
-            console.log('grade posted');
-            students_table.loadStudentsFromServer();
-            assessments_table.loadAssessmentsFromServer();
-            courses_table.loadCoursesFromServer();
-            //select next row in table
-            var select_next_row = function () {
-              var current_student_id = $('#current-student-id').val();
-              var data_rows = document.querySelector('table#students').rows;
-              for (var i = 1; i < data_rows.length; i++) {
-                var cell = data_rows[i].children[0];
-                if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
-                  data_rows[i + 1].children[1].click();
-                  break;
+          }).done(function (result) {
+            if (result && result.status === false) {
+              console.log('error posting grade');
+              $('#score').toggleClass('red', true);
+              setTimeout(function () {
+                $('#score').toggleClass('red', false);
+              }, 1000);
+            } else {
+              console.log('grade posted');
+              $('#score').toggleClass('green', true);
+              students_table.loadStudentsFromServer();
+              assessments_table.loadAssessmentsFromServer();
+              courses_table.loadCoursesFromServer();
+              //select next row in table
+              var select_next_row = function () {
+                var current_student_id = $('#current-student-id').val();
+                var data_rows = document.querySelector('table#students').rows;
+                for (var i = 1; i < data_rows.length; i++) {
+                  var cell = data_rows[i].children[0];
+                  if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
+                    data_rows[i + 1].children[1].click();
+                    break;
+                  };
                 };
+                $('#score').toggleClass('green', false);
               };
+              setTimeout(select_next_row, 500);
             };
-            setTimeout(select_next_row, 500);
           });
+        } else {
+          console.log('entry not recognized');
+          $('#score').toggleClass('red', true);
+          setTimeout(function () {
+            $('#score').toggleClass('red', false);
+          }, 1000);
         };
       };
     });
