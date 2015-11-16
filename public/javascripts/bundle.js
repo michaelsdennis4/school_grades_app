@@ -28262,14 +28262,14 @@ $('document').ready(function () {
             this.props.student_scores.forEach(function (score) {
               if (score.assessment_id.toString() == assessment._id.toString()) {
                 if (score.score !== 'X') {
-                  total_score += score.score / score.points * 100;
+                  total_score += parseFloat(score.score) / parseFloat(score.points) * 100;
                   count++;
                 };
               };
             });
             if (count > 0) {
               average = total_score / count;
-              averages.push({ average: average, weight: assessment.weight });
+              averages.push({ average: average, weight: parseFloat(assessment.weight) });
             };
           };
           //calculate overall class average
@@ -28277,7 +28277,7 @@ $('document').ready(function () {
           var total_weight = 0;
           averages.forEach(function (average) {
             total_score += average.average * average.weight;
-            total_weight += parseInt(average.weight);
+            total_weight += average.weight;
           });
           if (total_weight > 0) {
             class_average = (total_score / total_weight).toFixed(1).toLocaleString();
@@ -28353,7 +28353,7 @@ $('document').ready(function () {
         var total_weight = 0;
         if (this.state.assessments.length > 0) {
           this.state.assessments.forEach(function (assessment) {
-            total_weight += parseInt(assessment.weight);
+            total_weight += parseFloat(assessment.weight);
           });
         };
         var student_scores = this.state.student_scores;
@@ -28421,9 +28421,9 @@ $('document').ready(function () {
         var type = this.props.assessment.type;
         var points = this.props.assessment.points.toLocaleString();
         var weight = this.props.assessment.weight.toLocaleString();
-        var percentage_weight = '0';
+        var percentage_weight = "";
         if (this.props.total_weight > 0) {
-          percentage_weight = (this.props.assessment.weight / this.props.total_weight * 100).toFixed(1).toLocaleString();
+          percentage_weight = (parseFloat(this.props.assessment.weight) / this.props.total_weight * 100).toFixed(1).toLocaleString();
         };
         var average_score = "";
         var total_score = 0;
@@ -28432,7 +28432,7 @@ $('document').ready(function () {
           this.props.student_scores.forEach(function (score) {
             if (score.assessment_id.toString() == assessment_id.toString()) {
               if (score.score !== 'X') {
-                total_score += score.score / score.points * 100;
+                total_score += parseFloat(score.score) / parseFloat(score.points) * 100;
                 count++;
               };
             };
@@ -28579,8 +28579,8 @@ $('document').ready(function () {
           var total_weight = 0;
           for (var i = 0; i < this.props.student.scores.length; i++) {
             if (this.props.student.scores[i].assessment_id.toString() == assessment_id.toString()) {
-              score = this.props.student.scores[i].score;
-              points = this.props.student.scores[i].points;
+              score = parseFloat(this.props.student.scores[i].score);
+              points = parseFloat(this.props.student.scores[i].points);
               if (points > 0 && score != 'X') {
                 percent = (score / points * 100).toLocaleString();
               } else {
@@ -28588,9 +28588,9 @@ $('document').ready(function () {
               };
               score = score.toLocaleString();
             };
-            if (this.props.student.scores[i].course_id.toString() == course_id.toString() && this.props.student.scores[i].score != 'X') {
-              course_percentage += this.props.student.scores[i].score / this.props.student.scores[i].points * this.props.student.scores[i].weight;
-              total_weight += this.props.student.scores[i].weight;
+            if (this.props.student.scores[i].course_id.toString() == course_id.toString() && this.props.student.scores[i].score !== 'X') {
+              course_percentage += parseFloat(this.props.student.scores[i].score) / parseFloat(this.props.student.scores[i].points) * parseFloat(this.props.student.scores[i].weight);
+              total_weight += parseFloat(this.props.student.scores[i].weight);
             };
           };
           if (total_weight > 0) {
