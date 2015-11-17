@@ -466,14 +466,15 @@ $('document').ready(function() {
             document.querySelector('#current-course').value = cells[1].textContent + ' (Section '+cells[2].textContent+')';
             //clear current student and assessment fields
             $('#current-assessment').val("");
-            $('#current-assessment-id').val("");  
+            $('#current-assessment-id').val("");
+            $('.data-table#assessments').find('.data-row').toggleClass('selected', false); 
             $('#current-student').val("");
             $('#current-student-id').val("");
+            $('.data-table#students').find('.data-row').toggleClass('selected', false);
             $('#score').val(""); 
             $('#points').val(""); 
             $('#weight').val(""); 
             $(row).toggleClass('selected', true);
-            courses_table.loadCoursesFromServer();
             assessments_table.loadAssessmentsFromServer();
             students_table.loadStudentsFromServer();
           });
@@ -489,10 +490,11 @@ $('document').ready(function() {
             $('#current-assessment').val(cells[1].textContent +' ('+cells[2].textContent+')');
             $('#points').val(cells[3].textContent);
             $('#weight').val(cells[4].textContent);
-            $('#score').val("");
             $(row).toggleClass('selected', true);
-            assessments_table.loadAssessmentsFromServer();
             students_table.loadStudentsFromServer();
+            setTimeout(function() {
+              $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(5)').text());
+            }, 100);
           });
         } else if (table.getAttribute('id') === 'students') {
           //update current student on the server
@@ -506,7 +508,6 @@ $('document').ready(function() {
             $('#current-student').val(cells[1].textContent +', '+cells[2].textContent);
             $('#score').val(cells[4].textContent);
             $(row).toggleClass('selected', true);
-            students_table.loadStudentsFromServer();
           });
         };
       };
@@ -536,7 +537,7 @@ $('document').ready(function() {
             if ((result) && (result.status === false)) {
               console.log('error posting grade');
               $('#score').toggleClass('red', true); 
-              setTimeout(function() {$('#score').toggleClass('red', false)}, 1000);   
+              setTimeout(function() {$('#score').toggleClass('red', false)}, 500);   
             } else {
               console.log('grade posted');
               $('#score').toggleClass('green', true);
@@ -562,8 +563,12 @@ $('document').ready(function() {
         } else {
           console.log('entry not recognized');
           $('#score').toggleClass('red', true); 
-          setTimeout(function() {$('#score').toggleClass('red', false)}, 1000);
+          setTimeout(function() {$('#score').toggleClass('red', false)}, 500);
         };
+      } else {
+        console.log('course, assessment, or student not selected');
+        $('#score').toggleClass('red', true); 
+        setTimeout(function() {$('#score').toggleClass('red', false)}, 500);
       };
     });
 
