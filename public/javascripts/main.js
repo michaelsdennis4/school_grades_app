@@ -515,60 +515,66 @@ $('document').ready(function() {
 
 
     $('#score').on('keydown', function(event) {
-      if ((event.keyCode === 13) && ($('#current-course-id').val().length > 0) && ($('#current-assessment-id').val().length > 0) && ($('#current-student-id').val().length > 0)) {
-        var score;
-        if ((event.target.value === 'x') || (event.target.value === 'X')) {
-          score = 'X';
-        } else {
-          score = parseFloat(event.target.value);
-        };
-        var points = parseInt($('#points').val());
-        var weight = parseInt($('#weight').val());
-        console.log('the score is '+score);
-        if ((!isNaN(score)) || (score === 'X')) {
-          var data = {score: score, points: points, weight: weight};
-          $.ajax({
-            url: '/grade',
-            type: 'post',
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: 'json'
-          }).done(function(result) {
-            if ((result) && (result.status === false)) {
-              console.log('error posting grade');
-              $('#score').toggleClass('red', true); 
-              setTimeout(function() {$('#score').toggleClass('red', false)}, 500);   
-            } else {
-              console.log('grade posted');
-              $('#score').toggleClass('green', true);
-              students_table.loadStudentsFromServer();
-              assessments_table.loadAssessmentsFromServer();
-              courses_table.loadCoursesFromServer();
-              //select next row in table
-              var select_next_row = function() {
-                var current_student_id = $('#current-student-id').val();
-                var data_rows = document.querySelector('table#students').rows;
-                for (var i=1; i < data_rows.length; i++) {
-                  var cell = data_rows[i].children[0];
-                  if ((cell.textContent.toString() == current_student_id.toString()) && (i < (data_rows.length-1))) {
-                    data_rows[i+1].children[1].click();
-                    break;
+      if (event.keyCode === 13) {
+        if (($('#current-course-id').val().length > 0) && ($('#current-assessment-id').val().length > 0) && ($('#current-student-id').val().length > 0)){
+          var score;
+          if ((event.target.value === 'x') || (event.target.value === 'X')) {
+            score = 'X';
+          } else {
+            score = parseFloat(event.target.value);
+          };
+          var points = parseInt($('#points').val());
+          var weight = parseInt($('#weight').val());
+          console.log('the score is '+score);
+          var cancelRed = function() {
+            $('#score').toggleClass('red', false);
+            $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(5)').text());
+          };
+          if ((!isNaN(score)) || (score === 'X')) {
+            var data = {score: score, points: points, weight: weight};
+            $.ajax({
+              url: '/grade',
+              type: 'post',
+              data: JSON.stringify(data),
+              contentType: "application/json",
+              dataType: 'json'
+            }).done(function(result) {
+              if ((result) && (result.status === false)) {
+                console.log('error posting grade');
+                $('#score').toggleClass('red', true); 
+                setTimeout(cancelRed, 500);  
+              } else {
+                console.log('grade posted');
+                $('#score').toggleClass('green', true);
+                students_table.loadStudentsFromServer();
+                assessments_table.loadAssessmentsFromServer();
+                courses_table.loadCoursesFromServer();
+                //select next row in table
+                var select_next_row = function() {
+                  var current_student_id = $('#current-student-id').val();
+                  var data_rows = document.querySelector('table#students').rows;
+                  for (var i=1; i < data_rows.length; i++) {
+                    var cell = data_rows[i].children[0];
+                    if ((cell.textContent.toString() == current_student_id.toString()) && (i < (data_rows.length-1))) {
+                      data_rows[i+1].children[1].click();
+                      break;
+                    };
                   };
+                  $('#score').toggleClass('green', false);
                 };
-                $('#score').toggleClass('green', false);
+                setTimeout(select_next_row, 500);
               };
-              setTimeout(select_next_row, 500);
-            };
-          });
+            });
+          } else {
+            console.log('entry not recognized');
+            $('#score').toggleClass('red', true); 
+            setTimeout(cancelRed, 500);
+          };
         } else {
-          console.log('entry not recognized');
+          console.log('course, assessment, or student not selected');
           $('#score').toggleClass('red', true); 
-          setTimeout(function() {$('#score').toggleClass('red', false)}, 500);
+          setTimeout(cancelRed, 500);
         };
-      } else {
-        console.log('course, assessment, or student not selected');
-        $('#score').toggleClass('red', true); 
-        setTimeout(function() {$('#score').toggleClass('red', false)}, 500);
       };
     });
 
