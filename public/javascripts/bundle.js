@@ -28652,14 +28652,12 @@ $('document').ready(function () {
 
     //DASHBOARD EVENT LISTENERS ---------------------------------------------
 
-    $('#current_year').on('change', function (event) {
-      var form = event.target.parentNode;
-      $('#submit').trigger('click');
+    $('#current-year').on('change', function (event) {
+      $('#year-submit').click();
     });
 
-    $('#current_term').on('change', function (event) {
-      var form = event.target.parentNode;
-      $('#submit').trigger('click');
+    $('#current-term').on('change', function (event) {
+      $('#term-submit').click();
     });
 
     $('.data-table').on('mouseover', function (event) {

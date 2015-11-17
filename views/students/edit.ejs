@@ -33,6 +33,11 @@
 			<br>
 			<label for="grad_year">Graduation Year</label><br>
 			<input type="number" name="grad_year" min="2016" value="<%= student.grad_year %>"/><br>
+			<label for="is_active">Active?</label><br>
+			<input type="checkbox" name="is_active" value="true"
+			<% if (student.is_active === 'true') { %>
+				checked
+			<% } %> /><br>
 			<br>
 			<br>
 			<input type="hidden" name="_method" value="patch"/>

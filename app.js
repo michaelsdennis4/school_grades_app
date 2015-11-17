@@ -775,16 +775,16 @@ MongoClient.connect(mongoUri, function(error, db) {
           res.json(students);
         });
       } else {  //all students
-        db.collection('students').find({user_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
+        db.collection('students').find({user_id: ObjectId(req.session.user_id), is_active: "true"}).toArray(function(error, results) {
           if (results.length > 0) {
             students = results;
             students.sort(function (a, b) {
-              if (a.last_name > b.last_name) {
+              if (a.last_name+a.first_name > b.last_name+b.first_name) {
                 return 1;
-              };
-              if (a.last_name < b.last_name) {
+              }
+              if (a.last_name+a.first_name < b.last_name+b.first_name) {
                 return -1;
-              };
+              }
               return 0;
             });
             students.forEach(function(student) {
@@ -854,7 +854,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         console.log('last name cannot be blank');
         res.redirect('/students/new');
       } else {
-        var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year};
+        var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: req.body.is_active};
         db.collection('students').insert(new_student, function(error, results) {
           if (!error) {
             console.log('student added');
@@ -894,7 +894,11 @@ MongoClient.connect(mongoUri, function(error, db) {
           res.redirect('/students/edit');
           console.log('last name cannot be blank');
         } else {
-          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year}}, function(error, result) {
+          var is_active = 'false';
+          if ((req.body.is_active) && (req.body.is_active === 'true')) {
+            is_active = 'true';
+          };
+          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: is_active}}, function(error, result) {
             if (!error) {
               console.log("student profile updated");
               res.redirect('/dashboard');
