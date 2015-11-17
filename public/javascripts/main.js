@@ -47,7 +47,7 @@ $('document').ready(function() {
     	    			<th className="right">Sec.</th>
     	    			<th className="right">Auto Wt.</th>
                 <th className="right"># Students</th>
-                <th className="right"># Assess.</th>
+                <th className="right"># Assessments</th>
                 <th className="right">% Class Avg.</th>
     	    		</tr>
             </thead>

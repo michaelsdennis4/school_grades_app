@@ -28210,7 +28210,7 @@ $('document').ready(function () {
               React.createElement(
                 'th',
                 { className: 'right' },
-                '# Assess.'
+                '# Assessments'
               ),
               React.createElement(
                 'th',

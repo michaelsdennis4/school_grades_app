@@ -13,6 +13,8 @@
 
 		<h2>Edit Assessment</h2>
 
+		<hr>
+
 		<% course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); %>
 		<h3>Course Title: <%= course.title %></h3>
 		<h3>Section: <%= course.section %></h3>
