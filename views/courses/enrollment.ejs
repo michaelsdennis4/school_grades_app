@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body id="enrollment">
+<body id="checklist">
 
 	<div class="toplink">
 		<a href="/dashboard">Back to Dashboard</a>
@@ -25,7 +25,7 @@
 
 		<h3>Students</h3>
 
-		<div class="enrollment">
+		<div class="checkbox-list">
 			<% students.forEach(function(student) { %>
 				<label><input type="checkbox" class="student_enroll" id="<%= student._id %>" value="enrolled"	
 				<% var enrolled = false %>

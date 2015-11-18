@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<% include ../partials/head %>
+
+<body id="checklist">
+
+	<div class="toplink">
+		<a href="/dashboard">Back to Dashboard</a>
+	</div>
+
+	<div class="box">
+
+		<h2>Copy Courses</h2>
+
+		<h5>Select course(s) you want to copy to the current term.</h5>
+
+		<hr>
+
+		<h3>Current Year: <%= session.current_year %></h3>
+		<h3>Current Term: <%= session.current_term %></h3>
+
+		<hr>
+
+		<h3>Courses</h3>
+
+		<div class="checkbox-list" id="courses-checklist">
+			<% courses.forEach(function(course) { %>
+				<label><input type="checkbox" class="copy-course" id="<%= course._id %>" value="copy"/><%= course.title %> (<%= course.year %> Term: <%= course.term %>)<label><br>
+			<% }); %>
+			<br><br>
+		</div>
+
+		<form action="/dashboard">
+			<input type="submit" id="courses-copy" value="Copy Courses"/>
+			//need click event on this input
+			//get all checkboxes from above div id=courses-checklist
+			//store course id's from each checked box into an array
+			//make an ajax call to a courses/:id/copy route for each course in the array
+			//that route will make a copy of each course into the current year/term
+			//it will also enroll all the students from the existing course into the new one
+			//then route to dashboard
+		</form>
+
+	</div>
+
+</body>
+</html>

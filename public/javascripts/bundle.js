@@ -28963,8 +28963,8 @@ $('document').ready(function () {
 
     resetCourse();
 
-    //ENROLLMENT EVENT LISTENERS---------------------------------------------
-  } else if (document.body.id === 'enrollment') {
+    //CHECKLIST EVENT LISTENERS---------------------------------------------
+  } else if (document.body.id === 'checklist') {
 
       $('.student_enroll').on('click', function (event) {
         var student_id = event.target.getAttribute('id');
@@ -28994,6 +28994,42 @@ $('document').ready(function () {
             }
           });
         };
+      });
+
+      $('#courses-copy').on('click', function (req, res) {
+        event.preventDefault();
+        var courses = [];
+        var checklist = document.querySelector('#courses-checklist');
+        var items = checklist.querySelectorAll('.copy-course');
+        for (var i = 0; i < items.length; i++) {
+          console.log(items[i]);
+          if (items[i].checked === true) {
+            courses.push(items[i].getAttribute('id'));
+          };
+        };
+        var copyCourse = function (count) {
+          $.ajax({
+            url: '/courses/' + courses[count] + '/copy',
+            type: 'post',
+            dataType: 'json'
+          }).done(function () {
+            console.log('course copied');
+            count++;
+            if (count < courses.length) {
+              copyCourse(count);
+            } else {
+              console.log('all courses copied');
+            };
+          });
+        };
+        if (courses.length > 0) {
+          copyCourse(0);
+        };
+
+        //store course id's from each checked box into an array
+        //make an ajax call to a courses/:id/copy route for each course in the array
+        //that route will make a copy of each course into the current year/term
+        //it will also enroll all the students from the existing course into the new one
       });
 
       //EDIT EVENT LISTENERS ------------------------------------------------

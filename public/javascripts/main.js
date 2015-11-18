@@ -663,9 +663,9 @@ $('document').ready(function() {
 
     
     
-  //ENROLLMENT EVENT LISTENERS---------------------------------------------
+  //CHECKLIST EVENT LISTENERS---------------------------------------------
   
-  } else if (document.body.id === 'enrollment') {
+  } else if (document.body.id === 'checklist') {
 
     $('.student_enroll').on('click', function(event) {
       var student_id = event.target.getAttribute('id');
@@ -697,6 +697,38 @@ $('document').ready(function() {
       };
     });
 
+    $('#courses-copy').on('click', function(req, res) {
+      event.preventDefault();
+      var courses = [];
+      var checklist = document.querySelector('#courses-checklist');
+      var items = checklist.querySelectorAll('.copy-course');
+      for (var i=0; i < items.length; i++) {
+        console.log(items[i]);
+        if (items[i].checked === true) {
+          courses.push(items[i].getAttribute('id'));
+        };
+      };
+      var copyCourse = function(count) {
+        $.ajax({
+          url: '/courses/'+courses[count]+'/copy',
+          type: 'post',
+          dataType: 'json'
+        }).done(function() {
+          console.log('course copied');
+          count++;
+          if (count < courses.length) {
+            copyCourse(count);
+          } else {
+            console.log ('all courses copied');
+          };
+        });
+      };
+      if (courses.length > 0) {
+        copyCourse(0);
+      };
+    });
+
+
 
 
 
@@ -727,7 +759,6 @@ $('document').ready(function() {
         event.preventDefault();
       };
     });
-
 
   };
 

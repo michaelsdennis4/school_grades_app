@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-//var mongoUri    = 'mongodb://localhost:27017/school_grades'
+//var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -531,6 +531,38 @@ MongoClient.connect(mongoUri, function(error, db) {
     } else {
       res.redirect('/sorry');
     };
+  });
+
+  app.get('/courses/copy', function(req, res) {
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, results) { 
+        var courses = [];
+        if ((!error) && (results) && (results.length > 0)) {
+          courses = results[0].courses;
+          if (courses.length > 0) {
+            courses.sort(function (a, b) {
+              if (a.title+a.section > b.title+b.section) {
+                return 1;
+              }
+              if (a.title+a.section < b.title+b.section) {
+                return -1;
+              }
+              return 0;
+            });
+            courses.map(function(course) {
+              course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            });
+          }; 
+        };
+        res.render('courses/copy.ejs', {session: req.session, courses: courses});
+      });
+    } else {
+      res.redirect('/sorry');
+    };
+  });
+
+  app.post('/courses/:id/copy', function(req, res) {
+    res.json([]);
   });
 
 
