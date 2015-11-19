@@ -28653,7 +28653,8 @@ $('document').ready(function () {
     //DASHBOARD EVENT LISTENERS ---------------------------------------------
 
     $('#current-year').on('change', function (event) {
-      $('#year-submit').click();
+      $('#current-term').val("1");
+      $('#term-submit').click();
     });
 
     $('#current-term').on('change', function (event) {
@@ -28998,11 +28999,11 @@ $('document').ready(function () {
 
       $('#courses-copy').on('click', function (req, res) {
         event.preventDefault();
+        var $this = $(this.parentNode);
         var courses = [];
         var checklist = document.querySelector('#courses-checklist');
         var items = checklist.querySelectorAll('.copy-course');
         for (var i = 0; i < items.length; i++) {
-          console.log(items[i]);
           if (items[i].checked === true) {
             courses.push(items[i].getAttribute('id'));
           };
@@ -29019,17 +29020,15 @@ $('document').ready(function () {
               copyCourse(count);
             } else {
               console.log('all courses copied');
+              $this.unbind('submit').submit();
             };
           });
         };
         if (courses.length > 0) {
           copyCourse(0);
+        } else {
+          $this.unbind('submit').submit();
         };
-
-        //store course id's from each checked box into an array
-        //make an ajax call to a courses/:id/copy route for each course in the array
-        //that route will make a copy of each course into the current year/term
-        //it will also enroll all the students from the existing course into the new one
       });
 
       //EDIT EVENT LISTENERS ------------------------------------------------

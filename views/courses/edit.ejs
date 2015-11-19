@@ -23,10 +23,10 @@
 			<input type="number" name="section" min="1" value="<%= course.section %>"/><br>
 			<br>
 			<label for="year">Year</label><br>
-			<input type="number" name="year" min="2015" value="<%= course.year %>"/><br>
+			<input type="number" name="year" min="2015" value="<%= course.term.split('.')[0] %>"/><br>
 			<br>
 			<label for="term">Term</label><br>
-			<input type="number" name="term" min="1" value="<%= course.term %>"/><br>
+			<input type="number" name="term" min="1" value="<%= course.term.split('.')[1] %>"/><br>
 			<br>
 			<label for="auto">Auto Weighting On?</label><br>
 			<br>

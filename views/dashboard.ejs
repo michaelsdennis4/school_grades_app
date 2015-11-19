@@ -11,23 +11,18 @@
 			<h1>GradeBook</h1>
 		</div>
 
-		<div class="top-selector" id="year-selector">
-			<form action="/year" method="post">
+		<form action="/term" method="post">
+			<div class="top-selector" id="year-selector">
 				<label for="current-year">Current Year</label><br>
-				<input id="current-year" type="number" name="current_year" min="2015" value="<%= session.current_year %>"/>
-				<input type="hidden" name="_method" value="patch"/>
-				<input class="hidden" id="year-submit" type="submit"/>
-			</form>
-		</div>
-
-		<div class="top-selector" id="term-selector">
-			<form action="/term" method="post">
+				<input id="current-year" type="number" name="current_year" min="2015" value="<%= session.current_term.split('.')[0] %>"/>
+			</div>
+			<div class="top-selector" id="year-selector">
 				<label for="current-term">Current Term</label><br>
-				<input id="current-term" type="number" name="current_term" min="1" max="3" value="<%= session.current_term %>"/>
-				<input type="hidden" name="_method" value="patch"/>
-				<input class="hidden" id="term-submit" type="submit" />
-			</form>
-		</div>
+				<input id="current-term" type="number" name="current_term" min="1" max="9" value="<%= session.current_term.split('.')[1] %>"/>
+			</div>
+			<input type="hidden" name="_method" value="patch"/>
+			<input class="hidden" id="term-submit" type="submit"/>
+		</form>
 
 		<div class="top-button-box">
 		</div>
@@ -65,7 +60,7 @@
 			</div>
 			<div class="button-box">
 				<form action="/courses/copy">
-					<input type="submit" class="courses-button" id="course-copy" value="Copy"/>
+					<input type="submit" class="courses-button" id="course-copy" value="Copy" disabled/>
 				</form>
 			</div>
 			<div class="button-box">

@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-//var mongoUri    = process.env.MONGOLAB_URI;
-var mongoUri    = 'mongodb://localhost:27017/school_grades'
+var mongoUri    = process.env.MONGOLAB_URI;
+//var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -78,7 +78,6 @@ MongoClient.connect(mongoUri, function(error, db) {
           session = req.session;
           session.user_id = user._id;
           session.username = user.first_name +' '+user.last_name;
-          session.current_year = user.current_year;
           session.current_term = user.current_term;
           session.current_course_id = "";
           session.current_assessment_id = "";
@@ -96,7 +95,6 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.get('/logout',function(req, res) {
     req.session.user_id = null;
     req.session.username = null;
-    req.session.current_year = null;
     req.session.current_term = null;
     req.session.current_course_id = null;
     req.session.current_assessment_id = null;
@@ -168,14 +166,13 @@ MongoClient.connect(mongoUri, function(error, db) {
       else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
-        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_year: "2015", current_term: "1"};
+        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_term: "2015.1"};
         db.collection('users').insert(new_user, function(error, result) {
           if ((!error) && (result)) {
             console.log('new user id is '+new_user._id);
             session = req.session;
             session.user_id = new_user._id;
             session.username = new_user.first_name +' '+new_user.last_name;
-            session.current_year = new_user.current_year;
             session.current_term = new_user.current_term;
             session.current_course_id = "";
             session.current_assessment_id = "";
@@ -278,45 +275,32 @@ MongoClient.connect(mongoUri, function(error, db) {
     };
   });
 
-  app.patch('/year', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_year: req.body.current_year}}, function(error, result) {
-        if (!error) {
-          req.session.current_year = req.body.current_year;
-          req.session.current_course_id = "";
-          req.session.current_assessment_id = "";
-          req.session.current_student_id = "";
-          res.render('dashboard.ejs', {session: req.session});
-        } else {
-          res.redirect('/dashboard');
-        }
-      });   
-    };
-  });
-
   app.patch('/term', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: req.body.current_term}}, function(error, result) {
+      var term = req.body.current_year+'.'+req.body.current_term;
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {current_term: term}}, function(error, result) {
         if (!error) {
-          req.session.current_term = req.body.current_term;
+          req.session.current_term = term;
           req.session.current_course_id = "";
           req.session.current_assessment_id = "";
           req.session.current_student_id = "";
           res.render('dashboard.ejs', {session: req.session});
         } else {
           res.redirect('/dashboard');
-        }
+        };
       });      
-    };
+    } else {
+      res.redirect('/sorry');
+    }
   });
 
   //COURSES -----------------------------------------------
 
   app.get('/courses', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, results) { 
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": req.session.current_term}).toArray(function(error, results) { 
         var courses = [];
-        if ((!error) && (results) && (results.length > 0)) {
+        if ((!error) && (results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
           courses = results[0].courses;
           if (courses.length > 0) {
             courses.sort(function (a, b) {
@@ -367,7 +351,7 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_course_id.length > 0) {
         db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
-          if ((results) && (results.length > 0)) {
+          if ((results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
             var course = results[0].courses[0];
             res.render('courses/edit.ejs', {course: course});
           } else {
@@ -392,19 +376,20 @@ MongoClient.connect(mongoUri, function(error, db) {
     } 
     else {
       //make sure there are no duplicate courses
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
         if (results.length > 0) {
           res.redirect('/courses/new');
           console.log('course already exists');
         } else {
-          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, year: req.body.year, term: req.body.term, auto: req.body.auto}}}, function(error, results) {
-              if (!error) {
-                console.log('new course created');
-                res.redirect('/dashboard');
-              } else {
-                console.log('error creating course');
-                res.redirect('/courses/new');
-              };
+          var term = req.body.year+'.'+req.body.term;
+          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
+            if (!error) {
+              console.log('new course created');
+              res.redirect('/dashboard');
+            } else {
+              console.log('error creating course');
+              res.redirect('/courses/new');
+            };
           });
         };
       });
@@ -419,12 +404,13 @@ MongoClient.connect(mongoUri, function(error, db) {
           console.log('title cannot be blank');
         } else {
           //make sure the change does not create a duplicate course
-          db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.year": req.body.year, "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+          db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
             if ((results.length > 0) && (results[0].courses[0]._id.toString() != req.session.current_course_id.toString())) {
               res.redirect('/courses/edit');
               console.log('course already exists');
             } else {
-              db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.year": req.body.year, "courses.$.term": req.body.term, "courses.$.auto": req.body.auto}}, function(error, result) {
+              var term = req.body.year+'.'+req.body.term;
+              db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
                 if (!error) {
                   console.log('course updated');
                   res.redirect('/dashboard'); 
@@ -535,7 +521,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.get('/courses/copy', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.year": req.session.current_year, "courses.term": req.session.current_term}).toArray(function(error, results) { 
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": req.session.current_term}).toArray(function(error, results) { 
         var courses = [];
         if ((!error) && (results) && (results.length > 0)) {
           courses = results[0].courses;
@@ -562,7 +548,17 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/courses/:id/copy', function(req, res) {
-    res.json([]);
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.params.id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
+        if ((results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
+          var original_course = results[0].courses[0];
+          //create new course
+
+          //enroll students 
+
+        };
+      });
+    };
   });
 
 

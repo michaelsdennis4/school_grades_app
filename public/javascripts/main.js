@@ -347,7 +347,8 @@ $('document').ready(function() {
 
 
     $('#current-year').on('change', function(event) {
-      $('#year-submit').click();
+      $('#current-term').val("1");
+      $('#term-submit').click();
     });
 
     $('#current-term').on('change', function(event) {
@@ -699,15 +700,15 @@ $('document').ready(function() {
 
     $('#courses-copy').on('click', function(req, res) {
       event.preventDefault();
+      var $this = $(this.parentNode);
       var courses = [];
       var checklist = document.querySelector('#courses-checklist');
       var items = checklist.querySelectorAll('.copy-course');
       for (var i=0; i < items.length; i++) {
-        console.log(items[i]);
         if (items[i].checked === true) {
           courses.push(items[i].getAttribute('id'));
         };
-      };
+      };   
       var copyCourse = function(count) {
         $.ajax({
           url: '/courses/'+courses[count]+'/copy',
@@ -720,11 +721,14 @@ $('document').ready(function() {
             copyCourse(count);
           } else {
             console.log ('all courses copied');
+            $this.unbind('submit').submit();
           };
         });
       };
       if (courses.length > 0) {
         copyCourse(0);
+      } else {
+        $this.unbind('submit').submit();
       };
     });
 
