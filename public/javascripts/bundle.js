@@ -28997,6 +28997,32 @@ $('document').ready(function () {
         };
       });
 
+      $('#course-select').on('click', function (event) {
+        event.preventDefault();
+        var term = event.target.value;
+        console.log(term);
+        if (term.length > 0) {
+          data = { term: term };
+          $.ajax({
+            url: '/courses',
+            type: 'get',
+            data: data,
+            //contentType: "application/json",
+            dataType: 'json'
+          }).done(function (results) {
+            console.log(results);
+            if (results && results.courses.length > 0) {
+              var courses = results.courses;
+              courses.forEach(function (course) {
+                $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course.id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
+              });
+              $('#courses-checklist').append('<br><br>');
+              $('#courses-list').toggleClass('hidden', false);
+            }
+          });
+        };
+      });
+
       $('#courses-copy').on('click', function (req, res) {
         event.preventDefault();
         var $this = $(this.parentNode);

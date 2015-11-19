@@ -294,11 +294,19 @@ MongoClient.connect(mongoUri, function(error, db) {
     }
   });
 
+
+
   //COURSES -----------------------------------------------
 
   app.get('/courses', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": req.session.current_term}).toArray(function(error, results) { 
+      var term;
+      if (req.query.term) {
+        term = req.query.term;
+      } else {
+        term = req.session.current_term;
+      };
+      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": term}).toArray(function(error, results) { 
         var courses = [];
         if ((!error) && (results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
           courses = results[0].courses;
@@ -520,28 +528,23 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.get('/courses/copy', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": req.session.current_term}).toArray(function(error, results) { 
-        var courses = [];
+    if ((req.session.user_id) && (req.session.user_id != null)) {  
+      var terms = [];
+      db.collection('users').distinct("courses.term", function(error, results) {
         if ((!error) && (results) && (results.length > 0)) {
-          courses = results[0].courses;
-          if (courses.length > 0) {
-            courses.sort(function (a, b) {
-              if (a.title+a.section > b.title+b.section) {
-                return 1;
-              }
-              if (a.title+a.section < b.title+b.section) {
-                return -1;
-              }
-              return 0;
-            });
-            courses.map(function(course) {
-              course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            });
-          }; 
+          terms = results;
+          terms.sort(function (a, b) {
+            if (a < b) {
+              return 1;
+            }
+            if (a > b) {
+              return -1;
+            }
+            return 0;
+          });
         };
-        res.render('courses/copy.ejs', {session: req.session, courses: courses});
-      });
+        res.render('courses/copy.ejs', {session: req.session, terms: terms});
+      });     
     } else {
       res.redirect('/sorry');
     };

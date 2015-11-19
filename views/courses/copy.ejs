@@ -13,36 +13,42 @@
 
 		<h2>Copy Courses</h2>
 
-		<h5>Select course(s) you want to copy to the current term.</h5>
+		<hr>
+
+		<h3>Current Year: <%= session.current_term.split('.')[0] %></h3>
+		<h3>Current Term: <%= session.current_term.split('.')[1] %></h3>
 
 		<hr>
 
-		<h3>Current Year: <%= session.current_year %></h3>
-		<h3>Current Term: <%= session.current_term %></h3>
+		<h3>Select A Previous Term:</h3>
 
-		<hr>
-
-		<h3>Previous Term:</h3>
-
-		<form action="/year" method="post">
-			<label for="current-year">Year</label><br>
-			<input id="current-year" type="number" name="year" min="2015" value="<%= session.current_year %>"/>
-			<input type="hidden" name="_method" value="patch"/>
-			<input class="hidden" id="year-submit" type="submit"/>
+		<form action="/courses" method="get">
+			<select id="course-select" name="term">
+				<% terms.forEach(function(term) { %>
+					<% if (term.toString() != session.current_term.toString()) { %>
+						<option value="<%= term %>"/><%= term.split('.')[0] %> Term <%= term.split('.')[1] %></option>
+					<% }; %>
+				<% }); %>
+			</select>
 		</form>
 
-		<h3>Courses</h3>
+		<br>
 
-		<div class="checkbox-list" id="courses-checklist">
-			<% courses.forEach(function(course) { %>
-				<label><input type="checkbox" class="copy-course" id="<%= course._id %>" value="copy"/><%= course.title %> (<%= course.year %> Term: <%= course.term %>)<label><br>
-			<% }); %>
-			<br><br>
+		<div class="hidden" id="courses-list">
+
+			<hr>
+
+			<h3>Courses</h3>
+
+			<p>Select the course(s) you want to copy to the current term.</p>
+
+			<div class="checkbox-list" id="courses-checklist"></div>
+
+			<form action="/dashboard">
+				<input type="submit" id="courses-copy" value="Copy Courses"/>
+			</form>
+
 		</div>
-
-		<form action="/dashboard">
-			<input type="submit" id="courses-copy" value="Copy Courses"/>
-		</form>
 
 	</div>
 
