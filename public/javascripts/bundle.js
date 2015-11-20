@@ -29007,14 +29007,13 @@ $('document').ready(function () {
             url: '/courses',
             type: 'get',
             data: data,
-            //contentType: "application/json",
             dataType: 'json'
           }).done(function (results) {
             console.log(results);
             if (results && results.courses.length > 0) {
               var courses = results.courses;
               courses.forEach(function (course) {
-                $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course.id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
+                $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
               });
               $('#courses-checklist').append('<br><br>');
               $('#courses-list').toggleClass('hidden', false);
@@ -29029,17 +29028,24 @@ $('document').ready(function () {
         var courses = [];
         var checklist = document.querySelector('#courses-checklist');
         var items = checklist.querySelectorAll('.copy-course');
+        var copy_students = 'false';
+        if ($('#copy-students').val() === 'true') {
+          copy_students = 'true';
+        };
         for (var i = 0; i < items.length; i++) {
           if (items[i].checked === true) {
             courses.push(items[i].getAttribute('id'));
           };
         };
         var copyCourse = function (count) {
+          var data = { copy_students: copy_students };
           $.ajax({
             url: '/courses/' + courses[count] + '/copy',
             type: 'post',
+            data: JSON.stringify(data),
+            contentType: "application/json",
             dataType: 'json'
-          }).done(function () {
+          }).done(function (result) {
             console.log('course copied');
             count++;
             if (count < courses.length) {

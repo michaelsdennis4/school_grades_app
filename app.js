@@ -27,8 +27,8 @@ var bcrypt = require('bcryptjs');
 var MongoDB     = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var ObjectId    = MongoDB.ObjectID;
-var mongoUri    = process.env.MONGOLAB_URI;
-//var mongoUri    = 'mongodb://localhost:27017/school_grades'
+//var mongoUri    = process.env.MONGOLAB_URI;
+var mongoUri    = 'mongodb://localhost:27017/school_grades'
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -306,10 +306,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         term = req.session.current_term;
       };
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.term": term}).toArray(function(error, results) { 
+      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) { 
         var courses = [];
         if ((!error) && (results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
-          courses = results[0].courses;
+          results[0].courses.forEach(function(course) {
+            if (course.term === term) {
+              courses.push(course);
+            };
+          });
           if (courses.length > 0) {
             courses.sort(function (a, b) {
               if (a.title+a.section > b.title+b.section) {
@@ -556,11 +560,24 @@ MongoClient.connect(mongoUri, function(error, db) {
         if ((results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
           var original_course = results[0].courses[0];
           //create new course
+          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: original_course.title, section: original_course.section, term: req.session.current_term, auto: original_course.auto}}}, function(error, results) {
+            if (!error) {
+              console.log('course copied');
+              res.json({result: true});
+              //enroll students 
 
-          //enroll students 
-
+            } else {
+              console.log('error copying course');
+              res.json({result: false});
+            };
+          });
+        } else {
+          console.log('course not found');
+          res.json({result: false});
         };
       });
+    } else {
+      res.json({result: false});
     };
   });
 

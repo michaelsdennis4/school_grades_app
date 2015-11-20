@@ -415,6 +415,10 @@ input.grade {
 	text-align: left;
 }
 
+.checklist-submit {
+	margin-top: 10px;
+}
+
 input[type=checkbox] {
 	height: 20px;
 	line-height: 20px;
