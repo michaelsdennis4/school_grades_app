@@ -721,7 +721,7 @@ $('document').ready(function() {
           }
         });
       };
-    })
+    });
 
     $('#courses-copy').on('click', function(req, res) {
       event.preventDefault();
@@ -730,7 +730,7 @@ $('document').ready(function() {
       var checklist = document.querySelector('#courses-checklist');
       var items = checklist.querySelectorAll('.copy-course');
       var copy_students = 'false';
-      if ($('#copy-students').val() === 'true') {
+      if ($('#copy-students').checked === true) {
         copy_students = 'true';
       };
       for (var i=0; i < items.length; i++) {

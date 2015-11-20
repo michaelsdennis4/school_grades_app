@@ -559,13 +559,29 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.params.id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
         if ((results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
           var original_course = results[0].courses[0];
+          var new_course;
+          if (req.body.copy_students === 'true') {
+            new_course = {_id: ObjectId(), title: original_course.title, section: original_course.section, term: req.session.current_term, auto: original_course.auto, student_ids: original_course.student_ids};
+          } else {
+            new_course = {_id: ObjectId(), title: original_course.title, section: original_course.section, term: req.session.current_term, auto: original_course.auto};
+          };
           //create new course
-          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: original_course.title, section: original_course.section, term: req.session.current_term, auto: original_course.auto}}}, function(error, results) {
+          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: new_course}}, function(error, results) {
             if (!error) {
               console.log('course copied');
-              res.json({result: true});
-              //enroll students 
-
+              //add course to students
+              if (req.body.copy_students === 'true') {
+                new_course.student_ids.forEach(function(student) {
+                  db.collection('students').update({_id: ObjectId(student.id)}, {$push: {course_ids: {id: new_course._id}}}, function(error, result) {
+                    if (!error) {
+                      console.log('student '+student.id+' added to course');
+                    } else {
+                      console.log('error adding student '+student.id+' to course');
+                    };
+                  });
+                });
+              };
+              res.json({result: true});             
             } else {
               console.log('error copying course');
               res.json({result: false});
