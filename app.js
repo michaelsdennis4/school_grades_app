@@ -68,9 +68,10 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.post('/login', function(req, res) {
     db.collection('users').find({email: req.body.email}).toArray(function(error, results) {
-      if (results.length == 0) {
-        res.redirect('/');
+      if ((error) || (results.length == 0)) {
+        // res.redirect('/');
         console.log('user not found');
+        res.json({message: 'User not found'});
       } 
       else {
         var user = results[0];
@@ -83,10 +84,12 @@ MongoClient.connect(mongoUri, function(error, db) {
           session.current_assessment_id = "";
           session.current_student_id = "";
           console.log('user logged in!');
-          res.redirect('/dashboard');
+          //res.redirect('/dashboard');
+          res.json({message: 'ok'});
         } else {
-          res.redirect('/');
+          //res.redirect('/');
           console.log('password incorrect');
+          res.json({message: 'Password incorrect'});
         };
       };
     });

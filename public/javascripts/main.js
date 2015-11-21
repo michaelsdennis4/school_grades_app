@@ -796,6 +796,40 @@ $('document').ready(function() {
       };
     });
 
+
+
+
+  //INDEX EVENT LISTENERS-------------------------------------------------
+
+  } else if (document.body.id === 'index') {
+
+    $('#login').on('click', function(event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-login').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/login',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function(result) {
+        console.log('ajax complete');
+        if (result.message === 'ok') {
+          console.log('login successful');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-login').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+
+
+
+
+
   };
 
 

@@ -3,7 +3,7 @@
 
 	<% include ./partials/head %>
 
-<body>
+<body id="index">
 
 	<div class="caption">
 		<h1>Welcome to GradeBook</h1>
@@ -20,8 +20,10 @@
 			<label for="password">Password</label><br>
 			<input type="password" name="password" placeholder="Password"/><br>
 			<br>
-			<input type="submit" value="Login"/>
+			<input type="submit" id="login" value="Login"/>
 		</form>
+
+		<div class="hidden message" id="message-login"></div>
 
 	</div>
 
