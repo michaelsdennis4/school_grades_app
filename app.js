@@ -387,22 +387,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       console.log('title cannot be blank');
     } 
     else {
-      //make sure there are no duplicate courses
-      db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
-        if (results.length > 0) {
-          res.redirect('/courses/new');
-          console.log('course already exists');
+      var term = req.body.year+'.'+req.body.term;
+      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
+        if (!error) {
+          console.log('new course created');
+          res.redirect('/dashboard');
         } else {
-          var term = req.body.year+'.'+req.body.term;
-          db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
-            if (!error) {
-              console.log('new course created');
-              res.redirect('/dashboard');
-            } else {
-              console.log('error creating course');
-              res.redirect('/courses/new');
-            };
-          });
+          console.log('error creating course');
+          res.redirect('/courses/new');
         };
       });
     };
@@ -414,23 +406,15 @@ MongoClient.connect(mongoUri, function(error, db) {
         if (req.body.title.length === 0) {
           res.redirect('/courses/edit');
           console.log('title cannot be blank');
-        } else {
-          //make sure the change does not create a duplicate course
-          db.collection('users').find({_id: ObjectId(req.session.user_id), "courses.title": req.body.title.toLowerCase(), "courses.term": req.body.term, "courses.section": req.body.section}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
-            if ((results.length > 0) && (results[0].courses[0]._id.toString() != req.session.current_course_id.toString())) {
-              res.redirect('/courses/edit');
-              console.log('course already exists');
+        } else { 
+          var term = req.body.year+'.'+req.body.term;
+          db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
+            if (!error) {
+              console.log('course updated');
+              res.redirect('/dashboard'); 
             } else {
-              var term = req.body.year+'.'+req.body.term;
-              db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
-                if (!error) {
-                  console.log('course updated');
-                  res.redirect('/dashboard'); 
-                } else {
-                  console.log('error updating course');
-                  res.redirect('/courses/edit');
-                };
-              });
+              console.log('error updating course');
+              res.redirect('/courses/edit');
             };
           });
         };
