@@ -78,6 +78,8 @@ MongoClient.connect(mongoUri, function(error, db) {
         if (bcrypt.compareSync(req.body.password, user.password_digest) === true) {
           session = req.session;
           session.user_id = user._id;
+          user.first_name = user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          user.last_name = user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
           session.username = user.first_name +' '+user.last_name;
           session.current_term = user.current_term;
           session.current_course_id = "";
@@ -147,24 +149,34 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/users', function(req, res){
     db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
       if (users.length > 0) {
-        res.redirect('/users/new');
+        //res.redirect('/users/new');
         console.log('the user already exists');
+        res.json({message: 'User already exists'});
       } 
       else if (req.body.password != req.body.password_confirmation) { 
-        res.redirect('/users/new');
+        //res.redirect('/users/new');
         console.log('passwords do not match');
+        res.json({message: 'Passwords do not match'});
       } 
       else if (req.body.first_name.length === 0) {
-        res.redirect('/users/new');
+        //res.redirect('/users/new');
         console.log('first name cannot be blank');
+        res.json({message: 'First name cannot be blank'});
       }
       else if (req.body.last_name.length === 0) {
-        res.redirect('/users/new');
+        //res.redirect('/users/new');
         console.log('last name cannot be blank');
+        res.json({message: 'Last name cannot be blank'});
       }
       else if (req.body.email.length === 0) {
-        res.redirect('/users/new');
+        //res.redirect('/users/new');
         console.log('email cannot be blank');
+        res.json({message: 'Email cannot be blank'});
+      }
+      else if (req.body.password.length === 0) {
+        //res.redirect('/users/new');
+        console.log('password cannot be blank');
+        res.json({message: 'Password cannot be blank'});
       }
       else {
         var salt = bcrypt.genSaltSync(10);
@@ -175,15 +187,20 @@ MongoClient.connect(mongoUri, function(error, db) {
             console.log('new user id is '+new_user._id);
             session = req.session;
             session.user_id = new_user._id;
+            new_user.first_name = new_user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            new_user.last_name = new_user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
             session.username = new_user.first_name +' '+new_user.last_name;
             session.current_term = new_user.current_term;
             session.current_course_id = "";
             session.current_assessment_id = "";
             session.current_student_id = "";
             console.log('user logged in!');
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
           } else {
-            res.redirect('/users/new');
+            //res.redirect('/users/new');
+            console.log('error creating user');
+            res.json({message: 'Error creating user'});
           };
         });
       };

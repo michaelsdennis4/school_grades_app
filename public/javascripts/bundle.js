@@ -29104,7 +29104,6 @@ $('document').ready(function () {
               data: data,
               dataType: 'json'
             }).done(function (result) {
-              console.log('ajax complete');
               if (result.message === 'ok') {
                 console.log('login successful');
                 location.href = "/dashboard";
@@ -29114,7 +29113,31 @@ $('document').ready(function () {
               };
             });
           });
-        };
+
+          //USER EVENT LISTENERS-------------------------------------------------
+        } else if (document.body.id === 'user') {
+
+            $('#user-new').on('click', function (event) {
+              event.preventDefault();
+              var $form = $(event.target.parentNode);
+              var data = $form.serializeArray();
+              $('#message-user-new').text('').toggleClass('hidden', true);
+              $.ajax({
+                url: '/users',
+                type: 'post',
+                data: data,
+                dataType: 'json'
+              }).done(function (result) {
+                if (result.message === 'ok') {
+                  console.log('new user created successfully');
+                  location.href = "/dashboard";
+                } else {
+                  console.log(result.message);
+                  $('#message-user-new').text(result.message).toggleClass('hidden', false);
+                };
+              });
+            });
+          };
 });
 
 },{"jQuery":28,"react":158,"react-dom":29}],160:[function(require,module,exports){
