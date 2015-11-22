@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body>
+<body class="courses">
 
 	<div class="toplink">
 		<a href="/dashboard">Back to Dashboard</a>
@@ -35,8 +35,10 @@
 			  <option value="false">No</option>
 			</select>
 			<br><br><br>
-			<input type="submit" value="Create Course"/>
+			<input type="submit" id="course-post" value="Create Course"/>
 		</form>
+
+		<div class="hidden message" id="message-course-post"></div>
 
 	</div>
 

@@ -125,7 +125,7 @@ MongoClient.connect(mongoUri, function(error, db) {
     res.render('sorry');
   });
 
-  // USERS --------------------------------------------------
+// USERS --------------------------------------------------
 
   app.get('/users/new', function(req, res) {
     res.render('users/new.ejs'); 
@@ -335,7 +335,7 @@ MongoClient.connect(mongoUri, function(error, db) {
 
 
 
-  //COURSES -----------------------------------------------
+//COURSES -----------------------------------------------
 
   app.get('/courses', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
@@ -418,24 +418,28 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/courses', function(req, res) {
-    if ((!req.session.user_id) || (req.session.user_id == null)) {
-      console.log('user is not logged in');
-    }
-    else if (req.body.title.length === 0) {
-      res.redirect('/courses/new');
-      console.log('title cannot be blank');
-    } 
-    else {
-      var term = req.body.year+'.'+req.body.term;
-      db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
-        if (!error) {
-          console.log('new course created');
-          res.redirect('/dashboard');
-        } else {
-          console.log('error creating course');
-          res.redirect('/courses/new');
-        };
-      });
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.body.title.length === 0) {
+        //res.redirect('/courses/new');
+        console.log('title cannot be blank');
+        res.json({message: 'Title cannot be blank'});
+      } 
+      else {
+        var term = req.body.year+'.'+req.body.term;
+        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
+          if (!error) {
+            console.log('new course created');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
+          } else {
+            console.log('error creating course');
+            //res.redirect('/courses/new');
+            res.json({message: 'Error creating course'});
+          };
+        });
+      };
+    } else {
+      res.json({message: 'sorry'});
     };
   });
 
