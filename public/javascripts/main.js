@@ -837,11 +837,11 @@ $('document').ready(function() {
 
     console.log('user js loaded!');
 
-    $('#user-new').on('click', function(event) {
+    $('#user-post').on('click', function(event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
-      $('#message-user-new').text('').toggleClass('hidden', true);
+      $('#message-user-post').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users',
         type: 'post',
@@ -853,7 +853,7 @@ $('document').ready(function() {
           location.href = "/dashboard";
         } else {
           console.log(result.message);
-          $('#message-user-new').text(result.message).toggleClass('hidden', false);
+          $('#message-user-post').text(result.message).toggleClass('hidden', false);
         };
       });
     });
