@@ -28142,7 +28142,9 @@ $('document').ready(function () {
 
   console.log('main.js loaded!');
 
-  if (document.body.id === 'dashboard') {
+  if (document.body.classList.contains('dashboard')) {
+
+    console.log('dashboard js loaded!');
 
     //REACT
 
@@ -28963,181 +28965,218 @@ $('document').ready(function () {
     };
 
     resetCourse();
+  };
 
-    //CHECKLIST EVENT LISTENERS---------------------------------------------
-  } else if (document.body.id === 'checklist') {
+  //CHECKLIST EVENT LISTENERS---------------------------------------------
 
-      $('.student_enroll').on('click', function (event) {
-        var student_id = event.target.getAttribute('id');
-        var enrolled = event.target.checked;
-        if (enrolled === true) {
-          $.ajax({
-            url: '/students/' + student_id + '/enroll',
-            method: 'patch',
-            dataType: 'json',
-            success: function () {
-              console.log('enrollment updated');
-            },
-            error: function () {
-              console.log('enrollment NOT updated');
-            }
-          });
-        } else {
-          $.ajax({
-            url: '/students/' + student_id + '/unenroll',
-            method: 'patch',
-            dataType: 'json',
-            success: function () {
-              console.log('enrollment updated');
-            },
-            error: function () {
-              console.log('enrollment NOT updated');
-            }
-          });
-        };
-      });
+  if (document.body.classList.contains('checklist')) {
 
-      $('#course-select').on('click', function (event) {
-        event.preventDefault();
-        var term = event.target.value;
-        console.log(term);
-        if (term.length > 0) {
-          data = { term: term };
-          $.ajax({
-            url: '/courses',
-            type: 'get',
-            data: data,
-            dataType: 'json'
-          }).done(function (results) {
-            console.log(results);
-            if (results && results.courses.length > 0) {
-              var courses = results.courses;
-              courses.forEach(function (course) {
-                $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
-              });
-              $('#courses-checklist').append('<br><br>');
-              $('#courses-list').toggleClass('hidden', false);
-            }
-          });
-        };
-      });
+    console.log('checklist js loaded!');
 
-      $('#courses-copy').on('click', function (req, res) {
-        event.preventDefault();
-        var $this = $(this.parentNode);
-        var courses = [];
-        var checklist = document.querySelector('#courses-checklist');
-        var items = checklist.querySelectorAll('.copy-course');
-        var copy_students = 'false';
-        if ($('#copy-students').checked === true) {
-          copy_students = 'true';
-        };
-        for (var i = 0; i < items.length; i++) {
-          if (items[i].checked === true) {
-            courses.push(items[i].getAttribute('id'));
-          };
-        };
-        var copyCourse = function (count) {
-          var data = { copy_students: copy_students };
-          $.ajax({
-            url: '/courses/' + courses[count] + '/copy',
-            type: 'post',
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: 'json'
-          }).done(function (result) {
-            console.log('course copied');
-            count++;
-            if (count < courses.length) {
-              copyCourse(count);
-            } else {
-              console.log('all courses copied');
-              $this.unbind('submit').submit();
-            };
-          });
-        };
-        if (courses.length > 0) {
-          copyCourse(0);
-        } else {
-          $this.unbind('submit').submit();
-        };
-      });
-
-      //EDIT EVENT LISTENERS ------------------------------------------------
-    } else if (document.body.id === 'edit') {
-
-        $('#student-delete').on('click', function (event) {
-          if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === false) {
-            event.preventDefault();
-          };
+    $('.student_enroll').on('click', function (event) {
+      var student_id = event.target.getAttribute('id');
+      var enrolled = event.target.checked;
+      if (enrolled === true) {
+        $.ajax({
+          url: '/students/' + student_id + '/enroll',
+          method: 'patch',
+          dataType: 'json',
+          success: function () {
+            console.log('enrollment updated');
+          },
+          error: function () {
+            console.log('enrollment NOT updated');
+          }
         });
-
-        $('#assessment-delete').on('click', function (event) {
-          if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === false) {
-            event.preventDefault();
-          };
+      } else {
+        $.ajax({
+          url: '/students/' + student_id + '/unenroll',
+          method: 'patch',
+          dataType: 'json',
+          success: function () {
+            console.log('enrollment updated');
+          },
+          error: function () {
+            console.log('enrollment NOT updated');
+          }
         });
+      };
+    });
 
-        $('#course-delete').on('click', function (event) {
-          if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === false) {
-            event.preventDefault();
-          };
-        });
-
-        $('#user-delete').on('click', function (event) {
-          if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === false) {
-            event.preventDefault();
-          };
-        });
-
-        //INDEX EVENT LISTENERS-------------------------------------------------
-      } else if (document.body.id === 'index') {
-
-          $('#login').on('click', function (event) {
-            event.preventDefault();
-            var $form = $(event.target.parentNode);
-            var data = $form.serializeArray();
-            $('#message-login').text('').toggleClass('hidden', true);
-            $.ajax({
-              url: '/login',
-              type: 'post',
-              data: data,
-              dataType: 'json'
-            }).done(function (result) {
-              if (result.message === 'ok') {
-                console.log('login successful');
-                location.href = "/dashboard";
-              } else {
-                console.log(result.message);
-                $('#message-login').text(result.message).toggleClass('hidden', false);
-              };
+    $('#course-select').on('click', function (event) {
+      event.preventDefault();
+      var term = event.target.value;
+      console.log(term);
+      if (term.length > 0) {
+        data = { term: term };
+        $.ajax({
+          url: '/courses',
+          type: 'get',
+          data: data,
+          dataType: 'json'
+        }).done(function (results) {
+          console.log(results);
+          if (results && results.courses.length > 0) {
+            var courses = results.courses;
+            courses.forEach(function (course) {
+              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
             });
-          });
+            $('#courses-checklist').append('<br><br>');
+            $('#courses-list').toggleClass('hidden', false);
+          }
+        });
+      };
+    });
 
-          //USER EVENT LISTENERS-------------------------------------------------
-        } else if (document.body.id === 'user') {
-
-            $('#user-new').on('click', function (event) {
-              event.preventDefault();
-              var $form = $(event.target.parentNode);
-              var data = $form.serializeArray();
-              $('#message-user-new').text('').toggleClass('hidden', true);
-              $.ajax({
-                url: '/users',
-                type: 'post',
-                data: data,
-                dataType: 'json'
-              }).done(function (result) {
-                if (result.message === 'ok') {
-                  console.log('new user created successfully');
-                  location.href = "/dashboard";
-                } else {
-                  console.log(result.message);
-                  $('#message-user-new').text(result.message).toggleClass('hidden', false);
-                };
-              });
-            });
+    $('#courses-copy').on('click', function (req, res) {
+      event.preventDefault();
+      var $this = $(this.parentNode);
+      var courses = [];
+      var checklist = document.querySelector('#courses-checklist');
+      var items = checklist.querySelectorAll('.copy-course');
+      var copy_students = 'false';
+      if ($('#copy-students').checked === true) {
+        copy_students = 'true';
+      };
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].checked === true) {
+          courses.push(items[i].getAttribute('id'));
+        };
+      };
+      var copyCourse = function (count) {
+        var data = { copy_students: copy_students };
+        $.ajax({
+          url: '/courses/' + courses[count] + '/copy',
+          type: 'post',
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          dataType: 'json'
+        }).done(function (result) {
+          console.log('course copied');
+          count++;
+          if (count < courses.length) {
+            copyCourse(count);
+          } else {
+            console.log('all courses copied');
+            $this.unbind('submit').submit();
           };
+        });
+      };
+      if (courses.length > 0) {
+        copyCourse(0);
+      } else {
+        $this.unbind('submit').submit();
+      };
+    });
+  };
+
+  //EDIT EVENT LISTENERS ------------------------------------------------
+
+  if (document.body.classList.contains('edit')) {
+
+    console.log('edit js loaded!');
+
+    $('#student-delete').on('click', function (event) {
+      if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+
+    $('#assessment-delete').on('click', function (event) {
+      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+
+    $('#course-delete').on('click', function (event) {
+      if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+
+    $('#user-delete').on('click', function (event) {
+      if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === false) {
+        event.preventDefault();
+      };
+    });
+  };
+
+  //INDEX EVENT LISTENERS-------------------------------------------------
+
+  if (document.body.classList.contains('index')) {
+
+    console.log('index js loaded!');
+
+    $('#login').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-login').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/login',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('login successful');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-login').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+  };
+
+  //USER EVENT LISTENERS-------------------------------------------------
+
+  if (document.body.classList.contains('user')) {
+
+    console.log('user js loaded!');
+
+    $('#user-new').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-new').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('new user created successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-user-new').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+    $('#user-edit').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-edit').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('new user updated successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-user-edit').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+  };
 });
 
 },{"jQuery":28,"react":158,"react-dom":29}],160:[function(require,module,exports){

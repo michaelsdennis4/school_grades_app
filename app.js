@@ -210,29 +210,33 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.patch('/users', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
-          res.redirect('/users/edit');
+          //res.redirect('/users/edit');
           console.log('first name cannot be blank');
+          res.json({message: 'First name cannot be blank'});
       }
       else if (req.body.last_name.length === 0) {
-        res.redirect('/users/edit');
+        //res.redirect('/users/edit');
         console.log('last name cannot be blank');
+        res.json({message: 'Last name cannot be blank'});
       }
       else if (req.body.email.length === 0) {
-        res.redirect('/users/edit');
+        //res.redirect('/users/edit');
         console.log('email cannot be blank');
+        res.json({message: 'Email cannot be blank'});
       }
       else {
         db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}}, function(error, result) {
-            if (!error) {
-              req.session.username = req.body.first_name +' '+req.body.last_name;
-              res.render('dashboard.ejs', {session: req.session});
-            } else {
-              res.redirect('/dashboard');
-            }
+          if (!error) {
+            req.body.first_name = req.body.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            req.body.last_name = req.body.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            req.session.username = req.body.first_name +' '+req.body.last_name;
+          };
+          res.json({message: 'ok'});
         });     
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

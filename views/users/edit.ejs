@@ -3,7 +3,7 @@
 
 	<% include ../partials/head %>
 
-<body id="edit">
+<body class="edit user">
 
 	<div class="toplink">
 		<a href="/dashboard">Back to Dashboard</a>
@@ -26,8 +26,10 @@
 			<input type="text" name="email" value="<%= user.email %>"/><br>
 			<br>
 			<input type="hidden" name="_method" value="patch"/>
-			<input type="submit" value="Update My Profile"/>
+			<input type="submit" id="user-edit" value="Update My Profile"/>
 		</form>
+
+		<div class="hidden message" id="message-user-edit"></div>
 
 		<hr>
 

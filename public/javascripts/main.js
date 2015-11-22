@@ -7,7 +7,9 @@ $('document').ready(function() {
 
   console.log('main.js loaded!');
 
-  if (document.body.id === 'dashboard') {
+  if (document.body.classList.contains('dashboard')) {
+
+    console.log('dashboard js loaded!');
 
     //REACT
 
@@ -660,13 +662,15 @@ $('document').ready(function() {
 
 
 
-
+  };
 
     
     
   //CHECKLIST EVENT LISTENERS---------------------------------------------
   
-  } else if (document.body.id === 'checklist') {
+  if (document.body.classList.contains('checklist')) {
+
+    console.log('checklist js loaded!');
 
     $('.student_enroll').on('click', function(event) {
       var student_id = event.target.getAttribute('id');
@@ -765,12 +769,14 @@ $('document').ready(function() {
     });
 
 
-
+  };
 
 
   //EDIT EVENT LISTENERS ------------------------------------------------
 
-  } else if (document.body.id === 'edit') {
+  if (document.body.classList.contains('edit')) {
+
+    console.log('edit js loaded!');
 
     $('#student-delete').on('click', function(event) {
       if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === false) {
@@ -797,11 +803,13 @@ $('document').ready(function() {
     });
 
 
-
+  };
 
   //INDEX EVENT LISTENERS-------------------------------------------------
 
-  } else if (document.body.id === 'index') {
+  if (document.body.classList.contains('index')) {
+
+    console.log('index js loaded!');
 
     $('#login').on('click', function(event) {
       event.preventDefault();
@@ -825,11 +833,13 @@ $('document').ready(function() {
     });
 
 
-
+  };
 
   //USER EVENT LISTENERS-------------------------------------------------
 
-  } else if (document.body.id === 'user') {
+  if (document.body.classList.contains('user')) {
+
+    console.log('user js loaded!');
 
     $('#user-new').on('click', function(event) {
       event.preventDefault();
@@ -851,6 +861,29 @@ $('document').ready(function() {
         };
       });
     });
+
+    $('#user-edit').on('click', function(event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-edit').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function(result) {
+        if (result.message === 'ok') {
+          console.log('new user updated successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-user-edit').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+
 
   };
 
