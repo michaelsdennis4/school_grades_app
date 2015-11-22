@@ -26,10 +26,10 @@
 			<input type="text" name="email" value="<%= user.email %>"/><br>
 			<br>
 			<input type="hidden" name="_method" value="patch"/>
-			<input type="submit" id="user-edit" value="Update My Profile"/>
+			<input type="submit" id="user-patch" value="Update My Profile"/>
 		</form>
 
-		<div class="hidden message" id="message-user-edit"></div>
+		<div class="hidden message" id="message-user-patch"></div>
 
 		<hr>
 
@@ -46,8 +46,10 @@
 			<input type="password" name="confirm_new_password" placeholder="Confirm new password"/><br>
 			<br>
 			<input type="hidden" name="_method" value="patch"/>
-			<input type="submit" value="Change My Password"/>
+			<input type="submit" id="user-password" value="Change My Password"/>
 		</form>
+
+		<div class="hidden message" id="message-user-password"></div>
 
 		<hr>
 
@@ -55,6 +57,8 @@
 			<input type="hidden" name="_method" value="delete"/>
 			<input type="submit" class="delete" id="user-delete" value="Delete My Profile"/>
 		</form>
+
+		<div class="hidden message" id="message-user-delete"></div>
 
 	</div>
 

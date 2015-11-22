@@ -173,10 +173,10 @@ MongoClient.connect(mongoUri, function(error, db) {
         console.log('email cannot be blank');
         res.json({message: 'Email cannot be blank'});
       }
-      else if (req.body.password.length === 0) {
+      else if (req.body.password.length < 6) {
         //res.redirect('/users/new');
-        console.log('password cannot be blank');
-        res.json({message: 'Password cannot be blank'});
+        console.log('password too short');
+        res.json({message: 'Password must be at least 6 characters.'});
       }
       else {
         var salt = bcrypt.genSaltSync(10);
@@ -242,35 +242,47 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.patch('/users/password', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
-        if ((!error) && (results) && (results.length > 0)) {
-          var user = results[0];
-          if (req.body.new_password != req.body.confirm_new_password) { 
-            console.log('new passwords do not match');
-            res.redirect('/users/edit');
-          } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
-            var salt = bcrypt.genSaltSync(10);
-            var hash = bcrypt.hashSync(req.body.new_password, salt);
-            db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
-              if ((!error) && (result)) {
-                console.log('password changed');
-                res.redirect('/dashboard');
-              } else {
-                console.log('error updating password');
-                res.redirect('/users/edit');
-              };
-            });
+      if (req.body.new_password.length < 6) {
+        //res.redirect('/users/new');
+        console.log('password too short');
+        res.json({message: 'Password must be at least 6 characters.'});
+      } else {
+        db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
+          if ((!error) && (results) && (results.length > 0)) {
+            var user = results[0];
+            if (req.body.new_password != req.body.confirm_new_password) { 
+              console.log('new passwords do not match');
+              //res.redirect('/users/edit');
+              res.json({message: 'New passwords do not match'});
+            } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
+              var salt = bcrypt.genSaltSync(10);
+              var hash = bcrypt.hashSync(req.body.new_password, salt);
+              db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
+                if ((!error) && (result)) {
+                  console.log('password changed');
+                  //res.redirect('/dashboard');
+                  res.json({message: 'ok'});
+                } else {
+                  console.log('error updating password');
+                  //res.redirect('/users/edit');
+                  res.json({message: 'Error updating password'});
+                };
+              });
+            } else {
+              console.log('incorrect password');
+              //res.redirect('/users/edit');
+              res.json({message: 'Existing password incorrect'});
+            };
           } else {
-            console.log('incorrect password');
-            res.redirect('/users/edit');
+            console.log('user not found');
+            //res.redirect('/logout');
+            res.json({message: 'User not found'});
           };
-        } else {
-          console.log('user not found');
-          res.redirect('/logout');
-        };
-      });
+        });
+      };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
@@ -288,14 +300,17 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection('users').remove({_id: ObjectId(req.session.user_id)}, function(error, result) {
         if (!error) {
           console.log('user deleted');
-          res.redirect('/logout');
+          //res.redirect('/logout');
+          res.json({message: 'ok'});
         } else {
           console.log('error deleting user');
-          res.redirect('/users/edit');
+          //res.redirect('/users/edit');
+          res.json({message: 'Error deleting user'});
         };
       });
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

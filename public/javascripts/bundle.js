@@ -29093,12 +29093,6 @@ $('document').ready(function () {
         event.preventDefault();
       };
     });
-
-    $('#user-delete').on('click', function (event) {
-      if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === false) {
-        event.preventDefault();
-      };
-    });
   };
 
   //INDEX EVENT LISTENERS-------------------------------------------------
@@ -29156,25 +29150,72 @@ $('document').ready(function () {
       });
     });
 
-    $('#user-edit').on('click', function (event) {
+    $('#user-patch').on('click', function (event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
-      $('#message-user-edit').text('').toggleClass('hidden', true);
+      $('#message-user-patch').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users',
-        type: 'post',
+        type: 'patch',
         data: data,
         dataType: 'json'
       }).done(function (result) {
         if (result.message === 'ok') {
-          console.log('new user updated successfully');
+          console.log('user updated successfully');
           location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
         } else {
           console.log(result.message);
-          $('#message-user-edit').text(result.message).toggleClass('hidden', false);
+          $('#message-user-patch').text(result.message).toggleClass('hidden', false);
         };
       });
+    });
+
+    $('#user-password').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-password').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users/password',
+        type: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('password updated successfully');
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          console.log(result.message);
+          $('#message-user-password').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+    $('#user-delete').on('click', function (event) {
+      event.preventDefault();
+      if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === true) {
+        $('#message-user-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/users',
+          type: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            console.log('user deleted successfully');
+            location.href = "/logout";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
+          } else {
+            console.log(result.message);
+            $('#message-user-delete').text(result.message).toggleClass('hidden', false);
+          };
+        });
+      };
     });
   };
 });
