@@ -722,33 +722,38 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/assessments', function(req, res) {
-    if ((!req.session) || (req.session.user_id == null)) {
-        console.log('user is not logged in');
-    }
-    else if (req.session.current_course_id.length === 0) {
-      console.log('no course selected');
-      res.redirect('/dashboard');
-    }
-    else if (req.body.name.length === 0) {
-      console.log('name cannot be blank');
-      res.redirect('/assessments/new');
-    } 
-    else {
-      var weight;
-      if (req.body.weight) {
-        weight = req.body.weight;
-      } else {
-        weight = req.body.points;
-      };
-      db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
-        if (!error) {
-          console.log('new assessment created');
-          res.redirect('/dashboard');
+    if ((req.session.user_id) && (req.session.user_id != null)) {
+      if (req.session.current_course_id.length === 0) {
+        console.log('no course selected');
+        //res.redirect('/dashboard');
+        res.json({message: 'No course selected'});
+      }
+      else if (req.body.name.length === 0) {
+        console.log('name cannot be blank');
+        //res.redirect('/assessments/new');
+        res.json({message: 'Name cannot be blank'});
+      } 
+      else {
+        var weight;
+        if (req.body.weight) {
+          weight = req.body.weight;
         } else {
-          console.log('error creating assessment');
-          res.redirect('/assessments/new');
+          weight = req.body.points;
         };
-      });
+        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
+          if (!error) {
+            console.log('new assessment created');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
+          } else {
+            console.log('error creating assessment');
+            //res.redirect('/assessments/new');
+            res.json({message: 'Error creating assessment'});
+          };
+        });
+      };
+    } else {
+      res.json({message: 'sorry'});
     };
   });
 
@@ -757,7 +762,8 @@ MongoClient.connect(mongoUri, function(error, db) {
       if ((req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0)) {
         if (req.body.name.length === 0) {
           console.log('name cannot be blank');
-          res.redirect('/assessments/edit');
+          //res.redirect('/assessments/edit');
+          res.json({message: 'Name cannot be blank'});
         } 
         else {
           var weight;
@@ -782,24 +788,29 @@ MongoClient.connect(mongoUri, function(error, db) {
               db.collection("students").update({"scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.points": req.body.points, "scores.$.weight": weight}}, {multi: true}, function(error, result) {
                 if (!error) {
                   console.log('student scores updated');
-                  res.redirect('/dashboard');
+                  //res.redirect('/dashboard');
+                  res.json({message: 'ok'});
                 } else {
                   console.log('error updating student scores');
-                  res.redirect('/assessments/edit');
+                  //res.redirect('/assessments/edit');
+                  res.json({message: 'Error updating student scores'});
                 };
               });
             } else {
               console.log('error updating assessment');
-              res.redirect('/assessments/edit');
+              //res.redirect('/assessments/edit');
+              res.json({message: 'Error updating assessment'});
             };
           });
         };
       } else {
         console.log('no assessment selected');
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No assessment selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
@@ -818,18 +829,22 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {"courses.$.assessments": {_id: ObjectId(req.session.current_assessment_id)}}}, function(error, results) {
           if (!error) {
             console.log('assessment deleted');
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
           } else {
             console.log('error deleting assessment');
-            res.redirect('/assessments/edit');
+            //res.redirect('/assessments/edit');
+            res.json({message: 'Error deleting assessment'});
           };
         });
       } else {
         console.log('no assessment selected');
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No assessment selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
@@ -846,7 +861,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
 
-  // STUDENTS -----------------------------------------------------
+// STUDENTS -----------------------------------------------------
 
   app.get('/students', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {

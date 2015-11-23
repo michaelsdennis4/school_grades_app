@@ -29262,9 +29262,65 @@ $('document').ready(function () {
 
     console.log('assessments js loaded!');
 
+    $('#assessment-post').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-assessment-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/assessments',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('new assessment created successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+    $('#assessment-patch').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-assessment-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/assessments',
+        type: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('assessment updated successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
     $('#assessment-delete').on('click', function (event) {
-      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === false) {
-        event.preventDefault();
+      event.preventDefault();
+      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === true) {
+        $('#message-assessment-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/assessments',
+          type: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            console.log('assessment deleted successfully');
+            location.href = "/dashboard";
+          } else {
+            console.log(result.message);
+            $('#message-assessment-delete').text(result.message).toggleClass('hidden', false);
+          };
+        });
       };
     });
   };
