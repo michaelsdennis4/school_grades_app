@@ -880,7 +880,7 @@ $('document').ready(function() {
       };
     });
 
-    $('.student_enroll').on('click', function(event) {
+    $('.student-enroll').on('click', function(event) {
       var student_id = event.target.getAttribute('id');
       var enrolled = event.target.checked;
       if (enrolled === true) {
@@ -950,6 +950,54 @@ $('document').ready(function() {
         $this.unbind('submit').submit();
       };
     });
+
+    // $('#enrollment-update').on('click', function(event) {
+    //   event.preventDefault();
+    //   var $this = $(this.parentNode);
+    //   var students = [];
+    //   var checklist = document.querySelector('#students-checklist');
+    //   var items = checklist.querySelectorAll('.student-enroll');
+    //   var enrollStudent = function(count) {
+    //     var student_id = items[count].getAttribute('id');
+    //     var enrolled = items[count].checked;
+    //     if (enrolled === true) {
+    //       $.ajax({
+    //         url: '/students/'+student_id+'/enroll',
+    //         method: 'patch',
+    //         dataType: 'json',
+    //       }).done(function(result) {
+    //         console.log('student enrolled');
+    //         count++;
+    //         if (count < items.length) {
+    //           enrollStudent(count);
+    //         } else {
+    //           console.log ('enrollment updated');
+    //           $this.unbind('submit').submit();
+    //         };
+    //       });
+    //     } else {
+    //       $.ajax({
+    //         url: '/students/'+student_id+'/unenroll',
+    //         method: 'patch',
+    //         dataType: 'json',
+    //       }).done(function(result) {
+    //         console.log('student unenrolled');
+    //         count++;
+    //         if (count < items.length) {
+    //           enrollStudent(count);
+    //         } else {
+    //           console.log ('enrollment updated');
+    //           $this.unbind('submit').submit();
+    //         };
+    //       });
+    //     }; 
+    //   };
+    //   if (items.length > 0) {
+    //     enrollStudent(0)
+    //   } else {
+    //     $this.unbind('submit').submit();
+    //   };  
+    // });
 
   };
 

@@ -14,6 +14,7 @@
 		<h2>Enrollment</h2>
 
 		<h5>Check to enroll, uncheck to unenroll.</h5>
+		<h5>Unenrolling a student will NOT destroy the student's scores for that course.</h5>
 
 		<hr>
 
@@ -25,9 +26,9 @@
 
 		<h3>Students</h3>
 
-		<div class="checkbox-list">
+		<div class="checkbox-list" id="students-checklist">
 			<% students.forEach(function(student) { %>
-				<label><input type="checkbox" class="student_enroll" id="<%= student._id %>" value="enrolled"	
+				<label><input type="checkbox" class="student-enroll" id="<%= student._id %>" value="enrolled"	
 				<% var enrolled = false %>
 				<% if ((student.course_ids) && (student.course_ids.length > 0)) {
 						student.course_ids.forEach(function(course_id) {
@@ -47,7 +48,7 @@
 		</div>
 
 		<form action="/dashboard">
-			<input type="submit" class="checklist-submit" value="Update Enrollment"/>
+			<input type="submit" class="checklist-submit" id="enrollment-update" value="Back to Dashboard"/>
 		</form>
 
 	</div>

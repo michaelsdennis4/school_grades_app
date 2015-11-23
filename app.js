@@ -537,7 +537,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection("users").find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, 'courses.$': 1}).toArray(function(error, results) {
         if ((results.length > 0) && (results[0].courses.length > 0)) {
           var course = results[0].courses[0];
-          db.collection("students").find({user_id: ObjectId(req.session.user_id)}).toArray(function(error, students) {
+          db.collection("students").find({user_id: ObjectId(req.session.user_id), is_active: "true"}).toArray(function(error, students) {
             if (students.length > 0) {
               students.sort(function (a, b) {
                 if (a.last_name > b.last_name) {
