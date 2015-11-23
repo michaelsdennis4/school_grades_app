@@ -498,18 +498,22 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {courses: {_id: ObjectId(req.session.current_course_id)}}}, function(error, results) {
           if (!error) {
             console.log('course deleted');
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
           } else {
             console.log('error deleting course');
-            res.redirect('/courses/edit');
+            //res.redirect('/courses/edit');
+            res.json({message: 'Error deleting course'});
           };
         });
       } else {
         console.log("no course selected");
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No course selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

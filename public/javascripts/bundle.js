@@ -29164,6 +29164,26 @@ $('document').ready(function () {
       });
     });
 
+    $('#course-delete').on('click', function (event) {
+      event.preventDefault();
+      if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === true) {
+        $('#message-course-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/courses',
+          type: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            console.log('course deleted successfully');
+            location.href = "/dashboard";
+          } else {
+            console.log(result.message);
+            $('#message-course-delete').text(result.message).toggleClass('hidden', false);
+          };
+        });
+      };
+    });
+
     $('.student_enroll').on('click', function (event) {
       var student_id = event.target.getAttribute('id');
       var enrolled = event.target.checked;
@@ -29232,12 +29252,6 @@ $('document').ready(function () {
         copyCourse(0);
       } else {
         $this.unbind('submit').submit();
-      };
-    });
-
-    $('#course-delete').on('click', function (event) {
-      if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === false) {
-        event.preventDefault();
       };
     });
   };
