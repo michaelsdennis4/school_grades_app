@@ -42,8 +42,10 @@
 				<label><input type="checkbox" name="enroll" value="enroll" checked />Enroll this student in <%= course.title %> (Section <%= course.section %>)</label><br>			
 			<% } %>
 			<br>
-			<input type="submit" value="Add Student"/>
+			<input type="submit" id="student-post" value="Add Student"/>
 		</form>
+
+		<div class="hidden message" id="message-student-post"></div>
 
 	</div>
 

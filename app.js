@@ -964,10 +964,12 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
         console.log('first name cannot be blank');
-        res.redirect('/students/new');   
+        //res.redirect('/students/new'); 
+        res.json({message: 'First name cannot be blank'}); 
       } else if (req.body.last_name.length === 0) {
         console.log('last name cannot be blank');
-        res.redirect('/students/new');
+        //res.redirect('/students/new');
+        res.json({message: 'Last name cannot be blank'}); 
       } else {
         var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: req.body.is_active};
         db.collection('students').insert(new_student, function(error, results) {
@@ -987,15 +989,18 @@ MongoClient.connect(mongoUri, function(error, db) {
                 };
               });
             };
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
           } else {
             console.log('error adding student');
-            res.redirect('/students/new');
+            //res.redirect('/students/new');
+            res.json({message: 'Error adding student'}); 
           };
         });   
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'}); 
     };
   });
 
@@ -1003,11 +1008,13 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_student_id.length > 0) {
         if (req.body.first_name.length === 0) {
-          res.redirect('/students/edit');
+          //res.redirect('/students/edit');
           console.log('first name cannot be blank');
+          res.json({message: 'First name cannot be blank'});
         } else if (req.body.last_name.length === 0) {
-          res.redirect('/students/edit');
+          //res.redirect('/students/edit');
           console.log('last name cannot be blank');
+          res.json({message: 'Last name cannot be blank'});
         } else {
           var is_active = 'false';
           if ((req.body.is_active) && (req.body.is_active === 'true')) {
@@ -1016,19 +1023,23 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: is_active}}, function(error, result) {
             if (!error) {
               console.log("student profile updated");
-              res.redirect('/dashboard');
+              //res.redirect('/dashboard');
+              res.json({message: 'ok'});
             } else {
               console.log('error updating student profile');
-              res.redirect('/students/edit');
+              //res.redirect('/students/edit');
+              res.json({message: 'Error updating student profile'});
             };
           });
         };
       } else {
         console.log('no student selected');
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No student selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
@@ -1058,18 +1069,22 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('students').remove({_id: ObjectId(req.session.current_student_id)}, function(error, result) {
           if (!error) {
             console.log('student deleted');
-            res.redirect('/dashboard');
+            //res.redirect('/dashboard');
+            res.json({message: 'ok'});
           } else {
             console.log('error deleting student');
-            res.redirect('/students/edit');
+            //res.redirect('/students/edit');
+            res.json({message: 'Error deleting student'});
           };
         });
       } else {
         console.log('no student selected');
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No student selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

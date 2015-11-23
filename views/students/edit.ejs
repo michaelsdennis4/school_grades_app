@@ -41,8 +41,10 @@
 			<br>
 			<br>
 			<input type="hidden" name="_method" value="patch"/>
-			<input type="submit" value="Update Student"/>
+			<input type="submit" id="student-patch" value="Update Student"/>
 		</form>
+
+		<div class="hidden message" id="message-student-patch"></div>
 
 		<hr>
 
@@ -50,6 +52,8 @@
 			<input type="hidden" name="_method" value="delete"/>
 			<input type="submit" class="delete" id="student-delete" value="Delete Student"/>
 		</form>
+
+		<div class="hidden message" id="message-student-delete"></div>
 
 	</div>
 

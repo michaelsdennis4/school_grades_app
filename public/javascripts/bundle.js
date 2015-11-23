@@ -29136,6 +29136,8 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           console.log('new course created successfully');
           location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
         } else {
           console.log(result.message);
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
@@ -29157,6 +29159,8 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           console.log('course updated successfully');
           location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
         } else {
           console.log(result.message);
           $('#message-course-patch').text(result.message).toggleClass('hidden', false);
@@ -29176,6 +29180,8 @@ $('document').ready(function () {
           if (result.message === 'ok') {
             console.log('course deleted successfully');
             location.href = "/dashboard";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
           } else {
             console.log(result.message);
             $('#message-course-delete').text(result.message).toggleClass('hidden', false);
@@ -29276,6 +29282,8 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           console.log('new assessment created successfully');
           location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
         } else {
           console.log(result.message);
           $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
@@ -29297,6 +29305,8 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           console.log('assessment updated successfully');
           location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
         } else {
           console.log(result.message);
           $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
@@ -29316,6 +29326,8 @@ $('document').ready(function () {
           if (result.message === 'ok') {
             console.log('assessment deleted successfully');
             location.href = "/dashboard";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
           } else {
             console.log(result.message);
             $('#message-assessment-delete').text(result.message).toggleClass('hidden', false);
@@ -29331,9 +29343,71 @@ $('document').ready(function () {
 
     console.log('students js loaded!');
 
+    $('#student-post').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-student-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/students',
+        type: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('new student created successfully');
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          console.log(result.message);
+          $('#message-student-post').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+    $('#student-patch').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-student-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/students',
+        type: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('student updated successfully');
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          console.log(result.message);
+          $('#message-student-patch').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
     $('#student-delete').on('click', function (event) {
-      if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === false) {
-        event.preventDefault();
+      event.preventDefault();
+      if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === true) {
+        $('#message-student-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/students',
+          type: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            console.log('student deleted successfully');
+            location.href = "/dashboard";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
+          } else {
+            console.log(result.message);
+            $('#message-student-delete').text(result.message).toggleClass('hidden', false);
+          };
+        });
       };
     });
   };
