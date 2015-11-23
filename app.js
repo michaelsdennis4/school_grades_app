@@ -447,26 +447,31 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_course_id.length > 0) {
         if (req.body.title.length === 0) {
-          res.redirect('/courses/edit');
+          //res.redirect('/courses/edit');
           console.log('title cannot be blank');
+          res.json({message: 'Title cannot be blank'});
         } else { 
           var term = req.body.year+'.'+req.body.term;
           db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
             if (!error) {
               console.log('course updated');
-              res.redirect('/dashboard'); 
+              //res.redirect('/dashboard'); 
+              res.json({message: 'ok'});
             } else {
               console.log('error updating course');
-              res.redirect('/courses/edit');
+              //res.redirect('/courses/edit');
+              res.json({message: 'Error updating course'});
             };
           });
         };
       } else {
         console.log("no course selected");
-        res.redirect('/dashboard');
+        //res.redirect('/dashboard');
+        res.json({message: 'No course selected'});
       };
     } else {
-      res.redirect('/sorry');
+      //res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

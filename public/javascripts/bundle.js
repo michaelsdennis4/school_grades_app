@@ -28146,7 +28146,7 @@ $('document').ready(function () {
 
     console.log('dashboard js loaded!');
 
-    //REACT
+    //DASHBOARD REACT------------------------------------------------
 
     var CoursesTable = React.createClass({
       loadCoursesFromServer: function () {
@@ -29139,6 +29139,27 @@ $('document').ready(function () {
         } else {
           console.log(result.message);
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
+    $('#course-patch').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-course-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/courses',
+        type: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('course updated successfully');
+          location.href = "/dashboard";
+        } else {
+          console.log(result.message);
+          $('#message-course-patch').text(result.message).toggleClass('hidden', false);
         };
       });
     });
