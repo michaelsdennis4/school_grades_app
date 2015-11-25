@@ -28858,7 +28858,7 @@ $('document').ready(function () {
               if (result && result.status === false) {
                 console.log('error posting grade');
                 $('#score').toggleClass('red', true);
-                setTimeout(cancelRed, 500);
+                setTimeout(cancelRed, 100);
               } else {
                 console.log('grade posted');
                 $('#score').toggleClass('green', true);
@@ -28878,18 +28878,18 @@ $('document').ready(function () {
                   };
                   $('#score').toggleClass('green', false);
                 };
-                setTimeout(select_next_row, 500);
+                setTimeout(select_next_row, 100);
               };
             });
           } else {
             console.log('entry not recognized');
             $('#score').toggleClass('red', true);
-            setTimeout(cancelRed, 500);
+            setTimeout(cancelRed, 100);
           };
         } else {
           console.log('course, assessment, or student not selected');
           $('#score').toggleClass('red', true);
-          setTimeout(cancelRed, 500);
+          setTimeout(cancelRed, 100);
         };
       };
     });
@@ -29100,7 +29100,6 @@ $('document').ready(function () {
     $('#course-select').on('click', function (event) {
       event.preventDefault();
       var term = event.target.value;
-      console.log(term);
       if (term.length > 0) {
         data = { term: term };
         $.ajax({
@@ -29109,7 +29108,6 @@ $('document').ready(function () {
           data: data,
           dataType: 'json'
         }).done(function (results) {
-          console.log(results);
           if (results && results.courses.length > 0) {
             var courses = results.courses;
             courses.forEach(function (course) {
@@ -29226,9 +29224,11 @@ $('document').ready(function () {
       var courses = [];
       var checklist = document.querySelector('#courses-checklist');
       var items = checklist.querySelectorAll('.copy-course');
-      var copy_students = 'false';
-      if ($('#copy-students').checked === true) {
-        copy_students = 'true';
+      var data;
+      if (document.querySelector('#copy-students').checked === true) {
+        data = { copy_students: 'true' };
+      } else {
+        data = { copy_students: 'false' };
       };
       for (var i = 0; i < items.length; i++) {
         if (items[i].checked === true) {
@@ -29236,7 +29236,7 @@ $('document').ready(function () {
         };
       };
       var copyCourse = function (count) {
-        var data = { copy_students: copy_students };
+        console.log('data is ' + data.copy_students);
         $.ajax({
           url: '/courses/' + courses[count] + '/copy',
           type: 'post',

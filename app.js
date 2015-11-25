@@ -78,8 +78,8 @@ MongoClient.connect(mongoUri, function(error, db) {
         if (bcrypt.compareSync(req.body.password, user.password_digest) === true) {
           session = req.session;
           session.user_id = user._id;
-          user.first_name = user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-          user.last_name = user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          user.first_name = user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+          user.last_name = user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
           session.username = user.first_name +' '+user.last_name;
           session.current_term = user.current_term;
           session.current_course_id = "";
@@ -187,8 +187,8 @@ MongoClient.connect(mongoUri, function(error, db) {
             console.log('new user id is '+new_user._id);
             session = req.session;
             session.user_id = new_user._id;
-            new_user.first_name = new_user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            new_user.last_name = new_user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            new_user.first_name = new_user.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+            new_user.last_name = new_user.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             session.username = new_user.first_name +' '+new_user.last_name;
             session.current_term = new_user.current_term;
             session.current_course_id = "";
@@ -227,8 +227,8 @@ MongoClient.connect(mongoUri, function(error, db) {
       else {
         db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email}}, function(error, result) {
           if (!error) {
-            req.body.first_name = req.body.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            req.body.last_name = req.body.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            req.body.first_name = req.body.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+            req.body.last_name = req.body.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             req.session.username = req.body.first_name +' '+req.body.last_name;
           };
           res.json({message: 'ok'});
@@ -355,16 +355,16 @@ MongoClient.connect(mongoUri, function(error, db) {
           });
           if (courses.length > 0) {
             courses.sort(function (a, b) {
-              if (a.title+a.section > b.title+b.section) {
+              if (a.title.toLowerCase()+a.section > b.title.toLowerCase()+b.section) {
                 return 1;
               }
-              if (a.title+a.section < b.title+b.section) {
+              if (a.title.toLowerCase()+a.section < b.title.toLowerCase()+b.section) {
                 return -1;
               }
               return 0;
             });
             courses.map(function(course) {
-              course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             });
           }; 
         };
@@ -426,7 +426,7 @@ MongoClient.connect(mongoUri, function(error, db) {
       } 
       else {
         var term = req.body.year+'.'+req.body.term;
-        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title.toLowerCase(), section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
+        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title, section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
           if (!error) {
             console.log('new course created');
             //res.redirect('/dashboard');
@@ -452,7 +452,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           res.json({message: 'Title cannot be blank'});
         } else { 
           var term = req.body.year+'.'+req.body.term;
-          db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title.toLowerCase(), "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
+          db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title, "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
             if (!error) {
               console.log('course updated');
               //res.redirect('/dashboard'); 
@@ -540,18 +540,18 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection("students").find({user_id: ObjectId(req.session.user_id), is_active: "true"}).toArray(function(error, students) {
             if (students.length > 0) {
               students.sort(function (a, b) {
-                if (a.last_name > b.last_name) {
+                if (a.last_name.toLowerCase() > b.last_name.toLowerCase()) {
                   return 1;
                 }
-                if (a.last_name < b.last_name) {
+                if (a.last_name.toLowerCase() < b.last_name.toLowerCase()) {
                   return -1;
                 }
                 return 0;
               });
               students.forEach(function(student) {
-                student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-                student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-                student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+                student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+                student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
               });
             } else {
               students = []
@@ -596,6 +596,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         if ((results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
           var original_course = results[0].courses[0];
           var new_course;
+          console.log('copy students is '+req.body.copy_students);
           if (req.body.copy_students === 'true') {
             new_course = {_id: ObjectId(), title: original_course.title, section: original_course.section, term: req.session.current_term, auto: original_course.auto, student_ids: original_course.student_ids};
           } else {
@@ -644,7 +645,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           assessments = results[0].courses[0].assessments;
           if (assessments.length > 0) {
             assessments.map(function(assessment) {
-              assessment.name = assessment.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              assessment.name = assessment.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             });
           };
         };
@@ -740,7 +741,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         } else {
           weight = req.body.points;
         };
-        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name.toLowerCase(), type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
+        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name, type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
           if (!error) {
             console.log('new assessment created');
             //res.redirect('/dashboard');
@@ -774,7 +775,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           };
           var updateNode = {};
           var key = "courses.$.assessments."+parseInt(req.body.position)+".name";
-          updateNode[key] = req.body.name.toLowerCase();
+          updateNode[key] = req.body.name;
           key = "courses.$.assessments."+parseInt(req.body.position)+".type";
           updateNode[key] = req.body.type;
           key = "courses.$.assessments."+parseInt(req.body.position)+".points";
@@ -872,18 +873,18 @@ MongoClient.connect(mongoUri, function(error, db) {
           if (results.length > 0) {
             students = results;
             students.sort(function (a, b) {
-              if (a.last_name+a.first_name > b.last_name+b.first_name) {
+              if (a.last_name.toLowerCase()+a.first_name.toLowerCase() > b.last_name.toLowerCase()+b.first_name.toLowerCase()) {
                 return 1;
               }
-              if (a.last_name+a.first_name < b.last_name+b.first_name) {
+              if (a.last_name.toLowerCase()+a.first_name.toLowerCase() < b.last_name.toLowerCase()+b.first_name.toLowerCase()) {
                 return -1;
               }
               return 0;
             });
             students.forEach(function(student) {
-              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             });
           };
           console.log('returning '+students.length+' students');
@@ -894,18 +895,18 @@ MongoClient.connect(mongoUri, function(error, db) {
           if (results.length > 0) {
             students = results;
             students.sort(function (a, b) {
-              if (a.last_name+a.first_name > b.last_name+b.first_name) {
+              if (a.last_name.toLowerCase()+a.first_name.toLowerCase() > b.last_name.toLowerCase()+b.first_name.toLowerCase()) {
                 return 1;
               }
-              if (a.last_name+a.first_name < b.last_name+b.first_name) {
+              if (a.last_name.toLowerCase()+a.first_name.toLowerCase() < b.last_name.toLowerCase()+b.first_name.toLowerCase()) {
                 return -1;
               }
               return 0;
             });
             students.forEach(function(student) {
-              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+              student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+              student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             });
             req.session.current_course_id = "";
             req.session.current_assessment_id = "";
@@ -944,9 +945,9 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection("students").find({_id: ObjectId(req.session.current_student_id)}).toArray(function(error, results) {
           if ((results) && (results.length > 0)) {
             var student = results[0];
-            student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+            student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
+            student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             res.render('students/edit.ejs', {student: student});
           } else {
             res.redirect('/dashboard');
@@ -971,7 +972,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         //res.redirect('/students/new');
         res.json({message: 'Last name cannot be blank'}); 
       } else {
-        var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: req.body.is_active};
+        var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, identification: req.body.identification, advisor: req.body.advisor, grad_year: req.body.grad_year, is_active: req.body.is_active};
         db.collection('students').insert(new_student, function(error, results) {
           if (!error) {
             console.log('student added');
@@ -1020,7 +1021,7 @@ MongoClient.connect(mongoUri, function(error, db) {
           if ((req.body.is_active) && (req.body.is_active === 'true')) {
             is_active = 'true';
           };
-          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name.toLowerCase(), last_name: req.body.last_name.toLowerCase(), email: req.body.email, identification: req.body.identification, advisor: req.body.advisor.toLowerCase(), grad_year: req.body.grad_year, is_active: is_active}}, function(error, result) {
+          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, identification: req.body.identification, advisor: req.body.advisor, grad_year: req.body.grad_year, is_active: is_active}}, function(error, result) {
             if (!error) {
               console.log("student profile updated");
               //res.redirect('/dashboard');
