@@ -580,8 +580,7 @@ $('document').ready(function() {
     var current_course_id = $('#current-course-id').val();
     var current_assessment_id = $('#current-assessment-id').val();
     var current_student_id = $('#current-student-id').val();
-
-    
+   
     var resetCourse = function() {  
       console.log('the current course id is '+current_course_id);
       //reselect current course
@@ -599,7 +598,9 @@ $('document').ready(function() {
           };
           resetAssessment();
         };
-        setTimeout(get_data_rows, 100);
+        setTimeout(get_data_rows, 500);
+      } else {
+        resetStudent();
       };
     };
 
@@ -614,14 +615,15 @@ $('document').ready(function() {
           data_rows = assessments_table.rows;
           for (var i=0; i < data_rows.length; i++) {
             var cell = data_rows[i].children[0];
-            if (cell.textContent.toString() == current_assessment_id.toString()) {
-              //$(cell).trigger('click');
+            if (cell.textContent.toString() == current_assessment_id.toString()){
               cell.click();
             };
           };
           resetStudent();
         };
         setTimeout(get_data_rows, 100);
+      } else {
+        resetStudent();
       };
     };
 
@@ -637,7 +639,6 @@ $('document').ready(function() {
           for (var i=0; i < data_rows.length; i++) {
             var cell = data_rows[i].children[0];
             if (cell.textContent.toString() == current_student_id.toString()) {
-              // $(cell).trigger('click');
               cell.click();
             };
           };
@@ -951,54 +952,6 @@ $('document').ready(function() {
       };
     });
 
-    // $('#enrollment-update').on('click', function(event) {
-    //   event.preventDefault();
-    //   var $this = $(this.parentNode);
-    //   var students = [];
-    //   var checklist = document.querySelector('#students-checklist');
-    //   var items = checklist.querySelectorAll('.student-enroll');
-    //   var enrollStudent = function(count) {
-    //     var student_id = items[count].getAttribute('id');
-    //     var enrolled = items[count].checked;
-    //     if (enrolled === true) {
-    //       $.ajax({
-    //         url: '/students/'+student_id+'/enroll',
-    //         method: 'patch',
-    //         dataType: 'json',
-    //       }).done(function(result) {
-    //         console.log('student enrolled');
-    //         count++;
-    //         if (count < items.length) {
-    //           enrollStudent(count);
-    //         } else {
-    //           console.log ('enrollment updated');
-    //           $this.unbind('submit').submit();
-    //         };
-    //       });
-    //     } else {
-    //       $.ajax({
-    //         url: '/students/'+student_id+'/unenroll',
-    //         method: 'patch',
-    //         dataType: 'json',
-    //       }).done(function(result) {
-    //         console.log('student unenrolled');
-    //         count++;
-    //         if (count < items.length) {
-    //           enrollStudent(count);
-    //         } else {
-    //           console.log ('enrollment updated');
-    //           $this.unbind('submit').submit();
-    //         };
-    //       });
-    //     }; 
-    //   };
-    //   if (items.length > 0) {
-    //     enrollStudent(0)
-    //   } else {
-    //     $this.unbind('submit').submit();
-    //   };  
-    // });
-
   };
 
 //ASSESSMENTS EVENT LISTENERS-------------------------------------------
@@ -1096,7 +1049,14 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('new student created successfully');
-          location.href = "/dashboard";
+          //update current student to new student just created
+          $.ajax({
+            url: '/current_student/'+result.student_id,
+            method: 'post'
+          }).done(function() {
+            console.log('the new student id is '+result.student_id);
+            location.href = "/dashboard";
+          });
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {

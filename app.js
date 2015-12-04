@@ -69,7 +69,6 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/login', function(req, res) {
     db.collection('users').find({email: req.body.email}).toArray(function(error, results) {
       if ((error) || (results.length == 0)) {
-        // res.redirect('/');
         console.log('user not found');
         res.json({message: 'User not found'});
       } 
@@ -991,7 +990,7 @@ MongoClient.connect(mongoUri, function(error, db) {
               });
             };
             //res.redirect('/dashboard');
-            res.json({message: 'ok'});
+            res.json({message: 'ok', student_id: new_student._id});
           } else {
             console.log('error adding student');
             //res.redirect('/students/new');
