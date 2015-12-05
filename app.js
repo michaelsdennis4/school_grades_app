@@ -425,10 +425,14 @@ MongoClient.connect(mongoUri, function(error, db) {
       } 
       else {
         var term = req.body.year+'.'+req.body.term;
-        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: {_id: ObjectId(), title: req.body.title, section: req.body.section, term: term, auto: req.body.auto}}}, function(error, results) {
+        var new_course = {_id: ObjectId(), title: req.body.title, section: req.body.section, term: term, auto: req.body.auto}; 
+        db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: new_course}}, function(error, results) {
           if (!error) {
             console.log('new course created');
             //res.redirect('/dashboard');
+            //update current course to one just created
+            req.session.current_course_id = new_course._id;
+            console.log("current course updated "+req.session.current_course_id);
             res.json({message: 'ok'});
           } else {
             console.log('error creating course');
@@ -740,10 +744,14 @@ MongoClient.connect(mongoUri, function(error, db) {
         } else {
           weight = req.body.points;
         };
-        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": {_id: ObjectId(), name: req.body.name, type: req.body.type, points: req.body.points, weight: weight}}}, function(error, results) {
+        var new_assessment = {_id: ObjectId(), name: req.body.name, type: req.body.type, points: req.body.points, weight: weight};
+        db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": new_assessment}}, function(error, results) {
           if (!error) {
             console.log('new assessment created');
             //res.redirect('/dashboard');
+            //update current assessment to one just created
+            req.session.current_assessment_id = new_assessment._id;
+            console.log("current assessment updated "+req.session.current_assessment_id);
             res.json({message: 'ok'});
           } else {
             console.log('error creating assessment');
@@ -990,7 +998,10 @@ MongoClient.connect(mongoUri, function(error, db) {
               });
             };
             //res.redirect('/dashboard');
-            res.json({message: 'ok', student_id: new_student._id});
+            //update current student to one just created
+            req.session.current_student_id = new_student._id;
+            console.log("current student updated "+req.session.current_student_id);
+            res.json({message: 'ok'});
           } else {
             console.log('error adding student');
             //res.redirect('/students/new');

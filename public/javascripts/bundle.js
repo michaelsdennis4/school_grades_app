@@ -29358,14 +29358,7 @@ $('document').ready(function () {
       }).done(function (result) {
         if (result.message === 'ok') {
           console.log('new student created successfully');
-          //update current student to new student just created
-          $.ajax({
-            url: '/current_student/' + result.student_id,
-            method: 'post'
-          }).done(function () {
-            console.log('the new student id is ' + result.student_id);
-            location.href = "/dashboard";
-          });
+          location.href = "/dashboard";
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
