@@ -502,6 +502,10 @@ MongoClient.connect(mongoUri, function(error, db) {
           if (!error) {
             console.log('course deleted');
             //res.redirect('/dashboard');
+            //update current course, assessment, and student to none
+            req.session.current_course_id = "";
+            req.session.current_assessment_id = "";
+            req.session.current_student_id = "";
             res.json({message: 'ok'});
           } else {
             console.log('error deleting course');
@@ -621,6 +625,9 @@ MongoClient.connect(mongoUri, function(error, db) {
                   });
                 });
               };
+              //update current course to one just created
+              req.session.current_course_id = new_course._id;
+              console.log("current course updated "+req.session.current_course_id);
               res.json({result: true});             
             } else {
               console.log('error copying course');
@@ -838,6 +845,8 @@ MongoClient.connect(mongoUri, function(error, db) {
           if (!error) {
             console.log('assessment deleted');
             //res.redirect('/dashboard');
+            //update current assessment to none
+            req.session.current_assessment_id = "";
             res.json({message: 'ok'});
           } else {
             console.log('error deleting assessment');
@@ -1081,6 +1090,8 @@ MongoClient.connect(mongoUri, function(error, db) {
           if (!error) {
             console.log('student deleted');
             //res.redirect('/dashboard');
+            //update current student to none
+            req.session.current_student_id = "";
             res.json({message: 'ok'});
           } else {
             console.log('error deleting student');
