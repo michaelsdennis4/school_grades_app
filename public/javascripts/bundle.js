@@ -28782,18 +28782,28 @@ $('document').ready(function () {
             document.querySelector('#current-course-id').value = cells[0].textContent;
             document.querySelector('#current-course').value = cells[1].textContent + ' (Section ' + cells[2].textContent + ')';
             //clear current student and assessment fields
-            $('#current-assessment').val("");
-            $('#current-assessment-id').val("");
-            $('.data-table#assessments').find('.data-row').toggleClass('selected', false);
-            $('#current-student').val("");
-            $('#current-student-id').val("");
-            $('.data-table#students').find('.data-row').toggleClass('selected', false);
-            $('#score').val("");
-            $('#points').val("");
-            $('#weight').val("");
-            $(row).toggleClass('selected', true);
-            assessments_table.loadAssessmentsFromServer();
-            students_table.loadStudentsFromServer();
+            $.ajax({
+              url: '/current_assessment/0',
+              method: 'post'
+            }).done(function () {
+              $('#current-assessment').val("");
+              $('#current-assessment-id').val("");
+              $('.data-table#assessments').find('.data-row').toggleClass('selected', false);
+              assessments_table.loadAssessmentsFromServer();
+              $.ajax({
+                url: '/current_student/0',
+                method: 'post'
+              }).done(function () {
+                $('#current-student').val("");
+                $('#current-student-id').val("");
+                $('.data-table#students').find('.data-row').toggleClass('selected', false);
+                students_table.loadStudentsFromServer();
+                $('#score').val("");
+                $('#points').val("");
+                $('#weight').val("");
+                $(row).toggleClass('selected', true);
+              });
+            });
           });
         } else if (table.getAttribute('id') === 'assessments') {
           //update current assessment on the server

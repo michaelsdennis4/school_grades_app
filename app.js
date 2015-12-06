@@ -528,10 +528,10 @@ MongoClient.connect(mongoUri, function(error, db) {
         req.session.current_course_id = req.params.id;
       };
       //clear current assessment and student when changing current course
-      req.session.current_assessment_id = "";
-      req.session.current_student_id = "";
+      //req.session.current_assessment_id = "";
+      //req.session.current_student_id = "";
       console.log("current course updated "+req.session.current_course_id);
-      res.redirect('/dashboard');
+      res.json({});
     };
   });
 
@@ -864,7 +864,7 @@ MongoClient.connect(mongoUri, function(error, db) {
         req.session.current_assessment_id = req.params.id;
       }; 
       console.log("current assessment updated "+req.session.current_assessment_id);
-      res.redirect('/dashboard');
+      res.json({});
     };
   });
 
