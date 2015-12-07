@@ -40,20 +40,18 @@
 				<% } %>
 			</select>
 			<br><br><br>
+			<div class="hidden message" id="message-course-patch"></div>
 			<input type="hidden" name="_method" value="patch"/>
 			<input type="submit" id="course-patch" value="Update Course"/>
 		</form>
-
-		<div class="hidden message" id="message-course-patch"></div>
-
+	
 		<hr>
 
 		<form action="/courses" method="post">
+			<div class="hidden message" id="message-course-delete"></div>
 			<input type="hidden" name="_method" value="delete"/>
 			<input type="submit" class="delete" id="course-delete" value="Delete Course"/>
 		</form>
-
-		<div class="hidden message" id="message-course-delete"></div>
 
 	</div>
 

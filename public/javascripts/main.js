@@ -860,7 +860,10 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('course updated successfully');
-          location.href = "/dashboard";
+          $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function() {
+            location.href = "/dashboard";
+          }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
@@ -1012,7 +1015,10 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('assessment updated successfully');
-          location.href = "/dashboard";
+          $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function(){
+            location.href = "/dashboard";
+          }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
@@ -1091,7 +1097,10 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('student updated successfully');
-          location.href = "/dashboard";
+          $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function(){
+            location.href = "/dashboard";
+          }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {

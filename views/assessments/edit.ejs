@@ -55,20 +55,18 @@
 			<br>
 			<!-- position in the array to be used for updating mongodb -->
 			<input type="hidden" name="position" value="<%= position %>"/>
+			<div class="hidden message" id="message-assessment-patch"></div>
 			<input type="hidden" name="_method" value="patch"/>
 			<input type="submit" id="assessment-patch" value="Update Assessment"/>
 		</form>
 
-		<div class="hidden message" id="message-assessment-patch"></div>
-
 		<hr>
 
 		<form action="/assessments" method="post">
+			<div class="hidden message" id="message-assessment-delete"></div>
 			<input type="hidden" name="_method" value="delete"/>
 			<input type="submit" class="delete" id="assessment-delete" value="Delete Assessment"/>
 		</form>
-
-		<div class="hidden message" id="message-assessment-delete"></div>
 
 	</div>
 
