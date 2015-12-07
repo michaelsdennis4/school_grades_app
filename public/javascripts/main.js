@@ -834,7 +834,10 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('new course created successfully');
-          location.href = "/dashboard";
+          $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function() {
+            location.href = "/dashboard";
+          }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
@@ -982,8 +985,11 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('new assessment created successfully');   
-          location.href = "/dashboard";
+          console.log('new assessment created successfully'); 
+          $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function() {
+            location.href = "/dashboard";
+          }, 1000); 
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
@@ -1059,7 +1065,10 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.message === 'ok') {
           console.log('new student created successfully');
-          location.href = "/dashboard";
+          $('#message-student-post').text("Student added!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function() {
+            location.href = "/students/new";
+          }, 1000);    
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {

@@ -41,11 +41,13 @@
 				%>
 				<label><input type="checkbox" name="enroll" value="enroll" checked />Enroll this student in <%= course.title %> (Section <%= course.section %>)</label><br>			
 			<% } %>
-			<br>
-			<input type="submit" id="student-post" value="Add Student"/>
+			<div class="hidden message" id="message-student-post"></div>
+			<input type="submit" class="add-new" id="student-post" value="Add Student"/>
 		</form>
 
-		<div class="hidden message" id="message-student-post"></div>
+		<form action="/dashboard">
+			<input type="submit" value="Done Entering"/>
+		</form>
 
 	</div>
 

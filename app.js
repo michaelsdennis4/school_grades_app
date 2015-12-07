@@ -322,14 +322,12 @@ MongoClient.connect(mongoUri, function(error, db) {
           req.session.current_course_id = "";
           req.session.current_assessment_id = "";
           req.session.current_student_id = "";
-          res.render('dashboard.ejs', {session: req.session});
-        } else {
-          res.redirect('/dashboard');
         };
+        res.redirect('/dashboard');
       });      
     } else {
       res.redirect('/sorry');
-    }
+    };
   });
 
 
