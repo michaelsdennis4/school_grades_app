@@ -14,7 +14,7 @@
 		<form action="/term" method="post">
 			<div class="top-selector" id="year-selector">
 				<label for="current-year">Current Year</label><br>
-				<input id="current-year" type="number" name="current_year" min="2015" value="<%= session.current_term.split('.')[0] %>"/>
+				<input id="current-year" type="number" name="current_year" min="1" value="<%= session.current_term.split('.')[0] %>"/>
 			</div>
 			<div class="top-selector" id="year-selector">
 				<label for="current-term">Current Term</label><br>

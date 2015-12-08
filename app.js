@@ -180,7 +180,9 @@ MongoClient.connect(mongoUri, function(error, db) {
       else {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
-        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_term: "2015.1"};
+        var current_term = new Date().getFullYear().toString().concat('.1');
+        console.log('the year is '+current_term);
+        var new_user = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password_digest: hash, current_term: current_term};
         db.collection('users').insert(new_user, function(error, result) {
           if ((!error) && (result)) {
             console.log('new user id is '+new_user._id);
@@ -389,7 +391,7 @@ MongoClient.connect(mongoUri, function(error, db) {
   
   app.get('/courses/new', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      res.render('courses/new.ejs');
+      res.render('courses/new.ejs', {session: req.session});
     } else {
       res.redirect('/sorry');
     }; 
