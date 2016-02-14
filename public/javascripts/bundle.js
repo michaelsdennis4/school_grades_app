@@ -28167,12 +28167,8 @@ $('document').ready(function () {
       },
       componentDidMount: function () {
         this.loadCoursesFromServer();
-        //setInterval(this.loadCoursesFromServer, this.props.pollInterval);
       },
-      handleClick: function () {
-        // assessments_table.loadAssessmentsFromServer();
-        // students_table.loadStudentsFromServer();
-      },
+      handleClick: function () {},
       render: function () {
         var student_scores = this.state.student_scores;
         return React.createElement(
@@ -28346,11 +28342,8 @@ $('document').ready(function () {
       },
       componentDidMount: function () {
         this.loadAssessmentsFromServer();
-        //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
-      handleClick: function () {
-        //students_table.loadStudentsFromServer();
-      },
+      handleClick: function () {},
       render: function () {
         var total_weight = 0;
         if (this.state.assessments.length > 0) {
@@ -28507,6 +28500,7 @@ $('document').ready(function () {
         //setInterval(this.loadAssessmentsFromServer, this.props.pollInterval);
       },
       render: function () {
+        var num = 0;
         return React.createElement(
           'table',
           { className: 'data-table', id: 'students' },
@@ -28520,6 +28514,11 @@ $('document').ready(function () {
                 'th',
                 { className: 'hidden' },
                 'Student ID'
+              ),
+              React.createElement(
+                'th',
+                null,
+                '#'
               ),
               React.createElement(
                 'th',
@@ -28557,7 +28556,8 @@ $('document').ready(function () {
             'tbody',
             null,
             this.state.students.map(function (student) {
-              return React.createElement(StudentsTableRow, { key: student._id, student: student });
+              num++;
+              return React.createElement(StudentsTableRow, { key: student._id, num: num, student: student });
             })
           )
         );
@@ -28567,6 +28567,7 @@ $('document').ready(function () {
     var StudentsTableRow = React.createClass({
       render: function () {
         var student_id = this.props.student._id;
+        var num = this.props.num;
         var first_name = this.props.student.first_name;
         var last_name = this.props.student.last_name;
         var grad_year = this.props.student.grad_year.toLocaleString();
@@ -28611,6 +28612,11 @@ $('document').ready(function () {
             'td',
             { className: 'hidden' },
             student_id
+          ),
+          React.createElement(
+            'td',
+            null,
+            num
           ),
           React.createElement(
             'td',
@@ -28762,7 +28768,7 @@ $('document').ready(function () {
     });
 
     $('.data-table').on('click', function (event) {
-      if (event.target.parentNode.getAttribute('class') != 'table-header') {
+      if (!event.target.parentNode.classList.contains('table-header')) {
         var row = event.target.parentNode;
         var table_body = row.parentNode;
         var table = table_body.parentNode;
@@ -28818,9 +28824,12 @@ $('document').ready(function () {
             $('#points').val(cells[3].textContent);
             $('#weight').val(cells[4].textContent);
             $(row).toggleClass('selected', true);
+            console.log('assessment before load students ' + cells[0].textContent);
             students_table.loadStudentsFromServer();
+            console.log('assessment after load students ' + cells[0].textContent);
             setTimeout(function () {
-              $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(5)').text());
+              $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
+              $('#score').focus();
             }, 100);
           });
         } else if (table.getAttribute('id') === 'students') {
@@ -28832,31 +28841,36 @@ $('document').ready(function () {
             console.log('current student updated ' + cells[0].textContent);
             //update current student in the DOM
             $('#current-student-id').val(cells[0].textContent);
-            $('#current-student').val(cells[1].textContent + ', ' + cells[2].textContent);
-            $('#score').val(cells[4].textContent);
+            $('#current-student').val(cells[2].textContent + ', ' + cells[3].textContent);
+            $('#score').val(cells[5].textContent);
             $(row).toggleClass('selected', true);
           });
-        };
-      };
+        }
+        //if course, assessment, and student selected, then click on score box
+        if ($('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
+          $('#score').focus();
+        }
+      }
     });
 
     $('#score').on('keydown', function (event) {
       if (event.keyCode === 13) {
         if ($('#current-course-id').val().length > 0 && $('#current-assessment-id').val().length > 0 && $('#current-student-id').val().length > 0) {
           var score;
-          if (event.target.value === 'x' || event.target.value === 'X') {
+          if (event.target.value.length === 0) {
+            score = null;
+          } else if (event.target.value === 'x' || event.target.value === 'X') {
             score = 'X';
           } else {
             score = parseFloat(event.target.value);
           };
           var points = parseInt($('#points').val());
           var weight = parseInt($('#weight').val());
-          console.log('the score is ' + score);
           var cancelRed = function () {
             $('#score').toggleClass('red', false);
-            $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(5)').text());
+            $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
           };
-          if (!isNaN(score) || score === 'X') {
+          if (score === null || score === 'X' || !isNaN(score)) {
             var data = { score: score, points: points, weight: weight };
             $.ajax({
               url: '/grade',

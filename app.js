@@ -85,10 +85,8 @@ MongoClient.connect(mongoUri, function(error, db) {
           session.current_assessment_id = "";
           session.current_student_id = "";
           console.log('user logged in!');
-          //res.redirect('/dashboard');
           res.json({message: 'ok'});
         } else {
-          //res.redirect('/');
           console.log('password incorrect');
           res.json({message: 'Password incorrect'});
         };
@@ -148,32 +146,26 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/users', function(req, res){
     db.collection('users').find({email: req.body.email}).toArray(function(error, users) {
       if (users.length > 0) {
-        //res.redirect('/users/new');
         console.log('the user already exists');
         res.json({message: 'User already exists'});
       } 
       else if (req.body.password != req.body.password_confirmation) { 
-        //res.redirect('/users/new');
         console.log('passwords do not match');
         res.json({message: 'Passwords do not match'});
       } 
       else if (req.body.first_name.length === 0) {
-        //res.redirect('/users/new');
         console.log('first name cannot be blank');
         res.json({message: 'First name cannot be blank'});
       }
       else if (req.body.last_name.length === 0) {
-        //res.redirect('/users/new');
         console.log('last name cannot be blank');
         res.json({message: 'Last name cannot be blank'});
       }
       else if (req.body.email.length === 0) {
-        //res.redirect('/users/new');
         console.log('email cannot be blank');
         res.json({message: 'Email cannot be blank'});
       }
       else if (req.body.password.length < 6) {
-        //res.redirect('/users/new');
         console.log('password too short');
         res.json({message: 'Password must be at least 6 characters.'});
       }
@@ -196,10 +188,8 @@ MongoClient.connect(mongoUri, function(error, db) {
             session.current_assessment_id = "";
             session.current_student_id = "";
             console.log('user logged in!');
-            //res.redirect('/dashboard');
             res.json({message: 'ok'});
           } else {
-            //res.redirect('/users/new');
             console.log('error creating user');
             res.json({message: 'Error creating user'});
           };
@@ -211,17 +201,14 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.patch('/users', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
-          //res.redirect('/users/edit');
           console.log('first name cannot be blank');
           res.json({message: 'First name cannot be blank'});
       }
       else if (req.body.last_name.length === 0) {
-        //res.redirect('/users/edit');
         console.log('last name cannot be blank');
         res.json({message: 'Last name cannot be blank'});
       }
       else if (req.body.email.length === 0) {
-        //res.redirect('/users/edit');
         console.log('email cannot be blank');
         res.json({message: 'Email cannot be blank'});
       }
@@ -236,7 +223,6 @@ MongoClient.connect(mongoUri, function(error, db) {
         });     
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -244,7 +230,6 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.patch('/users/password', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.new_password.length < 6) {
-        //res.redirect('/users/new');
         console.log('password too short');
         res.json({message: 'Password must be at least 6 characters.'});
       } else {
@@ -253,7 +238,6 @@ MongoClient.connect(mongoUri, function(error, db) {
             var user = results[0];
             if (req.body.new_password != req.body.confirm_new_password) { 
               console.log('new passwords do not match');
-              //res.redirect('/users/edit');
               res.json({message: 'New passwords do not match'});
             } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
               var salt = bcrypt.genSaltSync(10);
@@ -261,28 +245,23 @@ MongoClient.connect(mongoUri, function(error, db) {
               db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
                 if ((!error) && (result)) {
                   console.log('password changed');
-                  //res.redirect('/dashboard');
                   res.json({message: 'ok'});
                 } else {
                   console.log('error updating password');
-                  //res.redirect('/users/edit');
                   res.json({message: 'Error updating password'});
                 };
               });
             } else {
               console.log('incorrect password');
-              //res.redirect('/users/edit');
               res.json({message: 'Existing password incorrect'});
             };
           } else {
             console.log('user not found');
-            //res.redirect('/logout');
             res.json({message: 'User not found'});
           };
         });
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -301,16 +280,13 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection('users').remove({_id: ObjectId(req.session.user_id)}, function(error, result) {
         if (!error) {
           console.log('user deleted');
-          //res.redirect('/logout');
           res.json({message: 'ok'});
         } else {
           console.log('error deleting user');
-          //res.redirect('/users/edit');
           res.json({message: 'Error deleting user'});
         };
       });
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -419,7 +395,6 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.post('/courses', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.title.length === 0) {
-        //res.redirect('/courses/new');
         console.log('title cannot be blank');
         res.json({message: 'Title cannot be blank'});
       } 
@@ -429,14 +404,12 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id)}, {$push: {courses: new_course}}, function(error, results) {
           if (!error) {
             console.log('new course created');
-            //res.redirect('/dashboard');
             //update current course to one just created
             req.session.current_course_id = new_course._id;
             console.log("current course updated "+req.session.current_course_id);
             res.json({message: 'ok'});
           } else {
             console.log('error creating course');
-            //res.redirect('/courses/new');
             res.json({message: 'Error creating course'});
           };
         });
@@ -450,7 +423,6 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_course_id.length > 0) {
         if (req.body.title.length === 0) {
-          //res.redirect('/courses/edit');
           console.log('title cannot be blank');
           res.json({message: 'Title cannot be blank'});
         } else { 
@@ -458,22 +430,18 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$set: {"courses.$.title": req.body.title, "courses.$.section": req.body.section, "courses.$.term": term, "courses.$.auto": req.body.auto}}, function(error, result) {
             if (!error) {
               console.log('course updated');
-              //res.redirect('/dashboard'); 
               res.json({message: 'ok'});
             } else {
               console.log('error updating course');
-              //res.redirect('/courses/edit');
               res.json({message: 'Error updating course'});
             };
           });
         };
       } else {
         console.log("no course selected");
-        //res.redirect('/dashboard');
         res.json({message: 'No course selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -501,7 +469,6 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {courses: {_id: ObjectId(req.session.current_course_id)}}}, function(error, results) {
           if (!error) {
             console.log('course deleted');
-            //res.redirect('/dashboard');
             //update current course, assessment, and student to none
             req.session.current_course_id = "";
             req.session.current_assessment_id = "";
@@ -509,17 +476,14 @@ MongoClient.connect(mongoUri, function(error, db) {
             res.json({message: 'ok'});
           } else {
             console.log('error deleting course');
-            //res.redirect('/courses/edit');
             res.json({message: 'Error deleting course'});
           };
         });
       } else {
         console.log("no course selected");
-        //res.redirect('/dashboard');
         res.json({message: 'No course selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -532,8 +496,6 @@ MongoClient.connect(mongoUri, function(error, db) {
         req.session.current_course_id = req.params.id;
       };
       //clear current assessment and student when changing current course
-      //req.session.current_assessment_id = "";
-      //req.session.current_student_id = "";
       console.log("current course updated "+req.session.current_course_id);
       res.json({});
     };
@@ -736,12 +698,10 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_course_id.length === 0) {
         console.log('no course selected');
-        //res.redirect('/dashboard');
         res.json({message: 'No course selected'});
       }
       else if (req.body.name.length === 0) {
         console.log('name cannot be blank');
-        //res.redirect('/assessments/new');
         res.json({message: 'Name cannot be blank'});
       } 
       else {
@@ -755,14 +715,12 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$push: {"courses.$.assessments": new_assessment}}, function(error, results) {
           if (!error) {
             console.log('new assessment created');
-            //res.redirect('/dashboard');
             //update current assessment to one just created
             req.session.current_assessment_id = new_assessment._id;
             console.log("current assessment updated "+req.session.current_assessment_id);
             res.json({message: 'ok'});
           } else {
             console.log('error creating assessment');
-            //res.redirect('/assessments/new');
             res.json({message: 'Error creating assessment'});
           };
         });
@@ -777,7 +735,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       if ((req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0)) {
         if (req.body.name.length === 0) {
           console.log('name cannot be blank');
-          //res.redirect('/assessments/edit');
           res.json({message: 'Name cannot be blank'});
         } 
         else {
@@ -803,28 +760,23 @@ MongoClient.connect(mongoUri, function(error, db) {
               db.collection("students").update({"scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.points": req.body.points, "scores.$.weight": weight}}, {multi: true}, function(error, result) {
                 if (!error) {
                   console.log('student scores updated');
-                  //res.redirect('/dashboard');
                   res.json({message: 'ok'});
                 } else {
                   console.log('error updating student scores');
-                  //res.redirect('/assessments/edit');
                   res.json({message: 'Error updating student scores'});
                 };
               });
             } else {
               console.log('error updating assessment');
-              //res.redirect('/assessments/edit');
               res.json({message: 'Error updating assessment'});
             };
           });
         };
       } else {
         console.log('no assessment selected');
-        //res.redirect('/dashboard');
         res.json({message: 'No assessment selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -844,23 +796,19 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').update({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {$pull: {"courses.$.assessments": {_id: ObjectId(req.session.current_assessment_id)}}}, function(error, results) {
           if (!error) {
             console.log('assessment deleted');
-            //res.redirect('/dashboard');
             //update current assessment to none
             req.session.current_assessment_id = "";
             res.json({message: 'ok'});
           } else {
             console.log('error deleting assessment');
-            //res.redirect('/assessments/edit');
             res.json({message: 'Error deleting assessment'});
           };
         });
       } else {
         console.log('no assessment selected');
-        //res.redirect('/dashboard');
         res.json({message: 'No assessment selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -981,11 +929,9 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.first_name.length === 0) {
         console.log('first name cannot be blank');
-        //res.redirect('/students/new'); 
         res.json({message: 'First name cannot be blank'}); 
       } else if (req.body.last_name.length === 0) {
         console.log('last name cannot be blank');
-        //res.redirect('/students/new');
         res.json({message: 'Last name cannot be blank'}); 
       } else {
         var new_student = {user_id: ObjectId(req.session.user_id), first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, identification: req.body.identification, advisor: req.body.advisor, grad_year: req.body.grad_year, is_active: req.body.is_active};
@@ -1006,20 +952,17 @@ MongoClient.connect(mongoUri, function(error, db) {
                 };
               });
             };
-            //res.redirect('/dashboard');
             //update current student to one just created
             req.session.current_student_id = new_student._id;
             console.log("current student updated "+req.session.current_student_id);
             res.json({message: 'ok'});
           } else {
             console.log('error adding student');
-            //res.redirect('/students/new');
             res.json({message: 'Error adding student'}); 
           };
         });   
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'}); 
     };
   });
@@ -1028,11 +971,9 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.session.current_student_id.length > 0) {
         if (req.body.first_name.length === 0) {
-          //res.redirect('/students/edit');
           console.log('first name cannot be blank');
           res.json({message: 'First name cannot be blank'});
         } else if (req.body.last_name.length === 0) {
-          //res.redirect('/students/edit');
           console.log('last name cannot be blank');
           res.json({message: 'Last name cannot be blank'});
         } else {
@@ -1043,22 +984,18 @@ MongoClient.connect(mongoUri, function(error, db) {
           db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$set: {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, identification: req.body.identification, advisor: req.body.advisor, grad_year: req.body.grad_year, is_active: is_active}}, function(error, result) {
             if (!error) {
               console.log("student profile updated");
-              //res.redirect('/dashboard');
               res.json({message: 'ok'});
             } else {
               console.log('error updating student profile');
-              //res.redirect('/students/edit');
               res.json({message: 'Error updating student profile'});
             };
           });
         };
       } else {
         console.log('no student selected');
-        //res.redirect('/dashboard');
         res.json({message: 'No student selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -1089,23 +1026,19 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('students').remove({_id: ObjectId(req.session.current_student_id)}, function(error, result) {
           if (!error) {
             console.log('student deleted');
-            //res.redirect('/dashboard');
             //update current student to none
             req.session.current_student_id = "";
             res.json({message: 'ok'});
           } else {
             console.log('error deleting student');
-            //res.redirect('/students/edit');
             res.json({message: 'Error deleting student'});
           };
         });
       } else {
         console.log('no student selected');
-        //res.redirect('/dashboard');
         res.json({message: 'No student selected'});
       };
     } else {
-      //res.redirect('/sorry');
       res.json({message: 'sorry'});
     };
   });
@@ -1156,39 +1089,47 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.post('/grade', function(req, res) {
-    if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0) && (req.session.current_student_id.length > 0)) {
-      var score = req.body.score;
-      var points = req.body.points;
-      var weight = req.body.weight;
-      //first check if there is already a score
-      db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
-        if ((results) && (results.length > 0)) {
-          //edit existing score
-          db.collection('students').update({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.score": score, "scores.$.points": points, "scores.$.weight": weight}}, function(error, result) {
-            if (!error) {
-              console.log('grade updated '+ result);
-              res.json({status: true});
-            } else {
-              console.log('error updating grade');
-              res.json({status: false});
-            }
-          });
-        } else {
-          //add score to student
-          db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$push: {scores: {course_id: ObjectId(req.session.current_course_id), assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}}, function(error, result) {
-            if (!error) {
-              console.log('grade entered '+ result);
-              res.json({status: true});
-            } else {
-              console.log('error entering grade');
-              res.json({status: false});
-            };
-          });
-        };   
-      }); 
+    console.log('the score 1 is '+req.body.score);
+    if (req.body.score !== null) {
+      console.log('the score 2 is '+req.body.score);
+      if ((req.session.user_id) && (req.session.user_id != null) && (req.session.current_course_id.length > 0) && (req.session.current_assessment_id.length > 0) && (req.session.current_student_id.length > 0)) {
+        var score = req.body.score;
+        var points = req.body.points;
+        var weight = req.body.weight;
+        console.log('the score 3 is '+score);
+        //first check if there is already a score
+        db.collection('students').find({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {_id: 0, "scores.$": 1}).toArray(function(error, results) {
+          if ((results) && (results.length > 0)) {
+            //edit existing score
+            db.collection('students').update({_id: ObjectId(req.session.current_student_id), "scores.assessment_id": ObjectId(req.session.current_assessment_id)}, {$set: {"scores.$.score": score, "scores.$.points": points, "scores.$.weight": weight}}, function(error, result) {
+              if (!error) {
+                console.log('grade updated '+ result);
+                res.json({status: true});
+              } else {
+                console.log('error updating grade');
+                res.json({status: false});
+              }
+            });
+          } else {
+            //add score to student
+            db.collection('students').update({_id: ObjectId(req.session.current_student_id)}, {$push: {scores: {course_id: ObjectId(req.session.current_course_id), assessment_id: ObjectId(req.session.current_assessment_id), score: score, points: points, weight: weight}}}, function(error, result) {
+              if (!error) {
+                console.log('grade entered '+ result);
+                res.json({status: true});
+              } else {
+                console.log('error entering grade');
+                res.json({status: false});
+              };
+            });
+          };   
+        }); 
+      } else {
+        res.json({status: false});
+      }
     } else {
-      res.json({status: false});
-    };
+      //score is blank, not updated, but returns true
+      res.json({status: true});
+    }
   });
 
 

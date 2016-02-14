@@ -299,17 +299,17 @@ select {
 }
 
 #courses-box {
-	height: 200px;
+	height: 30vh;
 	background-color: rgba(173,216,230,1);
 }
 
 #assessments-box {
-	height: 245px;
+	height: 37vh;
 	background-color: rgba(144,238,144,1);
 }
 
 #students-box {
-	height: 410px;
+	height: 62.5vh;
 	background-color: rgba(255,255,224,1);
 }
 
