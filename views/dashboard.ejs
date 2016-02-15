@@ -3,7 +3,7 @@
 
 <% include ./partials/head %>
 
-<body class="dashboard">
+<body class="dashboard courses">
 
 	<div id="main-header">
 
@@ -54,7 +54,7 @@
 				Courses
 			</div>
 			<div class="button-box">
-				<form action="/courses/new">
+				<form action="#newCourseModal">
 					<input type="submit" class="courses-button" id="course-new" value="New"/>
 				</form>
 			</div>
@@ -64,7 +64,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="/courses/edit">
+				<form action="#editCourseModal">
 					<input type="submit" class="courses-button" id="course-edit" value="Edit"/>
 				</form>
 			</div>
@@ -178,6 +178,83 @@
 				<div class="grade-field">
 				<input class="grade hidden" id="weight" type="text" value="" readonly/>
 			</div>
+		</div>
+	</div>
+
+<!-- MODAL WINDOWS -->
+
+	<!-- COURSES -->
+
+	<div id="newCourseModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2>New Course</h2>
+			<hr>
+			<form action="/courses" method="post">
+				<label for="title">Course Title</label><br>
+				<input type="text" name="title" placeholder="Course Title"/>
+				<br>
+				<label for="section">Section</label><br>
+				<input type="number" name="section" min="1" value="1"/>
+				<br>
+				<label for="year">Year</label><br>
+				<input type="number" name="year" min="1" value="<%= session.current_term.split('.')[0] %>"/>
+				<br>
+				<label for="term">Term</label><br>
+				<input type="number" name="term" min="1" value="<%= session.current_term.split('.')[1] %>"/>
+				<br>
+				<label for="auto">Auto Weighting On?</label><br>
+				<br>
+				<select class="narrow" name="auto">
+				  <option value="true" selected>Yes</option> 
+				  <option value="false">No</option>
+				</select>
+				<br><br><br>
+				<div class="hidden message" id="message-course-post"></div>
+				<input type="submit" id="course-post" value="Create Course"/>
+			</form>
+
+		</div>
+	</div>
+
+	<div id="editCourseModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2>Edit Course</h2>
+			<hr>
+			<form action="/courses" method="post">
+				<label for="title">Course Title</label><br>
+				<input type="text" name="title" id="edit-course-title" value=""/>
+				<br>
+				<label for="section">Section</label><br>
+				<input type="number" name="section" min="1" id="edit-course-section" value=""/>
+				<br>
+				<label for="year">Year</label><br>
+				<input type="number" name="year" min="1" id="edit-course-year" value=""/><br>
+				<label for="term">Term</label><br>
+				<input type="number" name="term" min="1" id="edit-course-term" value=""/><br>
+				<label for="auto">Auto Weighting On?</label><br>
+				<br>
+				<select class="narrow" id="edit-course-auto" name="auto">
+					  <option value="true">Yes</option> 
+					  <option value="false">No</option>
+				</select>
+				<br><br><br>
+				<div class="hidden message" id="message-course-patch"></div>
+				<input type="hidden" name="_method" value="patch"/>
+				<input type="submit" id="course-patch" value="Update Course"/>
+			</form>
+		
+			<hr>
+
+			<form action="/courses" method="post">
+				<div class="hidden message" id="message-course-delete"></div>
+				<input type="hidden" name="_method" value="delete"/>
+				<input type="submit" class="delete" id="course-delete" value="Delete Course"/>
+			</form>
+
 		</div>
 	</div>
 
