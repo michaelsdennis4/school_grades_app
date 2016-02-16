@@ -28675,36 +28675,6 @@ $('document').ready(function () {
       };
     });
 
-    $('#course-edit').on('click', function (event) {
-      event.preventDefault();
-      if ($('#current-course-id').val().length == 0) {
-        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function () {
-          $('#courses-warning').text('').toggleClass('invisible', true);
-        }, 2000);
-      } else {
-        //get current course
-        $.ajax({
-          url: '/courses/edit',
-          method: 'get',
-          contentType: 'application/json'
-        }).done(function (result) {
-          if (result.course) {
-            var course = result.course;
-            //update modal window with current course data
-            $('#edit-course-title').val(course.title);
-            $('#edit-course-section').val(course.section);
-            $('#edit-course-year').val(course.term.split('.')[0]);
-            $('#edit-course-term').val(course.term.split('.')[1]);
-            $("#edit-course-auto select").val("false");
-            location.href = "#editCourseModal";
-          } else if (result.message == 'sorry') {
-            location.href = '/sorry';
-          }
-        });
-      }
-    });
-
     $('#enroll').on('click', function (event) {
       if ($('#current-course-id').val().length == 0) {
         event.preventDefault();
@@ -29181,7 +29151,9 @@ $('document').ready(function () {
           console.log('new course created successfully');
           $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
+            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
             location.href = "#close";
+            location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
@@ -29190,6 +29162,36 @@ $('document').ready(function () {
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
         };
       });
+    });
+
+    $('#course-edit').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#courses-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        //get current course
+        $.ajax({
+          url: '/courses/edit',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course) {
+            var course = result.course;
+            //update modal window with current course data
+            $('#edit-course-title').val(course.title);
+            $('#edit-course-section').val(course.section);
+            $('#edit-course-year').val(course.term.split('.')[0]);
+            $('#edit-course-term').val(course.term.split('.')[1]);
+            $("#edit-course-auto").val(course.auto);
+            location.href = "#editCourseModal";
+          } else if (result.message == 'sorry') {
+            location.href = '/sorry';
+          }
+        });
+      }
     });
 
     $('#course-patch').on('click', function (event) {
@@ -29207,7 +29209,8 @@ $('document').ready(function () {
           console.log('course updated successfully');
           $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            location.href = "/dashboard#close";
+            location.href = "#close";
+            location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
@@ -29229,6 +29232,7 @@ $('document').ready(function () {
         }).done(function (result) {
           if (result.message === 'ok') {
             console.log('course deleted successfully');
+            location.href = "#close";
             location.href = "/dashboard";
           } else if (result.message === 'sorry') {
             location.href = "/sorry";

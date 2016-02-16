@@ -59,7 +59,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="/courses/copy">
+				<form action="#copyCourseModal">
 					<input type="submit" class="courses-button" id="course-copy" value="Copy"/>
 				</form>
 			</div>
@@ -255,6 +255,46 @@
 				<input type="submit" class="delete" id="course-delete" value="Delete Course"/>
 			</form>
 
+		</div>
+	</div>
+
+	<div id="copyCourseModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2>Copy Courses</h2>
+			<hr>
+			<h3>Current Year: <%= session.current_term.split('.')[0] %></h3>
+			<h3>Current Term: <%= session.current_term.split('.')[1] %></h3>
+			<hr>
+			<h3>Select A Previous Term:</h3>
+
+			<form action="/courses" method="get">
+				<select id="course-select" name="term">
+<!-- 					make an ajax call to /courses/copy to obtain list of terms
+					to be added as options here -->	
+				</select>
+			</form>
+
+			<br>
+
+			<div class="hidden" id="courses-list">
+
+				<hr>
+
+				<h3>Courses</h3>
+
+				<p>Select the course(s) you want to copy to the current term.</p>
+
+				<div class="checkbox-list" id="courses-checklist"></div>
+
+				<label><input type="checkbox" id="copy-students" value="true" checked/>Copy Students</label><br>
+
+				<form action="/dashboard">
+					<input type="submit" class="checklist-submit" id="courses-copy" value="Copy Courses"/>
+				</form>
+
+			</div>
 		</div>
 	</div>
 
