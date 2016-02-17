@@ -361,14 +361,6 @@ $('document').ready(function() {
       };
     });
 
-    $('#enroll').on('click', function(event) {
-      if ($('#current-course-id').val().length == 0) {
-        event.preventDefault();
-        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function() {$('#courses-warning').text('').toggleClass('invisible', true)}, 2000);
-      };
-    });
-
     $('#assessment-new').on('click', function(event) {
       if ($('#current-course-id').val().length == 0) {
         event.preventDefault();
@@ -542,7 +534,7 @@ $('document').ready(function() {
             var data = {score: score, points: points, weight: weight};
             $.ajax({
               url: '/grade',
-              type: 'post',
+              method: 'post',
               data: JSON.stringify(data),
               contentType: "application/json",
               dataType: 'json'
@@ -676,7 +668,7 @@ $('document').ready(function() {
       $('#message-login').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/login',
-        type: 'post',
+        method: 'post',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -705,7 +697,7 @@ $('document').ready(function() {
       $('#message-user-post').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users',
-        type: 'post',
+        method: 'post',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -726,7 +718,7 @@ $('document').ready(function() {
       $('#message-user-patch').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users',
-        type: 'patch',
+        method: 'patch',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -749,7 +741,7 @@ $('document').ready(function() {
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',
-        type: 'patch',
+        method: 'patch',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -773,7 +765,7 @@ $('document').ready(function() {
         $('#message-user-delete').text('').toggleClass('hidden', true);
         $.ajax({
           url: '/users',
-          type: 'delete',
+          method: 'delete',
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
@@ -799,14 +791,14 @@ $('document').ready(function() {
 
     console.log('courses js loaded!');
 
-    $('#course-select').on('click', function(event) {
+    $('#term-select').on('click', function(event) {
       event.preventDefault();
       var term = event.target.value;
       if (term.length > 0) {
         data = {term: term};
         $.ajax({
           url: '/courses',
-          type: 'get',
+          method: 'get',
           data: data,
           dataType: 'json'
         }).done(function(results) {
@@ -829,7 +821,7 @@ $('document').ready(function() {
       $('#message-course-post').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/courses',
-        type: 'post',
+        method: 'post',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -885,7 +877,7 @@ $('document').ready(function() {
       $('#message-course-patch').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/courses',
-        type: 'patch',
+        method: 'patch',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -911,7 +903,7 @@ $('document').ready(function() {
         $('#message-course-delete').text('').toggleClass('hidden', true);
         $.ajax({
           url: '/courses',
-          type: 'delete',
+          method: 'delete',
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
@@ -928,7 +920,50 @@ $('document').ready(function() {
       };
     });
 
-    $('.student-enroll').on('click', function(event) {
+    $('#enroll').on('click', function(event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) { 
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function() {$('#courses-warning').text('').toggleClass('invisible', true)}, 2000);
+      } else {
+        $.ajax({
+          url: '/enrollment',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function(result) {
+          if ((result.course) && (result.students)) {
+            var course = result.course,
+                students = result.students,
+                enrolled;
+            course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            $('#enrollment-course').html('<h5>Course Title: '+course.title+'</h5><h5>Section: '+course.section+'</h5>');
+            $('#students-checklist').html('');
+            students.forEach(function(student) {
+              enrolled = false;
+              if ((student.course_ids) && (student.course_ids.length > 0)) {
+                student.course_ids.forEach(function(course_id) {
+                  if (course_id.id.toString() == course._id.toString()) {
+                    enrolled = true;
+                  }
+                });
+              };
+              if (enrolled === true) {
+                $('#students-checklist').append('<label><input type="checkbox" class="student-enroll" id="'+student._id+'" value="enrolled" checked/> '+student.last_name+', '+student.first_name+' ('+student.grad_year+')</label><br>'); 
+
+              } else {
+                $('#students-checklist').append('<label><input type="checkbox" class="student-enroll" id="'+student._id+'" value="enrolled"/> '+student.last_name+', '+student.first_name+' ('+student.grad_year+')</label><br>'); 
+              }
+            });
+            $('.student-enroll').on('click', studentEnroll);
+            location.href = "#enrollmentModal";
+          } else if (result.message == 'sorry') {
+            location.href = '/sorry';
+          }
+        });
+      }
+    });
+
+    var studentEnroll = function(event) {
       var student_id = event.target.getAttribute('id');
       var enrolled = event.target.checked;
       if (enrolled === true) {
@@ -955,7 +990,36 @@ $('document').ready(function() {
             console.log('enrollment NOT updated');
           }
         });
-      };
+      }
+    };
+
+    $('#enrollment-update').on('click', function(event) {
+      event.preventDefault();
+      location.href = "#close";
+      location.href = "/dashboard";
+    });
+
+    $('#course-copy').on('click', function(event) {
+      event.preventDefault();  
+      //get terms
+      $.ajax({
+        url: '/courses/terms',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function(result) {
+        if (result.terms) {
+          var terms = result.terms;
+          //update modal window select with terms
+          terms.forEach(function(term) {
+            if (term.toString() != result.current_term.toString()) {
+              $('#term-select').append('<option value="'+term+'">'+term.split('.')[0]+' Term '+term.split('.')[1]+'</option>')
+            }
+          });
+          location.href = "#copyCoursesModal";
+        } else if (result.message == 'sorry') {
+          location.href = '/sorry';
+        }
+      });
     });
 
     $('#courses-copy').on('click', function(req, res) {
@@ -979,7 +1043,7 @@ $('document').ready(function() {
         console.log('data is '+data.copy_students);
         $.ajax({
           url: '/courses/'+courses[count]+'/copy',
-          type: 'post',
+          method: 'post',
           data: JSON.stringify(data),
           contentType: "application/json",
           dataType: 'json'
@@ -990,17 +1054,18 @@ $('document').ready(function() {
             copyCourse(count);
           } else {
             console.log ('all courses copied');
-            $this.unbind('submit').submit();
-          };
+            location.href = "#close";
+            location.href = "/dashboard";
+          }
         });
-      };
+      }
       if (courses.length > 0) {
         copyCourse(0);
       } else {
-        $this.unbind('submit').submit();
-      };
+        location.href = "#close";
+        location.href = "/dashboard";
+      }
     });
-
   };
 
 //ASSESSMENTS EVENT LISTENERS-------------------------------------------
@@ -1016,7 +1081,7 @@ $('document').ready(function() {
       $('#message-assessment-post').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/assessments',
-        type: 'post',
+        method: 'post',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -1042,7 +1107,7 @@ $('document').ready(function() {
       $('#message-assessment-patch').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/assessments',
-        type: 'patch',
+        method: 'patch',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -1067,7 +1132,7 @@ $('document').ready(function() {
         $('#message-assessment-delete').text('').toggleClass('hidden', true);
         $.ajax({
           url: '/assessments',
-          type: 'delete',
+          method: 'delete',
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
@@ -1098,7 +1163,7 @@ $('document').ready(function() {
       $('#message-student-post').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/students',
-        type: 'post',
+        method: 'post',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -1124,7 +1189,7 @@ $('document').ready(function() {
       $('#message-student-patch').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/students',
-        type: 'patch',
+        method: 'patch',
         data: data,
         dataType: 'json'
       }).done(function(result) {
@@ -1149,7 +1214,7 @@ $('document').ready(function() {
         $('#message-student-delete').text('').toggleClass('hidden', true);
         $.ajax({
           url: '/students',
-          type: 'delete',
+          method: 'delete',
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {

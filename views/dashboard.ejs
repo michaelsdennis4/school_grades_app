@@ -59,7 +59,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="#copyCourseModal">
+				<form action="#copyCoursesModal">
 					<input type="submit" class="courses-button" id="course-copy" value="Copy"/>
 				</form>
 			</div>
@@ -69,7 +69,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="/enrollment">
+				<form action="#enrollmentModal">
 					<input type="submit" class="courses-button" id="enroll" value="Enroll"/>
 				</form>
 			</div>
@@ -258,7 +258,7 @@
 		</div>
 	</div>
 
-	<div id="copyCourseModal" class="modalDialog">
+	<div id="copyCoursesModal" class="modalDialog">
 		<div>
 			<a href="#close" title="Close" class="close">X</a>
 
@@ -270,9 +270,8 @@
 			<h3>Select A Previous Term:</h3>
 
 			<form action="/courses" method="get">
-				<select id="course-select" name="term">
-<!-- 					make an ajax call to /courses/copy to obtain list of terms
-					to be added as options here -->	
+				<select id="term-select" name="term">
+					<!-- options populated dynamically -->
 				</select>
 			</form>
 
@@ -295,6 +294,30 @@
 				</form>
 
 			</div>
+		</div>
+	</div>
+
+	<div id="enrollmentModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2>Enrollment</h2>
+			<p>Check to enroll, uncheck to unenroll.</p>
+			<p>Unenrolling a student will NOT destroy the student's scores for that course.</p>
+			<hr>
+				<div class="course-data" id="enrollment-course">
+					<!-- populate course data dynamically -->
+				</div>
+			<hr>
+
+			<h3>Students</h3>
+			<div class="checkbox-list" id="students-checklist">
+					<!-- populate student list dynamically -->
+			</div>
+			<form action="/dashboard">
+				<input type="submit" class="checklist-submit" id="enrollment-update" value="Back to Dashboard"/>
+			</form>
+
 		</div>
 	</div>
 

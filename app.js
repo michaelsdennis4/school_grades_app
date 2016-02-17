@@ -524,18 +524,18 @@ MongoClient.connect(mongoUri, function(error, db) {
             } else {
               students = []
             };
-            res.render('courses/enrollment.ejs', {course: course, students: students});
+            res.json({course: course, students: students});
           });   
         } else {
-          res.redirect('/dashboard');
+          res.json({message: 'no course selected'});
         };
       });
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
-  app.get('/courses/copy', function(req, res) {
+  app.get('/courses/terms', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {  
       var terms = [];
       db.collection('users').distinct("courses.term", function(error, results) {
@@ -551,10 +551,10 @@ MongoClient.connect(mongoUri, function(error, db) {
             return 0;
           });
         };
-        res.render('courses/copy.ejs', {session: req.session, terms: terms});
+        res.json({terms: terms, current_term: req.session.current_term});
       });     
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 
