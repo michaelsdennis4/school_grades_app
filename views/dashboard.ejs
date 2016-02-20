@@ -3,7 +3,7 @@
 
 <% include ./partials/head %>
 
-<body class="dashboard courses">
+<body class="dashboard courses assessments">
 
 	<div id="main-header">
 
@@ -87,7 +87,7 @@
 				Assessments
 			</div>
 			<div class="button-box">
-				<form action="/assessments/new">
+				<form action="#newAssessmentModal">
 					<input type="submit" class="assessments-button" id="assessment-new" value="New"/>
 				</form>
 			</div>
@@ -183,15 +183,15 @@
 
 <!-- MODAL WINDOWS -->
 
-	<!-- COURSES -->
+<!-- COURSE MODALS -->
 
 	<div id="newCourseModal" class="modalDialog">
-		<div>
+		<div class="modalDialogWindow">
 			<a href="#close" title="Close" class="close">X</a>
 
-			<h2>New Course</h2>
+			<h2 class="modal-caption">New Course</h2>
 			<hr>
-			<form action="/courses" method="post">
+			<form class="modal-form" action="/courses" method="post">
 				<label for="title">Course Title</label><br>
 				<input type="text" name="title" placeholder="Course Title"/>
 				<br>
@@ -206,25 +206,25 @@
 				<br>
 				<label for="auto">Auto Weighting On?</label><br>
 				<br>
-				<select class="narrow" name="auto">
+				<select class="modal-select narrow" name="auto">
 				  <option value="true" selected>Yes</option> 
 				  <option value="false">No</option>
 				</select>
 				<br><br><br>
 				<div class="hidden message" id="message-course-post"></div>
-				<input type="submit" id="course-post" value="Create Course"/>
+				<input type="submit" class="modal-submit" id="course-post" value="Create Course"/>
 			</form>
 
 		</div>
 	</div>
 
 	<div id="editCourseModal" class="modalDialog">
-		<div>
+		<div class="modalDialogWindow">
 			<a href="#close" title="Close" class="close">X</a>
 
-			<h2>Edit Course</h2>
+			<h2 class="modal-caption">Edit Course</h2>
 			<hr>
-			<form action="/courses" method="post">
+			<form class="modal-form" action="/courses" method="post">
 				<label for="title">Course Title</label><br>
 				<input type="text" name="title" id="edit-course-title" value=""/>
 				<br>
@@ -237,14 +237,14 @@
 				<input type="number" name="term" min="1" id="edit-course-term" value=""/><br>
 				<label for="auto">Auto Weighting On?</label><br>
 				<br>
-				<select class="narrow" id="edit-course-auto" name="auto">
+				<select class="modal-select narrow" id="edit-course-auto" name="auto">
 					  <option value="true">Yes</option> 
 					  <option value="false">No</option>
 				</select>
 				<br><br><br>
 				<div class="hidden message" id="message-course-patch"></div>
 				<input type="hidden" name="_method" value="patch"/>
-				<input type="submit" id="course-patch" value="Update Course"/>
+				<input class="modal-submit" type="submit" id="course-patch" value="Update Course"/>
 			</form>
 		
 			<hr>
@@ -252,25 +252,25 @@
 			<form action="/courses" method="post">
 				<div class="hidden message" id="message-course-delete"></div>
 				<input type="hidden" name="_method" value="delete"/>
-				<input type="submit" class="delete" id="course-delete" value="Delete Course"/>
+				<input type="submit" class="modal-delete" id="course-delete" value="Delete Course"/>
 			</form>
 
 		</div>
 	</div>
 
 	<div id="copyCoursesModal" class="modalDialog">
-		<div>
+		<div class="modalDialogWindow">
 			<a href="#close" title="Close" class="close">X</a>
 
-			<h2>Copy Courses</h2>
+			<h2 class="modal-caption">Copy Courses</h2>
 			<hr>
-			<h3>Current Year: <%= session.current_term.split('.')[0] %></h3>
-			<h3>Current Term: <%= session.current_term.split('.')[1] %></h3>
+			<h5 class="modal-data">Current Year: <%= session.current_term.split('.')[0] %></h5>
+			<h5 class="modal-data">Current Term: <%= session.current_term.split('.')[1] %></h5>
 			<hr>
-			<h3>Select A Previous Term:</h3>
+			<h3 class="modal-header">Select A Previous Term:</h3>
 
-			<form action="/courses" method="get">
-				<select id="term-select" name="term">
+			<form class="modal-form" action="/courses" method="get">
+				<select class="modal-select" id="term-select" name="term">
 					<!-- options populated dynamically -->
 				</select>
 			</form>
@@ -281,16 +281,18 @@
 
 				<hr>
 
-				<h3>Courses</h3>
+				<h3 class="modal-header">Courses</h3>
 
-				<p>Select the course(s) you want to copy to the current term.</p>
+				<p class="modal-instructions">Select the course(s) you want to copy to the current term.</p>
 
-				<div class="checkbox-list" id="courses-checklist"></div>
+				<div class="checkbox-list" id="courses-checklist">
+					<!-- populate courses dynamically -->
+				</div>
 
-				<label><input type="checkbox" id="copy-students" value="true" checked/>Copy Students</label><br>
+				<label><input class="modal-checkbox" type="checkbox" id="copy-students" value="true" checked/>Copy Students</label><br>
 
 				<form action="/dashboard">
-					<input type="submit" class="checklist-submit" id="courses-copy" value="Copy Courses"/>
+					<input type="submit" class="modal-submit" id="courses-copy" value="Copy Courses"/>
 				</form>
 
 			</div>
@@ -298,12 +300,12 @@
 	</div>
 
 	<div id="enrollmentModal" class="modalDialog">
-		<div>
+		<div class="modalDialogWindow">
 			<a href="#close" title="Close" class="close">X</a>
 
-			<h2>Enrollment</h2>
-			<p>Check to enroll, uncheck to unenroll.</p>
-			<p>Unenrolling a student will NOT destroy the student's scores for that course.</p>
+			<h2 class="modal-caption">Enrollment</h2>
+			<p class="modal-instructions">Check to enroll, uncheck to unenroll.</p>
+			<p class="modal-instructions">Unenrolling a student will NOT destroy the student's scores for that course.</p>
 			<hr>
 				<div class="course-data" id="enrollment-course">
 					<!-- populate course data dynamically -->
@@ -315,7 +317,45 @@
 					<!-- populate student list dynamically -->
 			</div>
 			<form action="/dashboard">
-				<input type="submit" class="checklist-submit" id="enrollment-update" value="Back to Dashboard"/>
+				<input type="submit" class="modal-submit" id="enrollment-update" value="Back to Dashboard"/>
+			</form>
+
+		</div>
+	</div>
+
+<!-- ASSESSMENT MODALS -->
+
+	<div id="newAssessmentModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">New Assessment</h2>
+			<hr>
+				<div class="course-data" id="assessment-course">
+					<!-- populate course data dynamically -->
+				</div>
+			<hr>
+			<form action="/assessments" method="post">
+				<label for="name">Assessment Name</label><br>
+				<input type="text" name="name" placeholder="Assessment Title"/>
+				<br>
+				<label for="type">Type</label><br>
+				<select class="modal-select" name="type">
+				  <option value="Test" selected>Test</option> 
+				  <option value="Quiz">Quiz</option>
+				  <option value="Homework">Homework</option>
+				  <option value="Project">Project</option>
+				  <option value="Other">Other</option>
+				</select><br>
+				<br>
+				<label for="points">Points</label><br>
+				<input type="number" name="points" min="1" value="1"/>
+				<br>
+				<div id="auto-weighting">
+					<!-- auto weighting populated dynamically -->
+				</div>
+				<div class="hidden message" id="message-assessment-post"></div>
+				<input type="submit" id="assessment-post" value="Create Assessment"/>
 			</form>
 
 		</div>

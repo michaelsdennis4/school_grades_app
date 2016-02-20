@@ -29120,7 +29120,7 @@ $('document').ready(function () {
           if (results && results.courses.length > 0) {
             var courses = results.courses;
             courses.forEach(function (course) {
-              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/>' + course.title + ' (Section: ' + course.section + ')</label><br>');
+              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/> ' + course.title + ' (Section: ' + course.section + ')</label><br>');
             });
             $('#courses-checklist').append('<br><br>');
             $('#courses-list').toggleClass('hidden', false);
@@ -29257,7 +29257,7 @@ $('document').ready(function () {
             course.title = course.title.replace(/\w\S*/g, function (txt) {
               return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             });
-            $('#enrollment-course').html('<h5>Course Title: ' + course.title + '</h5><h5>Section: ' + course.section + '</h5>');
+            $('#enrollment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
             $('#students-checklist').html('');
             students.forEach(function (student) {
               enrolled = false;
@@ -29269,9 +29269,9 @@ $('document').ready(function () {
                 });
               };
               if (enrolled === true) {
-                $('#students-checklist').append('<label><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled" checked/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
+                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled" checked/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
               } else {
-                $('#students-checklist').append('<label><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled"/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
+                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled"/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
               }
             });
             $('.student-enroll').on('click', studentEnroll);
@@ -29394,6 +29394,38 @@ $('document').ready(function () {
 
     console.log('assessments js loaded!');
 
+    $('#assessment-new').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#assessments-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        $.ajax({
+          url: '/assessments/new',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course) {
+            var course = result.course;
+            course.title = course.title.replace(/\w\S*/g, function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+            $('#assessment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
+            if (course.auto === "false") {
+              $('#auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="1"/><br>');
+            } else {
+              $('#auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
+            }
+            location.href = "#newAssessmentModal";
+          } else if (result.message == "sorry") {
+            location.href = "/sorry";
+          }
+        });
+      }
+    });
+
     $('#assessment-post').on('click', function (event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
@@ -29409,6 +29441,7 @@ $('document').ready(function () {
           console.log('new assessment created successfully');
           $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
+            location.href = "#close";
             location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {

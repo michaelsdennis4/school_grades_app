@@ -131,12 +131,6 @@ input[type=submit] {
 	border-bottom: solid gray 2px;
 }
 
-input[type=submit].delete {
-	background-color: rgba(255,50,50,1);
-	color: white;
-	margin-top: 10px;
-}
-
 select {
 	width: 50%;
 	height: 30px;
@@ -144,10 +138,6 @@ select {
 	border-radius: 0;
 	margin-top: 20px;
 	margin-bottom: 15px;
-}
-
-.narrow {
-	width: 20%;
 }
 
 #main-header {
@@ -418,28 +408,6 @@ input.grade {
 	color: white;
 }
 
-.checkbox-list {
-	width: 70%;
-	height: 300px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 20px;
-	padding: 5px;
-	background-color: rgba(255,255,255,0.5);
-	font-family: 'Courier';
-	text-align: left;
-	overflow-y: scroll;
-}
-
-.checklist-submit {
-	margin-top: 10px;
-}
-
-input[type=checkbox] {
-	height: 20px;
-	line-height: 20px;
-} 
-
 .right {
 	text-align: right;
 }
@@ -466,7 +434,7 @@ input[type=checkbox] {
 	pointer-events: auto;
 }
 
-.modalDialog > div {
+.modalDialogWindow {
 	width: 30%;
 	position: relative;
 	margin-top: 40px;
@@ -480,15 +448,79 @@ input[type=checkbox] {
 	text-align: center;
 }
 
-.modalDialog > div > p {
+.modal-caption {
+	font-size: 24px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.modal-header {
+	font-size: 16px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.modal-instructions {
 	font-size: 12px;
 	line-height: 14px;
 }
 
-#enrollment-course > h5 {
+.modal-data {
 	font-size: 16px;
 	line-height: 20px;
 	margin: 5px;
+}
+
+.modal-form {
+	margin-bottom: 10px;
+}
+
+.checkbox-list {
+	width: 70%;
+	max-height: 300px;
+	margin-left: 15%;
+	margin-right: auto;
+	margin-bottom: 20px;
+	border: solid gray 1px;
+	padding: 5px;
+	background-color: rgba(255,255,255,0.5);
+	font-family: 'Courier';
+	text-align: left;
+	overflow-y: scroll;
+}
+
+.modal-item {
+	height: 20px;
+	font-size: 12px;
+	line-height: 20px;
+} 
+
+.modal-checkbox{
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+input[type="submit"].modal-submit {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+input[type="submit"].modal-delete {
+	background-color: rgba(255,50,50,1);
+	color: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+select.modal-select {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border: solid black 1px;
+	border-radius: 0;
+}
+
+.narrow {
+	width: 20%;
 }
 
 .close {
@@ -511,8 +543,6 @@ input[type=checkbox] {
 }
 
 .close:hover { background: #00d9ff; }
-
-
 
 
 
