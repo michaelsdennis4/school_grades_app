@@ -29214,29 +29214,6 @@ $('document').ready(function () {
       });
     });
 
-    $('#course-delete').on('click', function (event) {
-      event.preventDefault();
-      if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === true) {
-        $('#message-course-delete').text('').toggleClass('hidden', true);
-        $.ajax({
-          url: '/courses',
-          method: 'delete',
-          dataType: 'json'
-        }).done(function (result) {
-          if (result.message === 'ok') {
-            console.log('course deleted successfully');
-            location.href = "#close";
-            location.href = "/dashboard";
-          } else if (result.message === 'sorry') {
-            location.href = "/sorry";
-          } else {
-            console.log(result.message);
-            $('#message-course-delete').text(result.message).toggleClass('hidden', false);
-          };
-        });
-      };
-    });
-
     $('#enroll').on('click', function (event) {
       event.preventDefault();
       if ($('#current-course-id').val().length == 0) {
@@ -29388,6 +29365,29 @@ $('document').ready(function () {
     });
   };
 
+  $('#course-delete').on('click', function (event) {
+    event.preventDefault();
+    if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === true) {
+      $('#message-course-delete').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/courses',
+        method: 'delete',
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          console.log('course deleted successfully');
+          location.href = "#close";
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          console.log(result.message);
+          $('#message-course-delete').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    };
+  });
+
   //ASSESSMENTS EVENT LISTENERS-------------------------------------------
 
   if (document.body.classList.contains('assessments')) {
@@ -29529,6 +29529,7 @@ $('document').ready(function () {
         }).done(function (result) {
           if (result.message === 'ok') {
             console.log('assessment deleted successfully');
+            location.href = "#close";
             location.href = "/dashboard";
           } else if (result.message === 'sorry') {
             location.href = "/sorry";
@@ -29559,7 +29560,7 @@ $('document').ready(function () {
           course.title = course.title.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
           });
-          $('#new-student-course').html('<label><input class="modal-checkbox" type="checkbox" name="enroll" value="enroll" checked />Enroll this student in ' + course.title + ' (Section ' + course.section + ')</label><br>');
+          $('#new-student-course').html('<label for="enroll"><input class="modal-checkbox" type="checkbox" name="enroll" value="enroll" checked />Enroll this student in ' + course.title + ' (Section ' + course.section + ')</label><br>');
           location.href = "#newStudentModal";
         } else if (result.message == 'sorry') {
           location.href = "/sorry";
@@ -29621,6 +29622,31 @@ $('document').ready(function () {
       }
     });
 
+    $('#student-edit').on('click', function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/students/edit',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function (result) {
+        if (result.student) {
+          var student = result.student;
+          $('input[name="first_name"]').val(student.first_name);
+          $('input[name="last_name"]').val(student.last_name);
+          $('input[name="email"]').val(student.email);
+          $('input[name="identification"]').val(student.identification);
+          $('input[name="advisor"]').val(student.advisor);
+          $('input[name="grad_year"]').val(student.grad_year);
+          if (student.is_active === 'true') {
+            $('input[name="is_active"]').prop("checked", true);
+          }
+          location.href = "#editStudentModal";
+        } else if (result.message == 'sorry') {
+          location.href = "/sorry";
+        }
+      });
+    });
+
     $('#student-patch').on('click', function (event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
@@ -29636,6 +29662,7 @@ $('document').ready(function () {
           console.log('student updated successfully');
           $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
+            location.href = "#close";
             location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {
@@ -29658,6 +29685,7 @@ $('document').ready(function () {
         }).done(function (result) {
           if (result.message === 'ok') {
             console.log('student deleted successfully');
+            location.href = "#close";
             location.href = "/dashboard";
           } else if (result.message === 'sorry') {
             location.href = "/sorry";

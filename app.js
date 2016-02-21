@@ -911,16 +911,16 @@ MongoClient.connect(mongoUri, function(error, db) {
             student.first_name = student.first_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             student.last_name = student.last_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
             student.advisor = student.advisor.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1);});
-            res.render('students/edit.ejs', {student: student});
+            res.json({student: student});
           } else {
-            res.redirect('/dashboard');
+            res.json({message: 'student not found'});
           };
         });
       } else {
-        res.redirect('/dashboard');
+        res.json({message: 'student not selected'});
       };
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

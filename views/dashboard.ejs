@@ -121,7 +121,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="/students/edit">
+				<form action="#editStudentModal">
 					<input type="submit" class="students-button" id="student-edit" value="Edit"/>
 				</form>
 			</div>
@@ -444,6 +444,50 @@
 
 			<form action="/dashboard">
 				<input class="modal-submit" id="new-students-done" type="submit" value="Done Entering"/>
+			</form>
+
+		</div>
+	</div>
+
+	<div id="editStudentModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">Edit Student</h2>
+			<hr>
+			<form class="modal-form" action="/students" method="post">
+				<label for="first_name">First Name</label><br>
+				<input type="text" name="first_name" value=""/>
+				<br>
+				<label for="last_name">Last Name</label><br>
+				<input type="text" name="last_name" value=""/>
+				<br>
+				<label for="email">E-mail</label><br>
+				<input type="text" name="email" value=""/>
+				<br>
+				<label for="identification">Identification</label><br>
+				<input type="text" name="identification" value=""/>
+				<br>
+				<label for="advisor">Advisor</label><br>
+				<input type="text" name="advisor" value=""/>
+				<br>
+				<label for="grad_year">Graduation Year</label><br>
+				<input type="number" name="grad_year" min="2016" value=""/>
+				<br>
+				<label for="is_active">Active?</label>
+				<input class="modal-checkbox" type="checkbox" name="is_active" value="true"/>
+				<br>
+				<div class="hidden message" id="message-student-patch"></div>
+				<input type="hidden" name="_method" value="patch"/>
+				<input type="submit" class="modal-submit" id="student-patch" value="Update Student"/>
+			</form>
+
+			<hr>
+
+			<form action="/students" method="post">
+				<div class="hidden message" id="message-student-delete"></div>
+				<input type="hidden" name="_method" value="delete"/>
+				<input type="submit" class="modal-delete" id="student-delete" value="Delete Student"/>
 			</form>
 
 		</div>
