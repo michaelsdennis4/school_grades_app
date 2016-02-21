@@ -1091,13 +1091,47 @@ $('document').ready(function() {
           if (result.course) {
             var course = result.course;
             course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-            $('#assessment-course').html('<h5 class="modal-data">Course Title: '+course.title+'</h5><h5 class="modal-data">Section: '+course.section+'</h5>');
+            $('#new-assessment-course').html('<h5 class="modal-data">Course Title: '+course.title+'</h5><h5 class="modal-data">Section: '+course.section+'</h5>');
             if (course.auto === "false") {
-              $('#auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="1"/><br>');
+              $('#new-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="1"/><br>');
             } else {
-              $('#auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
+              $('#new-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
             }
             location.href = "#newAssessmentModal";
+          } else if (result.message == "sorry") {
+            location.href = "/sorry";
+          }
+        });
+      }
+    });
+
+    $('#assessment-edit').on('click', function(event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) { 
+        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function() {$('#assessments-warning').text('').toggleClass('invisible', true)}, 2000);
+      } else {
+        $.ajax({
+          url: '/assessments/edit',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function(result) {
+          if (result.course) {
+            var course = result.course;
+            var assessment = result.assessment;
+            var position = result.position;
+            course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            $('#edit-assessment-course').html('<h5 class="modal-data">Course Title: '+course.title+'</h5><h5 class="modal-data">Section: '+course.section+'</h5>');
+            $('#edit-assessment-name').val(assessment.name);
+            $('#edit-assessment-type').val(assessment.type);
+            $('#edit-assessment-points').val(assessment.points);
+            if (course.auto === "false") {
+              $('#edit-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="'+assessment.weight+'"/><br>');
+            } else {
+              $('#edit-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
+            }
+            $('#edit-assessment-position').val(position);
+            location.href = "#editAssessmentModal";
           } else if (result.message == "sorry") {
             location.href = "/sorry";
           }
@@ -1147,6 +1181,7 @@ $('document').ready(function() {
           console.log('assessment updated successfully');
           $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function(){
+            location.href = "#close";
             location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {

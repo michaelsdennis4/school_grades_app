@@ -677,19 +677,19 @@ MongoClient.connect(mongoUri, function(error, db) {
               };
             };
             if (assessment) {
-              res.render('assessments/edit.ejs', {course: course, assessment: assessment, position: position});
+              res.json({course: course, assessment: assessment, position: position});
             } else {
-              res.redirect('/dashboard');
+              res.json({message: 'assessment not found'});
             };
           } else {
-            res.redirect('/dashboard');
+            res.json({message: 'no assessment selected'});
           };
         });
       } else {
-        res.redirect('/dashboard');
+        res.json({message: 'no course selected'});
       };
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     }; 
   });
 

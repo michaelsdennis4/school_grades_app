@@ -92,7 +92,7 @@
 				</form>
 			</div>
 			<div class="button-box">
-				<form action="/assessments/edit">
+				<form action="#editAssessmentModal">
 					<input type="submit" class="assessments-button" id="assessment-edit" value="Edit"/>
 				</form>
 			</div>
@@ -331,13 +331,13 @@
 
 			<h2 class="modal-caption">New Assessment</h2>
 			<hr>
-				<div class="course-data" id="assessment-course">
+				<div class="course-data" id="new-assessment-course">
 					<!-- populate course data dynamically -->
 				</div>
 			<hr>
-			<form action="/assessments" method="post">
+			<form class="modal-form" action="/assessments" method="post">
 				<label for="name">Assessment Name</label><br>
-				<input type="text" name="name" placeholder="Assessment Title"/>
+				<input type="text" name="name" placeholder="Assessment Name"/>
 				<br>
 				<label for="type">Type</label><br>
 				<select class="modal-select" name="type">
@@ -351,11 +351,56 @@
 				<label for="points">Points</label><br>
 				<input type="number" name="points" min="1" value="1"/>
 				<br>
-				<div id="auto-weighting">
+				<div id="new-auto-weighting">
 					<!-- auto weighting populated dynamically -->
 				</div>
 				<div class="hidden message" id="message-assessment-post"></div>
 				<input type="submit" id="assessment-post" value="Create Assessment"/>
+			</form>
+
+		</div>
+	</div>
+
+	<div id="editAssessmentModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">Edit Assessment</h2>
+			<hr>
+				<div class="course-data" id="edit-assessment-course">
+					<!-- populate course data dynamically -->
+				</div>
+			<hr>
+			<form class="modal-form" action="/assessments" method="post">
+				<label for="name">Assessment Name</label><br>
+				<input type="text" name="name" id="edit-assessment-name" value=""/>
+				<br>
+				<label for="type">Type</label><br>
+				<select class="modal-select" id="edit-assessment-type" name="type">
+				  <option value="Test">Test</option> 
+				  <option value="Quiz">Quiz</option>
+				  <option value="Homework">Homework</option>
+				  <option value="Project">Project</option>
+				  <option value="Other">Other</option>
+				</select><br>
+				<br>
+				<label for="points">Points</label><br>
+				<input type="number" name="points" id="edit-assessment-points" min="1" value=""/>
+				<br>
+				<div id="edit-auto-weighting">
+					<!-- auto weighting populated dynamically -->
+				</div>
+				<!-- position in the array to be used for updating mongodb -->
+				<input type="hidden" name="position" id="edit-assessment-position" value=""/>
+				<div class="hidden message" id="message-assessment-patch"></div>
+				<input type="hidden" name="_method" value="patch"/>
+				<input class="modal-submit" type="submit" id="assessment-patch" value="Update Assessment"/>
+			</form>
+			<hr>
+			<form action="/assessments" method="post">
+				<div class="hidden message" id="message-assessment-delete"></div>
+				<input type="hidden" name="_method" value="delete"/>
+				<input type="submit" class="modal-delete" id="assessment-delete" value="Delete Assessment"/>
 			</form>
 
 		</div>
