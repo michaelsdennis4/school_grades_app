@@ -1105,6 +1105,33 @@ $('document').ready(function() {
       }
     });
 
+    $('#assessment-post').on('click', function(event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-assessment-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/assessments',
+        method: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function(result) {
+        if (result.message === 'ok') {
+          console.log('new assessment created successfully'); 
+          $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function() {
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000); 
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          console.log(result.message);
+          $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+
     $('#assessment-edit').on('click', function(event) {
       event.preventDefault();
       if ($('#current-course-id').val().length == 0) { 
@@ -1137,33 +1164,6 @@ $('document').ready(function() {
           }
         });
       }
-    });
-
-    $('#assessment-post').on('click', function(event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-assessment-post').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/assessments',
-        method: 'post',
-        data: data,
-        dataType: 'json'
-      }).done(function(result) {
-        if (result.message === 'ok') {
-          console.log('new assessment created successfully'); 
-          $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
-          setTimeout(function() {
-            location.href = "#close";
-            location.href = "/dashboard";
-          }, 1000); 
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          console.log(result.message);
-          $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
-        };
-      });
     });
 
     $('#assessment-patch').on('click', function(event) {
@@ -1223,6 +1223,26 @@ $('document').ready(function() {
 
     console.log('students js loaded!');
 
+    $('#student-new').on('click', function(event){
+      event.preventDefault();
+      $.ajax({
+        url: '/students/new',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function(result) {
+        if (result.course) {
+          var course = result.course;
+          course.title = course.title.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          $('#new-student-course').html('<label><input class="modal-checkbox" type="checkbox" name="enroll" value="enroll" checked />Enroll this student in '+course.title+' (Section '+course.section+')</label><br>');
+          location.href="#newStudentModal";    
+        } else if (result.message == 'sorry') {
+          location.href = "/sorry";
+        } else {
+          location.href="#newStudentModal";
+        }
+      });
+    });
+
     $('#student-post').on('click', function(event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
@@ -1238,7 +1258,13 @@ $('document').ready(function() {
           console.log('new student created successfully');
           $('#message-student-post').text("Student added!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            location.href = "/students/new";
+            //clear form
+            $('input[name="first_name"]').val("");
+            $('input[name="last_name"]').val("");
+            $('input[name="email"]').val("");
+            $('input[name="identification"]').val("");
+            $('input[name="advisor"]').val("");
+            $('input[name="grad_year"]').val("");
           }, 1000);    
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
@@ -1247,6 +1273,31 @@ $('document').ready(function() {
           $('#message-student-post').text(result.message).toggleClass('hidden', false);
         };
       });
+    });
+
+    $('#new-students-done').on('click', function(event) {
+      event.preventDefault();
+      //check to see if the form has data
+      if (($('input[name="first_name"]').val().length > 0) ||
+        ($('input[name="last_name"]').val().length > 0) ||
+        ($('input[name="email"]').val().length > 0) ||
+        ($('input[name="identification"]').val().length > 0) ||
+        ($('input[name="advisor"]').val().length > 0) ||
+        ($('input[name="grad_year"]').val().length > 0)) {
+        if (window.confirm('There is unsubmitted data in the form.\r\nDo you want to add the student?') === true) {
+          $('#student-post').click();
+          setTimeout(function() {
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000);
+        } else {
+          location.href = "#close";
+          location.href = "/dashboard";
+        }
+      } else {
+        location.href = "#close";
+        location.href = "/dashboard";
+      }
     });
 
     $('#student-patch').on('click', function(event) {

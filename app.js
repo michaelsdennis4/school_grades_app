@@ -889,16 +889,16 @@ MongoClient.connect(mongoUri, function(error, db) {
         db.collection('users').find({_id: ObjectId(req.session.user_id), "courses._id": ObjectId(req.session.current_course_id)}, {_id: 0, "courses.$": 1}).toArray(function(error, results) {
           if ((results) && (results.length > 0)) {
             var course = results[0].courses[0]; 
-            res.render('students/new.ejs', {course: course});
+            res.json({course: course});
           } else {
-            res.render('students/new.ejs', {course: null});
+            res.json({message: 'course not found'});
           }
         });
       } else {
-        res.render('students/new.ejs', {course: null});
+        res.json({message: 'no course selected'});
       };
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };
   });
 

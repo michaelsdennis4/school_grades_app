@@ -3,7 +3,7 @@
 
 <% include ./partials/head %>
 
-<body class="dashboard courses assessments">
+<body class="dashboard courses assessments students">
 
 	<div id="main-header">
 
@@ -116,7 +116,7 @@
 				Students
 			</div>
 			<div class="button-box">
-				<form action="/students/new">
+				<form action="#newStudentModal">
 					<input type="submit" class="students-button" id="student-new" value="New"/>
 				</form>
 			</div>
@@ -183,7 +183,7 @@
 
 <!-- MODAL WINDOWS -->
 
-<!-- COURSE MODALS -->
+<!-- COURSES MODALS -->
 
 	<div id="newCourseModal" class="modalDialog">
 		<div class="modalDialogWindow">
@@ -323,7 +323,7 @@
 		</div>
 	</div>
 
-<!-- ASSESSMENT MODALS -->
+<!-- ASSESSMENTS MODALS -->
 
 	<div id="newAssessmentModal" class="modalDialog">
 		<div class="modalDialogWindow">
@@ -401,6 +401,49 @@
 				<div class="hidden message" id="message-assessment-delete"></div>
 				<input type="hidden" name="_method" value="delete"/>
 				<input type="submit" class="modal-delete" id="assessment-delete" value="Delete Assessment"/>
+			</form>
+
+		</div>
+	</div>
+
+<!-- STUDENTS MODALS -->
+
+	<div id="newStudentModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">New Student</h2>
+			<hr>
+			<form class="modal-form" action="/students" method="post">
+				<label for="first_name">First Name</label><br>
+				<input type="text" name="first_name" placeholder="First Name"/>
+				<br>
+				<label for="last_name">Last Name</label><br>
+				<input type="text" name="last_name" placeholder="Last Name"/>
+				<br>
+				<label for="email">E-mail</label><br>
+				<input type="text" name="email" placeholder="Email address"/>
+				<br>
+				<label for="identification">Identification</label><br>
+				<input type="text" name="identification" placeholder="Student ID"/>
+				<br>
+				<label for="advisor">Advisor</label><br>
+				<input type="text" name="advisor" placeholder="Advisor"/>
+				<br>
+				<label for="grad_year">Graduation Year</label><br>
+				<input type="number" name="grad_year" min="2016" value="2016"/>
+				<br>
+				<input type="hidden" name="is_active" value="true"/>
+				<div id="new-student-course">
+					<!-- course data populated dynamically here -->
+				</div>
+				<div class="hidden message" id="message-student-post">
+				</div>
+				<input type="submit" class="modal-submit add-new" id="student-post" value="Add Student"/>
+			</form>
+
+			<form action="/dashboard">
+				<input class="modal-submit" id="new-students-done" type="submit" value="Done Entering"/>
 			</form>
 
 		</div>
