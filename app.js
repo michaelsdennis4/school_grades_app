@@ -228,19 +228,19 @@ MongoClient.connect(mongoUri, function(error, db) {
                   res.json({message: 'ok'});
                 } else {
                   res.json({message: 'Error updating password'});
-                };
+                }
               });
             } else {
               res.json({message: 'Existing password incorrect'});
-            };
+            }
           } else {
             res.json({message: 'User not found'});
-          };
+          }
         });
-      };
+      }
     } else {
       res.json({message: 'sorry'});
-    };
+    }
   });
 
   app.delete('/users', function(req, res) {
@@ -277,7 +277,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       res.redirect('/sorry');
     };
   });
-
 
 
 //COURSES -----------------------------------------------

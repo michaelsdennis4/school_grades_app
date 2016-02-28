@@ -762,6 +762,7 @@ $('document').ready(function() {
       event.preventDefault();
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
+      console.log('form serialized');
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',
@@ -781,6 +782,9 @@ $('document').ready(function() {
           location.href = "/sorry";
         } 
         else {
+          $('#edit-old-password').val("");
+          $('#edit-new-password').val("");
+          $('#edit-confirm-new-password').val("");
           $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });
