@@ -394,7 +394,6 @@ $('document').ready(function() {
         //clear current course fields
         $('#current-course').val("");
         $('#current-course-id').val(""); 
-        console.log('current course deleted'); 
         courses_table.loadCoursesFromServer();
       });
       $.ajax({
@@ -404,7 +403,6 @@ $('document').ready(function() {
         //clear current assessment fields
         $('#current-assessment').val("");
         $('#current-assessment-id').val("");  
-        console.log('current assessment deleted');
         assessments_table.loadAssessmentsFromServer();
       });
       $.ajax({
@@ -414,7 +412,6 @@ $('document').ready(function() {
         //clear current student fields
         $('#current-student').val("");
         $('#current-student-id').val(""); 
-        console.log('current student deleted');
         students_table.loadStudentsFromServer();
       });
       $('#score').val(""); 
@@ -443,7 +440,6 @@ $('document').ready(function() {
             url: '/current_course/'+cells[0].textContent,
             method: 'post'
           }).done(function() {
-            console.log('current course updated '+cells[0].textContent);
              //update current course in the DOM
             document.querySelector('#current-course-id').value = cells[0].textContent;
             document.querySelector('#current-course').value = cells[1].textContent + ' (Section '+cells[2].textContent+')';
@@ -477,16 +473,13 @@ $('document').ready(function() {
             url: '/current_assessment/'+cells[0].textContent,
             method: 'post'
           }).done(function() {
-            console.log('current assessment updated '+cells[0].textContent);
             //update current assessment in the DOM
             $('#current-assessment-id').val(cells[0].textContent);
             $('#current-assessment').val(cells[1].textContent +' ('+cells[2].textContent+')');
             $('#points').val(cells[3].textContent);
             $('#weight').val(cells[4].textContent);
             $(row).toggleClass('selected', true);
-            console.log('assessment before load students '+cells[0].textContent);
             students_table.loadStudentsFromServer();
-            console.log('assessment after load students '+cells[0].textContent);
             setTimeout(function() {
               $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
               $('#score').focus().select();
@@ -498,7 +491,6 @@ $('document').ready(function() {
             url: '/current_student/'+cells[0].textContent,
             method: 'post'
           }).done(function() {
-            console.log('current student updated '+cells[0].textContent);
             //update current student in the DOM
             $('#current-student-id').val(cells[0].textContent);
             $('#current-student').val(cells[2].textContent +', '+cells[3].textContent);
@@ -538,12 +530,10 @@ $('document').ready(function() {
               dataType: 'json'
             }).done(function(result) {
               if ((result) && (result.status === false)) {
-                console.log('error posting grade');
                 $('#score').toggleClass('red', true); 
                 $('#score').focus().select();
                 setTimeout(cancelRed, 100);  
               } else {
-                console.log('grade posted');
                 $('#score').toggleClass('green', true);
                 $('#score').focus().select();
                 students_table.loadStudentsFromServer();
@@ -567,13 +557,11 @@ $('document').ready(function() {
               };
             });
           } else {
-            console.log('entry not recognized');
             $('#score').toggleClass('red', true);
             $('#score').focus().select(); 
             setTimeout(cancelRed, 100);
           };
         } else {
-          console.log('course, assessment, or student not selected');
           $('#score').toggleClass('red', true); 
           $('#score').focus().select();
           setTimeout(cancelRed, 100);
@@ -588,7 +576,6 @@ $('document').ready(function() {
     var current_student_id = $('#current-student-id').val();
    
     var resetCourse = function() {  
-      console.log('the current course id is '+current_course_id);
       //reselect current course
       if (current_course_id.length > 0) {
         var courses_table = document.querySelector('table#courses');
@@ -611,7 +598,6 @@ $('document').ready(function() {
     };
 
     var resetAssessment = function() {
-      console.log('the current assessment id is '+current_assessment_id);
       //re-select current assessment   
       if (current_assessment_id.length > 0) {
         var assessments_table = document.querySelector('table#assessments');
@@ -634,7 +620,6 @@ $('document').ready(function() {
     };
 
     var resetStudent = function() {
-      console.log('the current student id is '+current_student_id);
       //reselect current student     
       if (current_student_id.length > 0) {
         var students_table = document.querySelector('table#students');
@@ -676,10 +661,8 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('login successful');
           location.href = "/dashboard";
         } else {
-          console.log(result.message);
           $('#message-login').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -705,10 +688,8 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('new user created successfully');
           location.href = "/dashboard";
         } else {
-          console.log(result.message);
           $('#message-user-post').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -726,12 +707,10 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('user updated successfully');
           location.href = "/dashboard";
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-user-patch').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -749,14 +728,12 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('password updated successfully');
           location.href = "/dashboard";
         } 
         else if (result.message === 'sorry') {
           location.href = "/sorry";
         } 
         else {
-          console.log(result.message);
           $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -772,14 +749,12 @@ $('document').ready(function() {
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
-            console.log('user deleted successfully');
             location.href = "/logout";
           } 
           else if (result.message === 'sorry') {
             location.href = "/sorry";
           } 
           else {
-            console.log(result.message);
             $('#message-user-delete').text(result.message).toggleClass('hidden', false);
           };
         });
@@ -829,7 +804,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('new course created successfully');
           $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
             $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
@@ -839,7 +813,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -885,7 +858,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('course updated successfully');
           $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
             location.href = "#close";
@@ -894,7 +866,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-course-patch').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -950,25 +921,13 @@ $('document').ready(function() {
         $.ajax({
           url: '/students/'+student_id+'/enroll',
           method: 'patch',
-          dataType: 'json',
-          success: function() {
-            console.log('enrollment updated');
-          },
-          error: function() {
-            console.log('enrollment NOT updated');
-          }
+          dataType: 'json'
         });
       } else {
         $.ajax({
           url: '/students/'+student_id+'/unenroll',
           method: 'patch',
-          dataType: 'json',
-          success: function() {
-            console.log('enrollment updated');
-          },
-          error: function() {
-            console.log('enrollment NOT updated');
-          }
+          dataType: 'json'
         });
       }
     };
@@ -1020,7 +979,6 @@ $('document').ready(function() {
         };
       };     
       var copyCourse = function(count) {
-        console.log('data is '+data.copy_students);
         $.ajax({
           url: '/courses/'+courses[count]+'/copy',
           method: 'post',
@@ -1028,12 +986,10 @@ $('document').ready(function() {
           contentType: "application/json",
           dataType: 'json'
         }).done(function(result) {
-          console.log('course copied');
           count++;
           if (count < courses.length) {
             copyCourse(count);
           } else {
-            console.log ('all courses copied');
             location.href = "#close";
             location.href = "/dashboard";
           }
@@ -1058,13 +1014,11 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('course deleted successfully');
           location.href = "#close";
           location.href = "/dashboard";
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-course-delete').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -1117,7 +1071,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('new assessment created successfully'); 
           $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
             location.href = "#close";
@@ -1126,7 +1079,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -1178,7 +1130,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('assessment updated successfully');
           $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function(){
             location.href = "#close";
@@ -1187,7 +1138,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -1203,13 +1153,11 @@ $('document').ready(function() {
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
-            console.log('assessment deleted successfully');
             location.href = "#close";
             location.href = "/dashboard";
           } else if (result.message === 'sorry') {
             location.href = "/sorry";
           } else {
-            console.log(result.message);
             $('#message-assessment-delete').text(result.message).toggleClass('hidden', false);
           };
         });
@@ -1256,7 +1204,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('new student created successfully');
           $('#message-student-post').text("Student added!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
             //clear form
@@ -1270,7 +1217,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-student-post').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -1338,7 +1284,6 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          console.log('student updated successfully');
           $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function(){
             location.href = "#close";
@@ -1347,7 +1292,6 @@ $('document').ready(function() {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          console.log(result.message);
           $('#message-student-patch').text(result.message).toggleClass('hidden', false);
         };
       });
@@ -1363,13 +1307,11 @@ $('document').ready(function() {
           dataType: 'json'
         }).done(function(result) {
           if (result.message === 'ok') {
-            console.log('student deleted successfully');
             location.href = "#close";
             location.href = "/dashboard";
           } else if (result.message === 'sorry') {
             location.href = "/sorry";
           } else {
-            console.log(result.message);
             $('#message-student-delete').text(result.message).toggleClass('hidden', false);
           };
         });
