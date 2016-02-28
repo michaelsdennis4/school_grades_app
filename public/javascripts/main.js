@@ -695,6 +695,25 @@ $('document').ready(function() {
       });
     });
 
+    $('#user-edit').on('click', function(event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/users/edit',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function(result) {
+        if (result.user) {
+          var user = result.user;
+          $('#edit-user-firstname').val(user.first_name);
+          $('#edit-user-lastname').val(user.last_name);
+          $('#edit-user-email').val(user.email);
+          location.href = "#editProfileModal";
+        } else if (result.message == 'sorry') {
+          location.href = "/sorry";
+        }
+      });
+    });
+
     $('#user-patch').on('click', function(event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
@@ -707,34 +726,12 @@ $('document').ready(function() {
         dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
+          location.href = "#close";
           location.href = "/dashboard";
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
           $('#message-user-patch').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#user-password').on('click', function(event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-user-password').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/users/password',
-        method: 'patch',
-        data: data,
-        dataType: 'json'
-      }).done(function(result) {
-        if (result.message === 'ok') {
-          location.href = "/dashboard";
-        } 
-        else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } 
-        else {
-          $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });
     });
@@ -759,6 +756,41 @@ $('document').ready(function() {
           };
         });
       };
+    });
+
+    $('#user-password').on('click', function(event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-password').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users/password',
+        method: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function(result) {
+        if (result.message === 'ok') {
+          $('#message-user-password').text("Password changed successfully").toggleClass('green', true).toggleClass('hidden', false);
+          setTimeout(function() {
+            location.href = "#close";
+            location.href = "/dashboard";
+            $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
+          }, 1000);
+        } 
+        else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } 
+        else {
+          $('#edit-old-password').val("");
+          $('#edit-new-password').val("");
+          $('#edit-confirm-new-password').val("");
+          var errors = result.errors, error_string = "";
+          for (var i=0; i < errors.length; i++) {
+            error_string += errors[i]+'\r\n';
+          }
+          $('#message-user-password').text(error_string).toggleClass('hidden', false);
+        };
+      });
     });
 
   };
@@ -1207,12 +1239,12 @@ $('document').ready(function() {
           $('#message-student-post').text("Student added!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
             //clear form
-            $('input[name="first_name"]').val("");
-            $('input[name="last_name"]').val("");
-            $('input[name="email"]').val("");
-            $('input[name="identification"]').val("");
-            $('input[name="advisor"]').val("");
-            $('input[name="grad_year"]').val("");
+            $('#new-student-firstname').val("");
+            $('#new-student-lastname').val("");
+            $('#new-student-email').val("");
+            $('#new-student-identification').val("");
+            $('#new-student-advisor').val("");
+            $('#new-student-gradyear').val("");
           }, 1000);    
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
@@ -1225,12 +1257,12 @@ $('document').ready(function() {
     $('#new-students-done').on('click', function(event) {
       event.preventDefault();
       //check to see if the form has data
-      if (($('input[name="first_name"]').val().length > 0) ||
-        ($('input[name="last_name"]').val().length > 0) ||
-        ($('input[name="email"]').val().length > 0) ||
-        ($('input[name="identification"]').val().length > 0) ||
-        ($('input[name="advisor"]').val().length > 0) ||
-        ($('input[name="grad_year"]').val().length > 0)) {
+      if (($('#edit-student-firstname').val().length > 0) ||
+        ($('#new-student-lastname').val().length > 0) ||
+        ($('#new-student-email').val().length > 0) ||
+        ($('#new-student-identification').val().length > 0) ||
+        ($('#new-student-advisor').val().length > 0) ||
+        ($('#new-student-gradyear').val().length > 0)) {
         if (window.confirm('There is unsubmitted data in the form.\r\nDo you want to add the student?') === true) {
           $('#student-post').click();
           setTimeout(function() {
@@ -1256,14 +1288,14 @@ $('document').ready(function() {
       }).done(function(result) {
         if (result.student) {
           var student = result.student;
-          $('input[name="first_name"]').val(student.first_name);
-          $('input[name="last_name"]').val(student.last_name);
-          $('input[name="email"]').val(student.email);
-          $('input[name="identification"]').val(student.identification);
-          $('input[name="advisor"]').val(student.advisor);
-          $('input[name="grad_year"]').val(student.grad_year);
+          $('#edit-student-firstname').val(student.first_name);
+          $('#edit-student-lastname').val(student.last_name);
+          $('#edit-student-email').val(student.email);
+          $('#edit-student-identification').val(student.identification);
+          $('#edit-student-advisor').val(student.advisor);
+          $('#edit-student-gradyear').val(student.grad_year);
           if (student.is_active === 'true') {
-            $('input[name="is_active"]').prop("checked", true );
+            $('#edit-student-isactive').prop("checked", true );
           }
           location.href = "#editStudentModal";
         } else if (result.message == 'sorry') {

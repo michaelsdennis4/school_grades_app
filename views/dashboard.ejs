@@ -3,7 +3,7 @@
 
 <% include ./partials/head %>
 
-<body class="dashboard courses assessments students">
+<body class="dashboard courses assessments students users">
 
 	<div id="main-header">
 
@@ -25,11 +25,14 @@
 		</form>
 
 		<div class="top-button-box">
+			<form action="#editProfileModal">
+				<input type="submit" id="user-edit" value="Edit My Profile"/>
+			</form>
 		</div>
 
 		<div class="top-button-box">
-			<form action="/users/edit">
-				<input type="submit" value="Edit My Profile"/>
+			<form action="#changePasswordModal">
+				<input type="submit" value="Change My Password"/>
 			</form>
 		</div>
 
@@ -278,9 +281,7 @@
 			<br>
 
 			<div class="hidden" id="courses-list">
-
 				<hr>
-
 				<h3 class="modal-header">Courses</h3>
 
 				<p class="modal-instructions">Select the course(s) you want to copy to the current term.</p>
@@ -416,22 +417,22 @@
 			<hr>
 			<form class="modal-form" action="/students" method="post">
 				<label for="first_name">First Name</label><br>
-				<input type="text" name="first_name" placeholder="First Name"/>
+				<input type="text" name="first_name" id="new-student-firstname" placeholder="First Name"/>
 				<br>
 				<label for="last_name">Last Name</label><br>
-				<input type="text" name="last_name" placeholder="Last Name"/>
+				<input type="text" name="last_name" id="new-student-lastname" placeholder="Last Name"/>
 				<br>
 				<label for="email">E-mail</label><br>
-				<input type="text" name="email" placeholder="Email address"/>
+				<input type="text" name="email" id="new-student-email" placeholder="Email address"/>
 				<br>
 				<label for="identification">Identification</label><br>
-				<input type="text" name="identification" placeholder="Student ID"/>
+				<input type="text" name="identification" id="new-student-identification" placeholder="Student ID"/>
 				<br>
 				<label for="advisor">Advisor</label><br>
-				<input type="text" name="advisor" placeholder="Advisor"/>
+				<input type="text" name="advisor" id="new-student-advisor" placeholder="Advisor"/>
 				<br>
 				<label for="grad_year">Graduation Year</label><br>
-				<input type="number" name="grad_year" min="2016" value="2016"/>
+				<input type="number" name="grad_year" id="new-student-gradyear" min="2016" value="2016"/>
 				<br>
 				<input type="hidden" name="is_active" value="true"/>
 				<div id="new-student-course">
@@ -457,37 +458,91 @@
 			<hr>
 			<form class="modal-form" action="/students" method="post">
 				<label for="first_name">First Name</label><br>
-				<input type="text" name="first_name" value=""/>
+				<input type="text" name="first_name" id="edit-student-firstname" value=""/>
 				<br>
 				<label for="last_name">Last Name</label><br>
-				<input type="text" name="last_name" value=""/>
+				<input type="text" name="last_name" id="edit-student-lastname" value=""/>
 				<br>
 				<label for="email">E-mail</label><br>
-				<input type="text" name="email" value=""/>
+				<input type="text" name="email" id="edit-student-email" value=""/>
 				<br>
 				<label for="identification">Identification</label><br>
-				<input type="text" name="identification" value=""/>
+				<input type="text" name="identification" id="edit-student-identification" value=""/>
 				<br>
 				<label for="advisor">Advisor</label><br>
-				<input type="text" name="advisor" value=""/>
+				<input type="text" name="advisor" id="edit-student-advisor" value=""/>
 				<br>
 				<label for="grad_year">Graduation Year</label><br>
-				<input type="number" name="grad_year" min="2016" value=""/>
+				<input type="number" name="grad_year" min="2016" id="edit-student-gradyear" value=""/>
 				<br>
 				<label for="is_active">Active?</label>
-				<input class="modal-checkbox" type="checkbox" name="is_active" value="true"/>
+				<input class="modal-checkbox" type="checkbox" name="is_active" id="edit-student-isactive" value="true"/>
 				<br>
 				<div class="hidden message" id="message-student-patch"></div>
 				<input type="hidden" name="_method" value="patch"/>
 				<input type="submit" class="modal-submit" id="student-patch" value="Update Student"/>
 			</form>
-
 			<hr>
-
 			<form action="/students" method="post">
 				<div class="hidden message" id="message-student-delete"></div>
 				<input type="hidden" name="_method" value="delete"/>
 				<input type="submit" class="modal-delete" id="student-delete" value="Delete Student"/>
+			</form>
+
+		</div>
+	</div>
+
+<!-- USERS MODALS -->
+
+	<div id="editProfileModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">Edit My Profile</h2>
+			<hr>
+			<form class="modal-form" action="/users" method="post">
+				<label for="first_name">First Name</label><br>
+				<input type="text" id="edit-user-firstname" name="first_name" value=""/>
+				<br>
+				<label for="last_name">Last Name</label><br>
+				<input type="text" id="edit-user-lastname" name="last_name" value=""/>
+				<br>
+				<label for="email">E-mail</label><br>
+				<input type="text" id="edit-user-email" name="email" value=""/>
+				<br>
+				<div class="hidden message" id="message-user-patch"></div>
+				<input type="hidden" name="_method" value="patch"/>
+				<input type="submit" class="modal-submit" id="user-patch" value="Update My Profile"/>
+			</form>
+			<hr>
+			<form action="/users" method="post">
+				<div class="hidden message" id="message-user-delete"></div>
+				<input type="hidden" name="_method" value="delete"/>
+				<input type="submit" class="modal-delete" id="user-delete" value="Delete My Profile"/>
+			</form>
+
+		</div>
+	</div>
+
+	<div id="changePasswordModal" class="modalDialog">
+		<div class="modalDialogWindow">
+			<a href="#close" title="Close" class="close">X</a>
+
+			<h2 class="modal-caption">Change My Password</h2>
+			<hr>
+			<form class="modal-form" action="/users/password" method="post">
+				<label for="old_password">Password</label><br>
+				<input type="password" name="old_password" id="edit-old-password"placeholder="Current password"/>
+				<br>
+				<label for="new_password">New Password</label><br>
+				<input type="password" name="new_password" id="edit-new-password" placeholder="New password"/>
+				<br>
+				<label for="confirm_new_password">Confirm New Password</label><br>
+				<input type="password" name="confirm_new_password" id="edit-confirm-new-password" placeholder="Confirm new password"/>
+				<br>
+				<div class="hidden message" id="message-user-password"></div>
+				<input type="hidden" name="_method" value="patch"/>
+				<input type="submit" class="modal-submit" id="user-password" value="Change My Password"/>
 			</form>
 
 		</div>

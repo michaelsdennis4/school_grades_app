@@ -129,13 +129,13 @@ MongoClient.connect(mongoUri, function(error, db) {
       db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
         if (!error) {
           var user = results[0];
-          res.render('users/edit.ejs', {user: user});
+          res.json({user: user});
         } else {
-          res.redirect('/dashboard');
+          res.json({message: 'user not found'});
         };
     });
     } else {
-      res.redirect('/sorry');
+      res.json({message: 'sorry'});
     };  
   });
 
@@ -211,36 +211,38 @@ MongoClient.connect(mongoUri, function(error, db) {
   });
 
   app.patch('/users/password', function(req, res) {
+    var message = "", errors = [];
     if ((req.session.user_id) && (req.session.user_id != null)) {
       if (req.body.new_password.length < 6) {
-        res.json({message: 'Password must be at least 6 characters.'});
+        errors.push('Password must be at least 6 characters.');
       } else {
         db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
           if ((!error) && (results) && (results.length > 0)) {
             var user = results[0];
             if (req.body.new_password != req.body.confirm_new_password) { 
-              res.json({message: 'New passwords do not match'});
+              errors.push('New passwords do not match');
             } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
               var salt = bcrypt.genSaltSync(10);
               var hash = bcrypt.hashSync(req.body.new_password, salt);
               db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
                 if ((!error) && (result)) {
-                  res.json({message: 'ok'});
+                  message = 'ok';
                 } else {
-                  res.json({message: 'Error updating password'});
+                  errors.push('Error updating password');
                 };
               });
             } else {
-              res.json({message: 'Existing password incorrect'});
+              errors.push('Existing password incorrect');
             };
           } else {
-            res.json({message: 'User not found'});
+            errors.push('User not found');
           };
         });
       };
     } else {
-      res.json({message: 'sorry'});
+      message = 'sorry';
     };
+    res.json({message: message, errors: errors});
   });
 
   app.delete('/users', function(req, res) {
