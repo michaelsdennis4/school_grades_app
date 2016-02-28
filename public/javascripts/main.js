@@ -767,7 +767,8 @@ $('document').ready(function() {
         url: '/users/password',
         method: 'patch',
         data: data,
-        dataType: 'json'
+        dataType: 'json',
+        contentType: 'application/json'
       }).done(function(result) {
         if (result.message === 'ok') {
           $('#message-user-password').text("Password changed successfully").toggleClass('green', true).toggleClass('hidden', false);
@@ -781,14 +782,11 @@ $('document').ready(function() {
           location.href = "/sorry";
         } 
         else {
+          console.log(result.message);
           $('#edit-old-password').val("");
           $('#edit-new-password').val("");
           $('#edit-confirm-new-password').val("");
-          var errors = result.errors, error_string = "";
-          for (var i=0; i < errors.length; i++) {
-            error_string += errors[i]+'\r\n';
-          }
-          $('#message-user-password').text(error_string).toggleClass('hidden', false);
+          $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });
     });
