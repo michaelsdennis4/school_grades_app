@@ -765,27 +765,22 @@ $('document').ready(function() {
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',
-        method: 'patch',
+        type: 'patch',
         data: data,
-        dataType: 'json',
-        contentType: 'application/json'
+        dataType: 'json'
       }).done(function(result) {
         if (result.message === 'ok') {
-          $('#message-user-password').text("Password changed successfully").toggleClass('green', true).toggleClass('hidden', false);
+          $('#message-user-password').text("Password updated successfully").toggleClass('green', true).toggleClass('hidden', false);
           setTimeout(function() {
             location.href = "#close";
             location.href = "/dashboard";
             $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
-          }, 1000);
+          }, 1000);    
         } 
         else if (result.message === 'sorry') {
           location.href = "/sorry";
         } 
         else {
-          console.log(result.message);
-          $('#edit-old-password').val("");
-          $('#edit-new-password').val("");
-          $('#edit-confirm-new-password').val("");
           $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });

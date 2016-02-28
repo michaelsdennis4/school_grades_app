@@ -29080,12 +29080,12 @@ $('document').ready(function () {
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',
-        method: 'patch',
+        type: 'patch',
         data: data,
         dataType: 'json'
       }).done(function (result) {
         if (result.message === 'ok') {
-          $('#message-user-password').text("Password changed successfully").toggleClass('green', true).toggleClass('hidden', false);
+          $('#message-user-password').text("Password updated successfully").toggleClass('green', true).toggleClass('hidden', false);
           setTimeout(function () {
             location.href = "#close";
             location.href = "/dashboard";
@@ -29094,15 +29094,7 @@ $('document').ready(function () {
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
         } else {
-          $('#edit-old-password').val("");
-          $('#edit-new-password').val("");
-          $('#edit-confirm-new-password').val("");
-          var errors = result.errors,
-              error_string = "";
-          for (var i = 0; i < errors.length; i++) {
-            error_string += errors[i] + '\r\n';
-          }
-          $('#message-user-password').text(error_string).toggleClass('hidden', false);
+          $('#message-user-password').text(result.message).toggleClass('hidden', false);
         };
       });
     });
