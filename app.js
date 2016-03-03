@@ -212,34 +212,41 @@ MongoClient.connect(mongoUri, function(error, db) {
 
   app.patch('/users/password', function(req, res) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
-      if (req.body.new_password.length < 6) {
-        res.json({message: 'Password must be at least 6 characters.'});
-      } else {
-        db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
-          if ((!error) && (results) && (results.length > 0)) {
-            var user = results[0];
-            if (req.body.new_password != req.body.confirm_new_password) { 
-              res.json({message: 'New passwords do not match'});
-            } else if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
-              var salt = bcrypt.genSaltSync(10);
-              var hash = bcrypt.hashSync(req.body.new_password, salt);
-              db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
-                if ((!error) && (result)) {
-                  res.json({message: 'ok'});
-                } else {
-                  res.json({message: 'Error updating password'});
-                }
-              });
+      //find user
+      db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) {
+        if ((!error) && (results) && (results.length > 0)) {
+          var user = results[0];
+          //check if existing password is correct
+          if (bcrypt.compareSync(req.body.old_password, user.password_digest) === true) {
+            //check if password at least 6 characters
+            if (req.body.new_password.length >= 6) {
+              //check if new passwords match
+              if (req.body.new_password === req.body.confirm_new_password) { 
+                //try to update password
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync(req.body.new_password, salt);
+                db.collection('users').update({_id: ObjectId(user._id)}, {$set: {password_digest: hash}}, function(error, result) {
+                  if ((!error) && (result)) {
+                    res.json({message: 'ok'});
+                  } else {
+                    res.json({message: 'Error updating password'});
+                  }
+                });
+              } else {
+                res.json({message: 'New passwords do not match'});
+              } 
             } else {
-              res.json({message: 'Existing password incorrect'});
+              res.json({message: 'Password must be at least 6 characters.'});
             }
           } else {
-            res.json({message: 'User not found'});
-          }
-        });
-      }
+            res.json({message: 'Existing password incorrect'});
+          }  
+        } else {
+          res.json({message: 'sorry'}); 
+        }
+      });
     } else {
-      res.json({message: 'sorry'});
+      res.json({message: 'sorry'}); 
     }
   });
 
