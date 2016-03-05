@@ -270,18 +270,20 @@
 			<h5 class="modal-data">Current Year: <%= session.current_term.split('.')[0] %></h5>
 			<h5 class="modal-data">Current Term: <%= session.current_term.split('.')[1] %></h5>
 			<hr>
-			<h3 class="modal-header">Select A Previous Term:</h3>
+			<h4 class="modal-header">Select A Previous Term:</h4>
 
-			<form class="modal-form" action="/courses" method="get">
+			<form class="modal-form-select" action="/courses" method="get">
 				<select class="modal-select" id="term-select" name="term">
 					<!-- options populated dynamically -->
 				</select>
 			</form>
 
-			<br>
-
-			<div class="hidden" id="courses-list">
+			<div class="hidden" id="no-courses-found">
 				<hr>
+				<h4>No Courses Found</h4>
+			</div>
+			<div class="hidden" id="courses-list">
+				<hr>	
 				<h3 class="modal-header">Courses</h3>
 
 				<p class="modal-instructions">Select the course(s) you want to copy to the current term.</p>
@@ -293,6 +295,7 @@
 				<label><input class="modal-checkbox" type="checkbox" id="copy-students" value="true" checked/>Copy Students</label><br>
 
 				<form action="/dashboard">
+					<div class="hidden message" id="message-courses-copy"></div>
 					<input type="submit" class="modal-submit" id="courses-copy" value="Copy Courses"/>
 				</form>
 

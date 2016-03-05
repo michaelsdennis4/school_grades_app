@@ -962,6 +962,7 @@ $('document').ready(function() {
       event.preventDefault();  
       $('#term-select').html("");
       $('#courses-checklist').html("");
+      $('#no-courses-found').toggleClass('hidden', true);
       $('#courses-list').toggleClass('hidden', true);
       //get terms
       $.ajax({
@@ -985,29 +986,29 @@ $('document').ready(function() {
     });
 
     $('#term-select').on('change', function(event) {
-      event.preventDefault();
       $('#courses-checklist').html("");
+      $('#no-courses-found').toggleClass('hidden', true);
       $('#courses-list').toggleClass('hidden', true);
       var term = event.target.value;
-      console.log(term);
       if (term.length > 0) {
-        data = JSON.stringify({term: term});
+        data = {term: term};
         $.ajax({
           url: '/courses',
           method: 'get',
           data: data,
-          dataType: 'json'
+          dataType: 'json',
+          contentType: 'application/json'
         }).done(function(results) {
           if ((results) && (results.courses.length > 0)) {
             var courses = results.courses;
             courses.forEach(function(course) { 
               $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="'+course._id+'" value="copy"/> '+course.title+' (Section: '+course.section+')</label><br>');
             });
+            $('#courses-checklist').append('<br><br>');
+            $('#courses-list').toggleClass('hidden', false);
           } else {
-            $('#courses-checklist').html("<h4>No Courses Found</h4>");
-          }
-          $('#courses-checklist').append('<br><br>');
-          $('#courses-list').toggleClass('hidden', false);
+            $('#no-courses-found').toggleClass('hidden', false);
+          }   
         });
       };
     });
@@ -1041,16 +1042,24 @@ $('document').ready(function() {
           if (count < courses.length) {
             copyCourse(count);
           } else {
-            location.href = "#close";
-            location.href = "/dashboard";
+            $('#message-courses-copy').toggleClass('green', true).toggleClass('hidden', false).text('Course(s) copied successfully!');
+            setTimeout(function() {
+              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
+              location.href = "#close";
+              location.href = "/dashboard";
+            }, 1000); 
           }
         });
       }
       if (courses.length > 0) {
         copyCourse(0);
       } else {
-        location.href = "#close";
-        location.href = "/dashboard";
+        $('#message-courses-copy').toggleClass('red', true).toggleClass('hidden', false).text('No courses copied.');
+        setTimeout(function() {
+          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
+          location.href = "#close";
+          location.href = "/dashboard";
+        }, 1000); 
       }
     });
   };

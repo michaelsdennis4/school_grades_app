@@ -292,10 +292,12 @@ MongoClient.connect(mongoUri, function(error, db) {
     if ((req.session.user_id) && (req.session.user_id != null)) {
       var term;
       if (req.query.term) {
-        term = req.query.term;
+        term = req.query.term; 
       } else {
         term = req.session.current_term;
       };
+      console.log('the term is '+term);
+      console.log(req.query);
       db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) { 
         var courses = [];
         if ((!error) && (results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
@@ -519,10 +521,12 @@ MongoClient.connect(mongoUri, function(error, db) {
             if (!error) {
               //add course to students
               if (req.body.copy_students === 'true') {
-                new_course.student_ids.forEach(function(student) {
-                  db.collection('students').update({_id: ObjectId(student.id)}, {$push: {course_ids: {id: new_course._id}}}, function(error, result) {
+                if (new_course.student_ids) {
+                  new_course.student_ids.forEach(function(student) {
+                    db.collection('students').update({_id: ObjectId(student.id)}, {$push: {course_ids: {id: new_course._id}}}, function(error, result) {
+                    });
                   });
-                });
+                }
               };
               //update current course to one just created
               req.session.current_course_id = new_course._id;

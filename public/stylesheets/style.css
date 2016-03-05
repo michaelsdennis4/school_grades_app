@@ -485,6 +485,11 @@ input.grade {
 	margin-bottom: 10px;
 }
 
+.modal-form-select {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 .checkbox-list {
 	width: 70%;
 	max-height: 300px;
@@ -497,6 +502,11 @@ input.grade {
 	font-family: 'Courier';
 	text-align: left;
 	overflow-y: scroll;
+}
+
+.courses-list{
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .modal-item {
