@@ -424,7 +424,17 @@ $('document').ready(function() {
       $(event.target.parentNode).toggleClass('highlighted', false);
     });
 
+    var updateInputState = function() {
+      if (($('#current-course-id').val() != "") && ($('#current-assessment-id').val() != "") && ($('#current-student-id').val() != "")) {
+        $("#score").prop('disabled', false);
+        $('#score').focus().select();
+      } else {
+        $("#score").prop('disabled', true);
+      }
+    }
+
     $('.data-table').on('click', function(event) {
+      updateInputState();
       if (!event.target.parentNode.classList.contains('table-header')) {
         var row = event.target.parentNode;
         var table_body = row.parentNode;
@@ -464,6 +474,7 @@ $('document').ready(function() {
                 $('#points').val(""); 
                 $('#weight').val(""); 
                 $(row).toggleClass('selected', true); 
+                updateInputState();
               });
             });  
           });
@@ -482,7 +493,7 @@ $('document').ready(function() {
             students_table.loadStudentsFromServer();
             setTimeout(function() {
               $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
-              $('#score').focus().select();
+              updateInputState();
             }, 100);
           });
         } else if (table.getAttribute('id') === 'students') {
@@ -495,8 +506,8 @@ $('document').ready(function() {
             $('#current-student-id').val(cells[0].textContent);
             $('#current-student').val(cells[2].textContent +', '+cells[3].textContent);
             $('#score').val(cells[5].textContent);
-            $('#score').focus().select();
             $(row).toggleClass('selected', true);
+            updateInputState();
           });
         }
       }
@@ -518,7 +529,7 @@ $('document').ready(function() {
           var cancelRed = function() {
             $('#score').toggleClass('red', false);
             $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
-            $('#score').focus().select();
+            updateInputState();
           };
           if ((score === null) || (score === 'X') || (!isNaN(score))) {
             var data = {score: score, points: points, weight: weight};
@@ -531,6 +542,7 @@ $('document').ready(function() {
             }).done(function(result) {
               if ((result) && (result.status === false)) {
                 $('#score').toggleClass('red', true); 
+                console.log('post grade error -- server response false');
                 $('#score').focus().select();
                 setTimeout(cancelRed, 100);  
               } else {
@@ -551,19 +563,21 @@ $('document').ready(function() {
                     };
                   };
                   $('#score').toggleClass('green', false);
-                  $('#score').focus().select();
+                  updateInputState();
                 };
                 setTimeout(select_next_row, 100);
               };
             });
           } else {
             $('#score').toggleClass('red', true);
-            $('#score').focus().select(); 
+            console.log('post grade error -- bad score entered');
+            updateInputState(); 
             setTimeout(cancelRed, 100);
           };
         } else {
           $('#score').toggleClass('red', true); 
-          $('#score').focus().select();
+          console.log('post grade error -- could not find course/assessment/student');
+          updateInputState();
           setTimeout(cancelRed, 100);
         };
       };
@@ -798,29 +812,6 @@ $('document').ready(function() {
 
     console.log('courses js loaded!');
 
-    $('#term-select').on('click', function(event) {
-      event.preventDefault();
-      var term = event.target.value;
-      if (term.length > 0) {
-        data = {term: term};
-        $.ajax({
-          url: '/courses',
-          method: 'get',
-          data: data,
-          dataType: 'json'
-        }).done(function(results) {
-          if ((results) && (results.courses.length > 0)) {
-            var courses = results.courses;
-            courses.forEach(function(course) { 
-              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="'+course._id+'" value="copy"/> '+course.title+' (Section: '+course.section+')</label><br>');
-            });
-            $('#courses-checklist').append('<br><br>');
-            $('#courses-list').toggleClass('hidden', false);
-          }
-        });
-      };
-    });
-
     $('#course-post').on('click', function(event) {
       event.preventDefault();
       var $form = $(event.target.parentNode);
@@ -969,6 +960,9 @@ $('document').ready(function() {
 
     $('#course-copy').on('click', function(event) {
       event.preventDefault();  
+      $('#term-select').html("");
+      $('#courses-checklist').html("");
+      $('#courses-list').toggleClass('hidden', true);
       //get terms
       $.ajax({
         url: '/courses/terms',
@@ -988,6 +982,34 @@ $('document').ready(function() {
           location.href = '/sorry';
         }
       });
+    });
+
+    $('#term-select').on('change', function(event) {
+      event.preventDefault();
+      $('#courses-checklist').html("");
+      $('#courses-list').toggleClass('hidden', true);
+      var term = event.target.value;
+      console.log(term);
+      if (term.length > 0) {
+        data = JSON.stringify({term: term});
+        $.ajax({
+          url: '/courses',
+          method: 'get',
+          data: data,
+          dataType: 'json'
+        }).done(function(results) {
+          if ((results) && (results.courses.length > 0)) {
+            var courses = results.courses;
+            courses.forEach(function(course) { 
+              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="'+course._id+'" value="copy"/> '+course.title+' (Section: '+course.section+')</label><br>');
+            });
+          } else {
+            $('#courses-checklist').html("<h4>No Courses Found</h4>");
+          }
+          $('#courses-checklist').append('<br><br>');
+          $('#courses-list').toggleClass('hidden', false);
+        });
+      };
     });
 
     $('#courses-copy').on('click', function(req, res) {
