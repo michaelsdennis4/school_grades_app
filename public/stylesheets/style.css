@@ -121,14 +121,7 @@ input[type=submit] {
 	min-width: 80px;
 	padding: 5px;
 	height: 30px;
-	background-color: rgba(255,255,255,0.9);
-	color: black;
 	font-weight: 700;
-	margin-bottom: 20px;
-	border-top: solid white 2px;
-	border-left: solid white 2px;
-	border-right: solid gray 2px;
-	border-bottom: solid gray 2px;
 }
 
 select {
@@ -530,6 +523,9 @@ input.dash-button {
 }
 
 input[type="submit"].modal-submit {
+	background-color: white;
+	color: black;
+	border: solid rgba(0,0,0,0.4) 1px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
@@ -537,6 +533,7 @@ input[type="submit"].modal-submit {
 input[type="submit"].modal-delete {
 	background-color: rgba(255,50,50,1);
 	color: white;
+	border: solid rgba(0,0,0,0.4) 1px;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }

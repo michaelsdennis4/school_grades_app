@@ -85,7 +85,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":8,"_process":160}],2:[function(require,module,exports){
+},{"./emptyFunction":8,"_process":165}],2:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -425,7 +425,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":2,"./createArrayFromMixed":6,"./getMarkupWrap":12,"./invariant":16,"_process":160}],8:[function(require,module,exports){
+},{"./ExecutionEnvironment":2,"./createArrayFromMixed":6,"./getMarkupWrap":12,"./invariant":16,"_process":165}],8:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -487,7 +487,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":160}],10:[function(require,module,exports){
+},{"_process":165}],10:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -646,7 +646,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":2,"./invariant":16,"_process":160}],13:[function(require,module,exports){
+},{"./ExecutionEnvironment":2,"./invariant":16,"_process":165}],13:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -811,7 +811,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":160}],17:[function(require,module,exports){
+},{"_process":165}],17:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -912,7 +912,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":16,"_process":160}],20:[function(require,module,exports){
+},{"./invariant":16,"_process":165}],20:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -1197,7 +1197,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":16,"_process":160}],27:[function(require,module,exports){
+},{"./invariant":16,"_process":165}],27:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1257,7 +1257,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":8,"_process":160}],28:[function(require,module,exports){
+},{"./emptyFunction":8,"_process":165}],28:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11235,7 +11235,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":32,"./ReactPerf":100,"./dangerousStyleValue":134,"_process":160,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/camelizeStyleName":4,"fbjs/lib/hyphenateStyleName":15,"fbjs/lib/memoizeStringOnly":22,"fbjs/lib/warning":27}],34:[function(require,module,exports){
+},{"./CSSProperty":32,"./ReactPerf":100,"./dangerousStyleValue":134,"_process":165,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/camelizeStyleName":4,"fbjs/lib/hyphenateStyleName":15,"fbjs/lib/memoizeStringOnly":22,"fbjs/lib/warning":27}],34:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -11331,7 +11331,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./PooledClass":52,"_process":160,"fbjs/lib/invariant":16}],35:[function(require,module,exports){
+},{"./Object.assign":51,"./PooledClass":52,"_process":165,"fbjs/lib/invariant":16}],35:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -11809,7 +11809,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":40,"./ReactMultiChildUpdateTypes":96,"./ReactPerf":100,"./setInnerHTML":153,"./setTextContent":154,"_process":160,"fbjs/lib/invariant":16}],38:[function(require,module,exports){
+},{"./Danger":40,"./ReactMultiChildUpdateTypes":96,"./ReactPerf":100,"./setInnerHTML":153,"./setTextContent":154,"_process":165,"fbjs/lib/invariant":16}],38:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12046,7 +12046,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],39:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],39:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12274,7 +12274,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":38,"./ReactPerf":100,"./quoteAttributeValueForBrowser":151,"_process":160,"fbjs/lib/warning":27}],40:[function(require,module,exports){
+},{"./DOMProperty":38,"./ReactPerf":100,"./quoteAttributeValueForBrowser":151,"_process":165,"fbjs/lib/warning":27}],40:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12422,7 +12422,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/createNodesFromMarkup":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/getMarkupWrap":12,"fbjs/lib/invariant":16}],41:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/createNodesFromMarkup":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/getMarkupWrap":12,"fbjs/lib/invariant":16}],41:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -12950,7 +12950,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":45,"./EventPluginUtils":46,"./ReactErrorUtils":85,"./accumulateInto":131,"./forEachAccumulated":139,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],45:[function(require,module,exports){
+},{"./EventPluginRegistry":45,"./EventPluginUtils":46,"./ReactErrorUtils":85,"./accumulateInto":131,"./forEachAccumulated":139,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],45:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13173,7 +13173,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],46:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],46:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13378,7 +13378,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":43,"./ReactErrorUtils":85,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],47:[function(require,module,exports){
+},{"./EventConstants":43,"./ReactErrorUtils":85,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],47:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13516,7 +13516,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":43,"./EventPluginHub":44,"./accumulateInto":131,"./forEachAccumulated":139,"_process":160,"fbjs/lib/warning":27}],48:[function(require,module,exports){
+},{"./EventConstants":43,"./EventPluginHub":44,"./accumulateInto":131,"./forEachAccumulated":139,"_process":165,"fbjs/lib/warning":27}],48:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13980,7 +13980,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":102,"./ReactPropTypes":103,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],51:[function(require,module,exports){
+},{"./ReactPropTypeLocations":102,"./ReactPropTypes":103,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],51:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -14150,7 +14150,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],53:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],53:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14229,7 +14229,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":91,"./findDOMNode":137,"_process":160,"fbjs/lib/warning":27}],55:[function(require,module,exports){
+},{"./ReactInstanceMap":91,"./findDOMNode":137,"_process":165,"fbjs/lib/warning":27}],55:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14679,7 +14679,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":105,"./instantiateReactComponent":147,"./shouldUpdateReactComponent":155,"./traverseAllChildren":156,"_process":160,"fbjs/lib/warning":27}],57:[function(require,module,exports){
+},{"./ReactReconciler":105,"./instantiateReactComponent":147,"./shouldUpdateReactComponent":155,"./traverseAllChildren":156,"_process":165,"fbjs/lib/warning":27}],57:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15636,7 +15636,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactComponent":59,"./ReactElement":81,"./ReactNoopUpdateQueue":98,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"_process":160,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/keyMirror":19,"fbjs/lib/keyOf":20,"fbjs/lib/warning":27}],59:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactComponent":59,"./ReactElement":81,"./ReactNoopUpdateQueue":98,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"_process":165,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/keyMirror":19,"fbjs/lib/keyOf":20,"fbjs/lib/warning":27}],59:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15761,7 +15761,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":98,"./canDefineProperty":133,"_process":160,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],60:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":98,"./canDefineProperty":133,"_process":165,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],60:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15857,7 +15857,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],62:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],62:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16554,7 +16554,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactComponentEnvironment":61,"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceMap":91,"./ReactPerf":100,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"./ReactReconciler":105,"./ReactUpdateQueue":111,"./shouldUpdateReactComponent":155,"_process":160,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],63:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactComponentEnvironment":61,"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceMap":91,"./ReactPerf":100,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"./ReactReconciler":105,"./ReactUpdateQueue":111,"./shouldUpdateReactComponent":155,"_process":165,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],63:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16680,7 +16680,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":63,"./ReactDOMTextComponent":75,"./ReactDefaultInjection":78,"./ReactInstanceHandles":90,"./ReactMount":94,"./ReactPerf":100,"./ReactReconciler":105,"./ReactUpdates":112,"./ReactVersion":113,"./findDOMNode":137,"./renderSubtreeIntoContainer":152,"_process":160,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/warning":27}],65:[function(require,module,exports){
+},{"./ReactCurrentOwner":63,"./ReactDOMTextComponent":75,"./ReactDefaultInjection":78,"./ReactInstanceHandles":90,"./ReactMount":94,"./ReactPerf":100,"./ReactReconciler":105,"./ReactUpdates":112,"./ReactVersion":113,"./findDOMNode":137,"./renderSubtreeIntoContainer":152,"_process":165,"fbjs/lib/ExecutionEnvironment":2,"fbjs/lib/warning":27}],65:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17696,7 +17696,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":30,"./CSSPropertyOperations":33,"./DOMProperty":38,"./DOMPropertyOperations":39,"./EventConstants":43,"./Object.assign":51,"./ReactBrowserEventEmitter":55,"./ReactComponentBrowserEnvironment":60,"./ReactDOMButton":65,"./ReactDOMInput":70,"./ReactDOMOption":71,"./ReactDOMSelect":72,"./ReactDOMTextarea":76,"./ReactMount":94,"./ReactMultiChild":95,"./ReactPerf":100,"./ReactUpdateQueue":111,"./canDefineProperty":133,"./escapeTextContentForBrowser":136,"./isEventSupported":148,"./setInnerHTML":153,"./setTextContent":154,"./validateDOMNesting":157,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/keyOf":20,"fbjs/lib/shallowEqual":25,"fbjs/lib/warning":27}],67:[function(require,module,exports){
+},{"./AutoFocusUtils":30,"./CSSPropertyOperations":33,"./DOMProperty":38,"./DOMPropertyOperations":39,"./EventConstants":43,"./Object.assign":51,"./ReactBrowserEventEmitter":55,"./ReactComponentBrowserEnvironment":60,"./ReactDOMButton":65,"./ReactDOMInput":70,"./ReactDOMOption":71,"./ReactDOMSelect":72,"./ReactDOMTextarea":76,"./ReactMount":94,"./ReactMultiChild":95,"./ReactPerf":100,"./ReactUpdateQueue":111,"./canDefineProperty":133,"./escapeTextContentForBrowser":136,"./isEventSupported":148,"./setInnerHTML":153,"./setTextContent":154,"./validateDOMNesting":157,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/keyOf":20,"fbjs/lib/shallowEqual":25,"fbjs/lib/warning":27}],67:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17876,7 +17876,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":81,"./ReactElementValidator":82,"_process":160,"fbjs/lib/mapObject":21}],68:[function(require,module,exports){
+},{"./ReactElement":81,"./ReactElementValidator":82,"_process":165,"fbjs/lib/mapObject":21}],68:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17992,7 +17992,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":37,"./DOMPropertyOperations":39,"./ReactMount":94,"./ReactPerf":100,"_process":160,"fbjs/lib/invariant":16}],70:[function(require,module,exports){
+},{"./DOMChildrenOperations":37,"./DOMPropertyOperations":39,"./ReactMount":94,"./ReactPerf":100,"_process":165,"fbjs/lib/invariant":16}],70:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18148,7 +18148,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactDOMIDOperations":69,"./ReactMount":94,"./ReactUpdates":112,"_process":160,"fbjs/lib/invariant":16}],71:[function(require,module,exports){
+},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactDOMIDOperations":69,"./ReactMount":94,"./ReactUpdates":112,"_process":165,"fbjs/lib/invariant":16}],71:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18237,7 +18237,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactChildren":57,"./ReactDOMSelect":72,"_process":160,"fbjs/lib/warning":27}],72:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactChildren":57,"./ReactDOMSelect":72,"_process":165,"fbjs/lib/warning":27}],72:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18428,7 +18428,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactMount":94,"./ReactUpdates":112,"_process":160,"fbjs/lib/warning":27}],73:[function(require,module,exports){
+},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactMount":94,"./ReactUpdates":112,"_process":165,"fbjs/lib/warning":27}],73:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18798,7 +18798,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":37,"./DOMPropertyOperations":39,"./Object.assign":51,"./ReactComponentBrowserEnvironment":60,"./ReactMount":94,"./escapeTextContentForBrowser":136,"./setTextContent":154,"./validateDOMNesting":157,"_process":160}],76:[function(require,module,exports){
+},{"./DOMChildrenOperations":37,"./DOMPropertyOperations":39,"./Object.assign":51,"./ReactComponentBrowserEnvironment":60,"./ReactMount":94,"./escapeTextContentForBrowser":136,"./setTextContent":154,"./validateDOMNesting":157,"_process":165}],76:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18914,7 +18914,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactDOMIDOperations":69,"./ReactUpdates":112,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],77:[function(require,module,exports){
+},{"./LinkedValueUtils":50,"./Object.assign":51,"./ReactDOMIDOperations":69,"./ReactUpdates":112,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],77:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19082,7 +19082,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":31,"./ChangeEventPlugin":35,"./ClientReactRootIndex":36,"./DefaultEventPluginOrder":41,"./EnterLeaveEventPlugin":42,"./HTMLDOMPropertyConfig":49,"./ReactBrowserComponentMixin":54,"./ReactComponentBrowserEnvironment":60,"./ReactDOMComponent":66,"./ReactDOMTextComponent":75,"./ReactDefaultBatchingStrategy":77,"./ReactDefaultPerf":79,"./ReactEventListener":87,"./ReactInjection":88,"./ReactInstanceHandles":90,"./ReactMount":94,"./ReactReconcileTransaction":104,"./SVGDOMPropertyConfig":114,"./SelectEventPlugin":115,"./ServerReactRootIndex":116,"./SimpleEventPlugin":117,"_process":160,"fbjs/lib/ExecutionEnvironment":2}],79:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":31,"./ChangeEventPlugin":35,"./ClientReactRootIndex":36,"./DefaultEventPluginOrder":41,"./EnterLeaveEventPlugin":42,"./HTMLDOMPropertyConfig":49,"./ReactBrowserComponentMixin":54,"./ReactComponentBrowserEnvironment":60,"./ReactDOMComponent":66,"./ReactDOMTextComponent":75,"./ReactDefaultBatchingStrategy":77,"./ReactDefaultPerf":79,"./ReactEventListener":87,"./ReactInjection":88,"./ReactInstanceHandles":90,"./ReactMount":94,"./ReactReconcileTransaction":104,"./SVGDOMPropertyConfig":114,"./SelectEventPlugin":115,"./ServerReactRootIndex":116,"./SimpleEventPlugin":117,"_process":165,"fbjs/lib/ExecutionEnvironment":2}],79:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19770,7 +19770,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactCurrentOwner":63,"./canDefineProperty":133,"_process":160}],82:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactCurrentOwner":63,"./canDefineProperty":133,"_process":165}],82:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -20054,7 +20054,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"./canDefineProperty":133,"./getIteratorFn":144,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],83:[function(require,module,exports){
+},{"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactPropTypeLocationNames":101,"./ReactPropTypeLocations":102,"./canDefineProperty":133,"./getIteratorFn":144,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],83:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -20235,7 +20235,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":160}],86:[function(require,module,exports){
+},{"_process":165}],86:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20955,7 +20955,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":107,"_process":160,"fbjs/lib/invariant":16}],91:[function(require,module,exports){
+},{"./ReactRootIndex":107,"_process":165,"fbjs/lib/invariant":16}],91:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21080,7 +21080,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactChildren":57,"./ReactClass":58,"./ReactComponent":59,"./ReactDOMFactories":67,"./ReactElement":81,"./ReactElementValidator":82,"./ReactPropTypes":103,"./ReactVersion":113,"./onlyChild":150,"_process":160}],93:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactChildren":57,"./ReactClass":58,"./ReactComponent":59,"./ReactDOMFactories":67,"./ReactElement":81,"./ReactElementValidator":82,"./ReactPropTypes":103,"./ReactVersion":113,"./onlyChild":150,"_process":165}],93:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21979,7 +21979,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":38,"./Object.assign":51,"./ReactBrowserEventEmitter":55,"./ReactCurrentOwner":63,"./ReactDOMFeatureFlags":68,"./ReactElement":81,"./ReactEmptyComponentRegistry":84,"./ReactInstanceHandles":90,"./ReactInstanceMap":91,"./ReactMarkupChecksum":93,"./ReactPerf":100,"./ReactReconciler":105,"./ReactUpdateQueue":111,"./ReactUpdates":112,"./instantiateReactComponent":147,"./setInnerHTML":153,"./shouldUpdateReactComponent":155,"./validateDOMNesting":157,"_process":160,"fbjs/lib/containsNode":5,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],95:[function(require,module,exports){
+},{"./DOMProperty":38,"./Object.assign":51,"./ReactBrowserEventEmitter":55,"./ReactCurrentOwner":63,"./ReactDOMFeatureFlags":68,"./ReactElement":81,"./ReactEmptyComponentRegistry":84,"./ReactInstanceHandles":90,"./ReactInstanceMap":91,"./ReactMarkupChecksum":93,"./ReactPerf":100,"./ReactReconciler":105,"./ReactUpdateQueue":111,"./ReactUpdates":112,"./instantiateReactComponent":147,"./setInnerHTML":153,"./shouldUpdateReactComponent":155,"./validateDOMNesting":157,"_process":165,"fbjs/lib/containsNode":5,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22478,7 +22478,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":56,"./ReactComponentEnvironment":61,"./ReactCurrentOwner":63,"./ReactMultiChildUpdateTypes":96,"./ReactReconciler":105,"./flattenChildren":138,"_process":160}],96:[function(require,module,exports){
+},{"./ReactChildReconciler":56,"./ReactComponentEnvironment":61,"./ReactCurrentOwner":63,"./ReactMultiChildUpdateTypes":96,"./ReactReconciler":105,"./flattenChildren":138,"_process":165}],96:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22608,7 +22608,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"_process":160,"fbjs/lib/invariant":16}],98:[function(require,module,exports){
+},{"./Object.assign":51,"_process":165,"fbjs/lib/invariant":16}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -22729,7 +22729,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/warning":27}],99:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/warning":27}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22823,7 +22823,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],100:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],100:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22922,7 +22922,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":160}],101:[function(require,module,exports){
+},{"_process":165}],101:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22949,7 +22949,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":160}],102:[function(require,module,exports){
+},{"_process":165}],102:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23808,7 +23808,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":77,"./ReactElement":81,"./ReactInstanceHandles":90,"./ReactMarkupChecksum":93,"./ReactServerBatchingStrategy":108,"./ReactServerRenderingTransaction":110,"./ReactUpdates":112,"./instantiateReactComponent":147,"_process":160,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16}],110:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":77,"./ReactElement":81,"./ReactInstanceHandles":90,"./ReactMarkupChecksum":93,"./ReactServerBatchingStrategy":108,"./ReactServerRenderingTransaction":110,"./ReactUpdates":112,"./instantiateReactComponent":147,"_process":165,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":16}],110:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -24156,7 +24156,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceMap":91,"./ReactUpdates":112,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],112:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceMap":91,"./ReactUpdates":112,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],112:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24382,7 +24382,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":34,"./Object.assign":51,"./PooledClass":52,"./ReactPerf":100,"./ReactReconciler":105,"./Transaction":129,"_process":160,"fbjs/lib/invariant":16}],113:[function(require,module,exports){
+},{"./CallbackQueue":34,"./Object.assign":51,"./PooledClass":52,"./ReactPerf":100,"./ReactReconciler":105,"./Transaction":129,"_process":165,"fbjs/lib/invariant":16}],113:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25347,7 +25347,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":43,"./EventPropagators":47,"./ReactMount":94,"./SyntheticClipboardEvent":118,"./SyntheticDragEvent":120,"./SyntheticEvent":121,"./SyntheticFocusEvent":122,"./SyntheticKeyboardEvent":124,"./SyntheticMouseEvent":125,"./SyntheticTouchEvent":126,"./SyntheticUIEvent":127,"./SyntheticWheelEvent":128,"./getEventCharCode":140,"_process":160,"fbjs/lib/EventListener":1,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":16,"fbjs/lib/keyOf":20}],118:[function(require,module,exports){
+},{"./EventConstants":43,"./EventPropagators":47,"./ReactMount":94,"./SyntheticClipboardEvent":118,"./SyntheticDragEvent":120,"./SyntheticEvent":121,"./SyntheticFocusEvent":122,"./SyntheticKeyboardEvent":124,"./SyntheticMouseEvent":125,"./SyntheticTouchEvent":126,"./SyntheticUIEvent":127,"./SyntheticWheelEvent":128,"./getEventCharCode":140,"_process":165,"fbjs/lib/EventListener":1,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":16,"fbjs/lib/keyOf":20}],118:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25643,7 +25643,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./PooledClass":52,"_process":160,"fbjs/lib/emptyFunction":8,"fbjs/lib/warning":27}],122:[function(require,module,exports){
+},{"./Object.assign":51,"./PooledClass":52,"_process":165,"fbjs/lib/emptyFunction":8,"fbjs/lib/warning":27}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26278,7 +26278,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],130:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],130:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26368,7 +26368,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":160,"fbjs/lib/invariant":16}],132:[function(require,module,exports){
+},{"_process":165,"fbjs/lib/invariant":16}],132:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26438,7 +26438,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":160}],134:[function(require,module,exports){
+},{"_process":165}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26545,7 +26545,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"_process":160,"fbjs/lib/warning":27}],136:[function(require,module,exports){
+},{"./Object.assign":51,"_process":165,"fbjs/lib/warning":27}],136:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26636,7 +26636,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":63,"./ReactInstanceMap":91,"./ReactMount":94,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],138:[function(require,module,exports){
+},{"./ReactCurrentOwner":63,"./ReactInstanceMap":91,"./ReactMount":94,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],138:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26687,7 +26687,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":156,"_process":160,"fbjs/lib/warning":27}],139:[function(require,module,exports){
+},{"./traverseAllChildren":156,"_process":165,"fbjs/lib/warning":27}],139:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27211,7 +27211,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"./ReactCompositeComponent":62,"./ReactEmptyComponent":83,"./ReactNativeComponent":97,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],148:[function(require,module,exports){
+},{"./Object.assign":51,"./ReactCompositeComponent":62,"./ReactEmptyComponent":83,"./ReactNativeComponent":97,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27349,7 +27349,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":81,"_process":160,"fbjs/lib/invariant":16}],151:[function(require,module,exports){
+},{"./ReactElement":81,"_process":165,"fbjs/lib/invariant":16}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27761,7 +27761,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceHandles":90,"./getIteratorFn":144,"_process":160,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],157:[function(require,module,exports){
+},{"./ReactCurrentOwner":63,"./ReactElement":81,"./ReactInstanceHandles":90,"./getIteratorFn":144,"_process":165,"fbjs/lib/invariant":16,"fbjs/lib/warning":27}],157:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -28127,7 +28127,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":51,"_process":160,"fbjs/lib/emptyFunction":8,"fbjs/lib/warning":27}],158:[function(require,module,exports){
+},{"./Object.assign":51,"_process":165,"fbjs/lib/emptyFunction":8,"fbjs/lib/warning":27}],158:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
@@ -28135,18 +28135,483 @@ module.exports = require('./lib/React');
 },{"./lib/React":53}],159:[function(require,module,exports){
 var $ = require('jQuery');
 
+$('document').ready(function () {
+
+  if (document.body.classList.contains('assessments')) {
+
+    console.log('assessments.js loaded!');
+
+    $('#assessment-new').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#assessments-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        $.ajax({
+          url: '/assessments/new',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course) {
+            var course = result.course;
+            course.title = course.title.replace(/\w\S*/g, function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+            $('#new-assessment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
+            if (course.auto === "false") {
+              $('#new-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="1"/><br>');
+            } else {
+              $('#new-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
+            }
+            location.href = "#newAssessmentModal";
+          } else if (result.message == "sorry") {
+            location.href = "/sorry";
+          }
+        });
+      }
+    });
+
+    $('#assessment-post').on('click', function (event) {
+      event.preventDefault();
+      $('#assessment-post').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-assessment-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/assessments',
+        method: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function () {
+            $('#assessment-post').prop('disabled', false);
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000);
+        } else if (result.message === 'sorry') {
+          $('#assessment-post').prop('disabled', false);
+          location.href = "/sorry";
+        } else {
+          $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
+          $('#assessment-post').prop('disabled', false);
+        };
+      });
+    });
+
+    $('#assessment-edit').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#assessments-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        $.ajax({
+          url: '/assessments/edit',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course) {
+            var course = result.course;
+            var assessment = result.assessment;
+            var position = result.position;
+            course.title = course.title.replace(/\w\S*/g, function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+            $('#edit-assessment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
+            $('#edit-assessment-name').val(assessment.name);
+            $('#edit-assessment-type').val(assessment.type);
+            $('#edit-assessment-points').val(assessment.points);
+            if (course.auto === "false") {
+              $('#edit-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="' + assessment.weight + '"/><br>');
+            } else {
+              $('#edit-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
+            }
+            $('#edit-assessment-position').val(position);
+            location.href = "#editAssessmentModal";
+          } else if (result.message == "sorry") {
+            location.href = "/sorry";
+          }
+        });
+      }
+    });
+
+    $('#assessment-patch').on('click', function (event) {
+      event.preventDefault();
+      $('#assessment-patch').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-assessment-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/assessments',
+        method: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function () {
+            $('#assessment-patch').prop('disabled', false);
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000);
+        } else if (result.message === 'sorry') {
+          $('#assessment-patch').prop('disabled', false);
+          location.href = "/sorry";
+        } else {
+          $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
+          $('#assessment-patch').prop('disabled', false);
+        };
+      });
+    });
+
+    $('#assessment-delete').on('click', function (event) {
+      event.preventDefault();
+      $('#assessment-delete').prop('disabled', true);
+      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === true) {
+        $('#message-assessment-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/assessments',
+          method: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            location.href = "#close";
+            location.href = "/dashboard";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
+          } else {
+            $('#message-assessment-delete').text(result.message).toggleClass('hidden', false);
+          };
+          $('#assessment-delete').prop('disabled', false);
+        });
+      } else {
+        $('#assessment-delete').prop('disabled', false);
+      }
+    });
+  };
+});
+
+},{"jQuery":28}],160:[function(require,module,exports){
+var $ = require('jQuery');
+
+$('document').ready(function () {
+
+  if (document.body.classList.contains('courses')) {
+
+    console.log('courses.js loaded!');
+
+    $('#course-post').on('click', function (event) {
+      event.preventDefault();
+      $('#course-post').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-course-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/courses',
+        method: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function () {
+            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
+            $('#course-post').prop('disabled', false);
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000);
+        } else if (result.message === 'sorry') {
+          $('#course-post').prop('disabled', false);
+          location.href = "/sorry";
+        } else {
+          $('#message-course-post').text(result.message).toggleClass('hidden', false);
+          $('#course-post').prop('disabled', false);
+        };
+      });
+    });
+
+    $('#course-edit').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#courses-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        //get current course
+        $.ajax({
+          url: '/courses/edit',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course) {
+            var course = result.course;
+            //update modal window with current course data
+            $('#edit-course-title').val(course.title);
+            $('#edit-course-section').val(course.section);
+            $('#edit-course-year').val(course.term.split('.')[0]);
+            $('#edit-course-term').val(course.term.split('.')[1]);
+            $("#edit-course-auto").val(course.auto);
+            location.href = "#editCourseModal";
+          } else if (result.message == 'sorry') {
+            location.href = '/sorry';
+          }
+        });
+      }
+    });
+
+    $('#course-patch').on('click', function (event) {
+      event.preventDefault();
+      $('#course-patch').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-course-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/courses',
+        method: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
+          setTimeout(function () {
+            $('#course-patch').prop('disabled', false);
+            location.href = "#close";
+            location.href = "/dashboard";
+          }, 1000);
+        } else if (result.message === 'sorry') {
+          $('#course-patch').prop('disabled', false);
+          location.href = "/sorry";
+        } else {
+          $('#message-course-patch').text(result.message).toggleClass('hidden', false);
+          $('#course-patch').prop('disabled', false);
+        };
+      });
+    });
+
+    $('#enroll').on('click', function (event) {
+      event.preventDefault();
+      if ($('#current-course-id').val().length == 0) {
+        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
+        setTimeout(function () {
+          $('#courses-warning').text('').toggleClass('invisible', true);
+        }, 2000);
+      } else {
+        $.ajax({
+          url: '/enrollment',
+          method: 'get',
+          contentType: 'application/json'
+        }).done(function (result) {
+          if (result.course && result.students) {
+            var course = result.course,
+                students = result.students,
+                enrolled;
+            course.title = course.title.replace(/\w\S*/g, function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+            $('#enrollment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
+            $('#students-checklist').html('');
+            students.forEach(function (student) {
+              enrolled = false;
+              if (student.course_ids && student.course_ids.length > 0) {
+                student.course_ids.forEach(function (course_id) {
+                  if (course_id.id.toString() == course._id.toString()) {
+                    enrolled = true;
+                  }
+                });
+              };
+              if (enrolled === true) {
+                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled" checked/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
+              } else {
+                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled"/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
+              }
+            });
+            $('.student-enroll').on('click', studentEnroll);
+            location.href = "#enrollmentModal";
+          } else if (result.message == 'sorry') {
+            location.href = '/sorry';
+          }
+        });
+      }
+    });
+
+    var studentEnroll = function (event) {
+      var student_id = event.target.getAttribute('id');
+      var enrolled = event.target.checked;
+      if (enrolled === true) {
+        $.ajax({
+          url: '/students/' + student_id + '/enroll',
+          method: 'patch',
+          dataType: 'json'
+        });
+      } else {
+        $.ajax({
+          url: '/students/' + student_id + '/unenroll',
+          method: 'patch',
+          dataType: 'json'
+        });
+      }
+    };
+
+    $('#enrollment-update').on('click', function (event) {
+      event.preventDefault();
+      location.href = "#close";
+      location.href = "/dashboard";
+    });
+
+    $('#course-copy').on('click', function (event) {
+      event.preventDefault();
+      $('#term-select').html("");
+      $('#courses-checklist').html("");
+      $('#no-courses-found').toggleClass('hidden', true);
+      $('#courses-list').toggleClass('hidden', true);
+      //get terms
+      $.ajax({
+        url: '/courses/terms',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function (result) {
+        if (result.terms) {
+          var terms = result.terms;
+          //update modal window select with terms
+          terms.forEach(function (term) {
+            if (term.toString() != result.current_term.toString()) {
+              $('#term-select').append('<option value="' + term + '">' + term.split('.')[0] + ' Term ' + term.split('.')[1] + '</option>');
+            }
+          });
+          location.href = "#copyCoursesModal";
+        } else if (result.message == 'sorry') {
+          location.href = '/sorry';
+        }
+      });
+    });
+
+    $('#term-select').on('change', function (event) {
+      $('#courses-checklist').html("");
+      $('#no-courses-found').toggleClass('hidden', true);
+      $('#courses-list').toggleClass('hidden', true);
+      var term = event.target.value;
+      if (term.length > 0) {
+        data = { term: term };
+        $.ajax({
+          url: '/courses',
+          method: 'get',
+          data: data,
+          dataType: 'json',
+          contentType: 'application/json'
+        }).done(function (results) {
+          if (results && results.courses.length > 0) {
+            var courses = results.courses;
+            courses.forEach(function (course) {
+              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/> ' + course.title + ' (Section: ' + course.section + ')</label><br>');
+            });
+            $('#courses-checklist').append('<br><br>');
+            $('#courses-list').toggleClass('hidden', false);
+          } else {
+            $('#no-courses-found').toggleClass('hidden', false);
+          }
+        });
+      };
+    });
+
+    $('#courses-copy').on('click', function (req, res) {
+      event.preventDefault();
+      $('#courses-copy').prop('disabled', true);
+      var $this = $(this.parentNode);
+      var courses = [];
+      var checklist = document.querySelector('#courses-checklist');
+      var items = checklist.querySelectorAll('.copy-course');
+      var data;
+      if (document.querySelector('#copy-students').checked === true) {
+        data = { copy_students: 'true' };
+      } else {
+        data = { copy_students: 'false' };
+      };
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].checked === true) {
+          courses.push(items[i].getAttribute('id'));
+        };
+      };
+      var copyCourse = function (count) {
+        $.ajax({
+          url: '/courses/' + courses[count] + '/copy',
+          method: 'post',
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          dataType: 'json'
+        }).done(function (result) {
+          count++;
+          if (count < courses.length) {
+            copyCourse(count);
+          } else {
+            $('#message-courses-copy').toggleClass('green', true).toggleClass('hidden', false).text('Course(s) copied successfully!');
+            setTimeout(function () {
+              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
+              $('#courses-copy').prop('disabled', false);
+              location.href = "#close";
+              location.href = "/dashboard";
+            }, 1000);
+          }
+        });
+      };
+      if (courses.length > 0) {
+        copyCourse(0);
+      } else {
+        $('#message-courses-copy').toggleClass('red', true).toggleClass('hidden', false).text('No courses copied.');
+        setTimeout(function () {
+          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
+          $('#courses-copy').prop('disabled', false);
+          location.href = "#close";
+          location.href = "/dashboard";
+        }, 1000);
+      }
+    });
+  };
+
+  $('#course-delete').on('click', function (event) {
+    event.preventDefault();
+    $('#course-delete').prop('disabled', true);
+    if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === true) {
+      $('#message-course-delete').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/courses',
+        method: 'delete',
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          location.href = "#close";
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          $('#message-course-delete').text(result.message).toggleClass('hidden', false);
+        }
+        $('#course-delete').prop('disabled', false);
+      });
+    } else {
+      $('#course-delete').prop('disabled', false);
+    }
+  });
+});
+
+},{"jQuery":28}],161:[function(require,module,exports){
+var $ = require('jQuery');
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 
 $('document').ready(function () {
 
-  console.log('main.js loaded!');
-
   if (document.body.classList.contains('dashboard')) {
 
-    console.log('dashboard js loaded!');
+    console.log('dashboard.js loaded!');
 
-    //DASHBOARD REACT------------------------------------------------
+    // DASHBOARD REACT --------------------------------------------------------
 
     var CoursesTable = React.createClass({
       loadCoursesFromServer: function () {
@@ -28974,15 +29439,20 @@ $('document').ready(function () {
 
     resetCourse();
   };
+});
 
-  //INDEX EVENT LISTENERS-------------------------------------------------
+},{"jQuery":28,"react":158,"react-dom":29}],162:[function(require,module,exports){
+var $ = require('jQuery');
+
+$('document').ready(function () {
 
   if (document.body.classList.contains('index')) {
 
-    console.log('index js loaded!');
+    console.log('index.js loaded!');
 
     $('#login').on('click', function (event) {
       event.preventDefault();
+      $('#login').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
       $('#message-login').text('').toggleClass('hidden', true);
@@ -28997,564 +29467,20 @@ $('document').ready(function () {
         } else {
           $('#message-login').text(result.message).toggleClass('hidden', false);
         };
+        $('#login').prop('disabled', false);
       });
     });
   };
+});
 
-  //USERS EVENT LISTENERS-------------------------------------------------
+},{"jQuery":28}],163:[function(require,module,exports){
+var $ = require('jQuery');
 
-  if (document.body.classList.contains('users')) {
-
-    console.log('users js loaded!');
-
-    $('#user-post').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-user-post').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/users',
-        method: 'post',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          location.href = "/dashboard";
-        } else {
-          $('#message-user-post').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#user-edit').on('click', function (event) {
-      event.preventDefault();
-      $.ajax({
-        url: '/users/edit',
-        method: 'get',
-        contentType: 'application/json'
-      }).done(function (result) {
-        if (result.user) {
-          var user = result.user;
-          $('#edit-user-firstname').val(user.first_name);
-          $('#edit-user-lastname').val(user.last_name);
-          $('#edit-user-email').val(user.email);
-          location.href = "#editProfileModal";
-        } else if (result.message == 'sorry') {
-          location.href = "/sorry";
-        }
-      });
-    });
-
-    $('#user-patch').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-user-patch').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/users',
-        method: 'patch',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          location.href = "#close";
-          location.href = "/dashboard";
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-user-patch').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#user-delete').on('click', function (event) {
-      event.preventDefault();
-      if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === true) {
-        $('#message-user-delete').text('').toggleClass('hidden', true);
-        $.ajax({
-          url: '/users',
-          method: 'delete',
-          dataType: 'json'
-        }).done(function (result) {
-          if (result.message === 'ok') {
-            location.href = "/logout";
-          } else if (result.message === 'sorry') {
-            location.href = "/sorry";
-          } else {
-            $('#message-user-delete').text(result.message).toggleClass('hidden', false);
-          };
-        });
-      };
-    });
-
-    $('#user-password').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      console.log('form serialized');
-      $('#message-user-password').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/users/password',
-        type: 'patch',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          $('#message-user-password').text("Password updated successfully").toggleClass('green', true).toggleClass('hidden', false);
-          setTimeout(function () {
-            location.href = "#close";
-            location.href = "/dashboard";
-            $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
-          }, 1000);
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#edit-old-password').val("");
-          $('#edit-new-password').val("");
-          $('#edit-confirm-new-password').val("");
-          $('#message-user-password').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-  };
-
-  //COURSES EVENT LISTENERS---------------------------------------------
-
-  if (document.body.classList.contains('courses')) {
-
-    console.log('courses js loaded!');
-
-    $('#course-post').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-course-post').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/courses',
-        method: 'post',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
-          setTimeout(function () {
-            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
-            location.href = "#close";
-            location.href = "/dashboard";
-          }, 1000);
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-course-post').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#course-edit').on('click', function (event) {
-      event.preventDefault();
-      if ($('#current-course-id').val().length == 0) {
-        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function () {
-          $('#courses-warning').text('').toggleClass('invisible', true);
-        }, 2000);
-      } else {
-        //get current course
-        $.ajax({
-          url: '/courses/edit',
-          method: 'get',
-          contentType: 'application/json'
-        }).done(function (result) {
-          if (result.course) {
-            var course = result.course;
-            //update modal window with current course data
-            $('#edit-course-title').val(course.title);
-            $('#edit-course-section').val(course.section);
-            $('#edit-course-year').val(course.term.split('.')[0]);
-            $('#edit-course-term').val(course.term.split('.')[1]);
-            $("#edit-course-auto").val(course.auto);
-            location.href = "#editCourseModal";
-          } else if (result.message == 'sorry') {
-            location.href = '/sorry';
-          }
-        });
-      }
-    });
-
-    $('#course-patch').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-course-patch').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/courses',
-        method: 'patch',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
-          setTimeout(function () {
-            location.href = "#close";
-            location.href = "/dashboard";
-          }, 1000);
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-course-patch').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#enroll').on('click', function (event) {
-      event.preventDefault();
-      if ($('#current-course-id').val().length == 0) {
-        $('#courses-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function () {
-          $('#courses-warning').text('').toggleClass('invisible', true);
-        }, 2000);
-      } else {
-        $.ajax({
-          url: '/enrollment',
-          method: 'get',
-          contentType: 'application/json'
-        }).done(function (result) {
-          if (result.course && result.students) {
-            var course = result.course,
-                students = result.students,
-                enrolled;
-            course.title = course.title.replace(/\w\S*/g, function (txt) {
-              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            });
-            $('#enrollment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
-            $('#students-checklist').html('');
-            students.forEach(function (student) {
-              enrolled = false;
-              if (student.course_ids && student.course_ids.length > 0) {
-                student.course_ids.forEach(function (course_id) {
-                  if (course_id.id.toString() == course._id.toString()) {
-                    enrolled = true;
-                  }
-                });
-              };
-              if (enrolled === true) {
-                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled" checked/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
-              } else {
-                $('#students-checklist').append('<label class="modal-item"><input type="checkbox" class="student-enroll" id="' + student._id + '" value="enrolled"/> ' + student.last_name + ', ' + student.first_name + ' (' + student.grad_year + ')</label><br>');
-              }
-            });
-            $('.student-enroll').on('click', studentEnroll);
-            location.href = "#enrollmentModal";
-          } else if (result.message == 'sorry') {
-            location.href = '/sorry';
-          }
-        });
-      }
-    });
-
-    var studentEnroll = function (event) {
-      var student_id = event.target.getAttribute('id');
-      var enrolled = event.target.checked;
-      if (enrolled === true) {
-        $.ajax({
-          url: '/students/' + student_id + '/enroll',
-          method: 'patch',
-          dataType: 'json'
-        });
-      } else {
-        $.ajax({
-          url: '/students/' + student_id + '/unenroll',
-          method: 'patch',
-          dataType: 'json'
-        });
-      }
-    };
-
-    $('#enrollment-update').on('click', function (event) {
-      event.preventDefault();
-      location.href = "#close";
-      location.href = "/dashboard";
-    });
-
-    $('#course-copy').on('click', function (event) {
-      event.preventDefault();
-      $('#term-select').html("");
-      $('#courses-checklist').html("");
-      $('#no-courses-found').toggleClass('hidden', true);
-      $('#courses-list').toggleClass('hidden', true);
-      //get terms
-      $.ajax({
-        url: '/courses/terms',
-        method: 'get',
-        contentType: 'application/json'
-      }).done(function (result) {
-        if (result.terms) {
-          var terms = result.terms;
-          //update modal window select with terms
-          terms.forEach(function (term) {
-            if (term.toString() != result.current_term.toString()) {
-              $('#term-select').append('<option value="' + term + '">' + term.split('.')[0] + ' Term ' + term.split('.')[1] + '</option>');
-            }
-          });
-          location.href = "#copyCoursesModal";
-        } else if (result.message == 'sorry') {
-          location.href = '/sorry';
-        }
-      });
-    });
-
-    $('#term-select').on('change', function (event) {
-      $('#courses-checklist').html("");
-      $('#no-courses-found').toggleClass('hidden', true);
-      $('#courses-list').toggleClass('hidden', true);
-      var term = event.target.value;
-      if (term.length > 0) {
-        data = { term: term };
-        $.ajax({
-          url: '/courses',
-          method: 'get',
-          data: data,
-          dataType: 'json',
-          contentType: 'application/json'
-        }).done(function (results) {
-          if (results && results.courses.length > 0) {
-            var courses = results.courses;
-            courses.forEach(function (course) {
-              $('#courses-checklist').append('<label><input type="checkbox" class="copy-course" id="' + course._id + '" value="copy"/> ' + course.title + ' (Section: ' + course.section + ')</label><br>');
-            });
-            $('#courses-checklist').append('<br><br>');
-            $('#courses-list').toggleClass('hidden', false);
-          } else {
-            $('#no-courses-found').toggleClass('hidden', false);
-          }
-        });
-      };
-    });
-
-    $('#courses-copy').on('click', function (req, res) {
-      event.preventDefault();
-      var $this = $(this.parentNode);
-      var courses = [];
-      var checklist = document.querySelector('#courses-checklist');
-      var items = checklist.querySelectorAll('.copy-course');
-      var data;
-      if (document.querySelector('#copy-students').checked === true) {
-        data = { copy_students: 'true' };
-      } else {
-        data = { copy_students: 'false' };
-      };
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].checked === true) {
-          courses.push(items[i].getAttribute('id'));
-        };
-      };
-      var copyCourse = function (count) {
-        $.ajax({
-          url: '/courses/' + courses[count] + '/copy',
-          method: 'post',
-          data: JSON.stringify(data),
-          contentType: "application/json",
-          dataType: 'json'
-        }).done(function (result) {
-          count++;
-          if (count < courses.length) {
-            copyCourse(count);
-          } else {
-            $('#message-courses-copy').toggleClass('green', true).toggleClass('hidden', false).text('Course(s) copied successfully!');
-            setTimeout(function () {
-              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
-              location.href = "#close";
-              location.href = "/dashboard";
-            }, 1000);
-          }
-        });
-      };
-      if (courses.length > 0) {
-        copyCourse(0);
-      } else {
-        $('#message-courses-copy').toggleClass('red', true).toggleClass('hidden', false).text('No courses copied.');
-        setTimeout(function () {
-          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
-          location.href = "#close";
-          location.href = "/dashboard";
-        }, 1000);
-      }
-    });
-  };
-
-  $('#course-delete').on('click', function (event) {
-    event.preventDefault();
-    if (window.confirm("Are you sure you want to delete this course?\r\nThis will also delete all assessments and scores for this course.\r\nIt cannot be undone.") === true) {
-      $('#message-course-delete').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/courses',
-        method: 'delete',
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          location.href = "#close";
-          location.href = "/dashboard";
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-course-delete').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    };
-  });
-
-  //ASSESSMENTS EVENT LISTENERS-------------------------------------------
-
-  if (document.body.classList.contains('assessments')) {
-
-    console.log('assessments js loaded!');
-
-    $('#assessment-new').on('click', function (event) {
-      event.preventDefault();
-      if ($('#current-course-id').val().length == 0) {
-        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function () {
-          $('#assessments-warning').text('').toggleClass('invisible', true);
-        }, 2000);
-      } else {
-        $.ajax({
-          url: '/assessments/new',
-          method: 'get',
-          contentType: 'application/json'
-        }).done(function (result) {
-          if (result.course) {
-            var course = result.course;
-            course.title = course.title.replace(/\w\S*/g, function (txt) {
-              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            });
-            $('#new-assessment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
-            if (course.auto === "false") {
-              $('#new-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="1"/><br>');
-            } else {
-              $('#new-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
-            }
-            location.href = "#newAssessmentModal";
-          } else if (result.message == "sorry") {
-            location.href = "/sorry";
-          }
-        });
-      }
-    });
-
-    $('#assessment-post').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-assessment-post').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/assessments',
-        method: 'post',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
-          setTimeout(function () {
-            location.href = "#close";
-            location.href = "/dashboard";
-          }, 1000);
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#assessment-edit').on('click', function (event) {
-      event.preventDefault();
-      if ($('#current-course-id').val().length == 0) {
-        $('#assessments-warning').text('You must select a course first.').toggleClass('invisible', false);
-        setTimeout(function () {
-          $('#assessments-warning').text('').toggleClass('invisible', true);
-        }, 2000);
-      } else {
-        $.ajax({
-          url: '/assessments/edit',
-          method: 'get',
-          contentType: 'application/json'
-        }).done(function (result) {
-          if (result.course) {
-            var course = result.course;
-            var assessment = result.assessment;
-            var position = result.position;
-            course.title = course.title.replace(/\w\S*/g, function (txt) {
-              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            });
-            $('#edit-assessment-course').html('<h5 class="modal-data">Course Title: ' + course.title + '</h5><h5 class="modal-data">Section: ' + course.section + '</h5>');
-            $('#edit-assessment-name').val(assessment.name);
-            $('#edit-assessment-type').val(assessment.type);
-            $('#edit-assessment-points').val(assessment.points);
-            if (course.auto === "false") {
-              $('#edit-auto-weighting').html('<label for="weight">Weight:</label><br><input type="number" name="weight" min="1" value="' + assessment.weight + '"/><br>');
-            } else {
-              $('#edit-auto-weighting').html('<h4>Auto Weighting is ON for this course.</h4>');
-            }
-            $('#edit-assessment-position').val(position);
-            location.href = "#editAssessmentModal";
-          } else if (result.message == "sorry") {
-            location.href = "/sorry";
-          }
-        });
-      }
-    });
-
-    $('#assessment-patch').on('click', function (event) {
-      event.preventDefault();
-      var $form = $(event.target.parentNode);
-      var data = $form.serializeArray();
-      $('#message-assessment-patch').text('').toggleClass('hidden', true);
-      $.ajax({
-        url: '/assessments',
-        method: 'patch',
-        data: data,
-        dataType: 'json'
-      }).done(function (result) {
-        if (result.message === 'ok') {
-          $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
-          setTimeout(function () {
-            location.href = "#close";
-            location.href = "/dashboard";
-          }, 1000);
-        } else if (result.message === 'sorry') {
-          location.href = "/sorry";
-        } else {
-          $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
-        };
-      });
-    });
-
-    $('#assessment-delete').on('click', function (event) {
-      event.preventDefault();
-      if (window.confirm("Are you sure you want to delete this assessment?\r\nThis will also delete all scores for this assessment.\r\nIt cannot be undone.") === true) {
-        $('#message-assessment-delete').text('').toggleClass('hidden', true);
-        $.ajax({
-          url: '/assessments',
-          method: 'delete',
-          dataType: 'json'
-        }).done(function (result) {
-          if (result.message === 'ok') {
-            location.href = "#close";
-            location.href = "/dashboard";
-          } else if (result.message === 'sorry') {
-            location.href = "/sorry";
-          } else {
-            $('#message-assessment-delete').text(result.message).toggleClass('hidden', false);
-          };
-        });
-      };
-    });
-  };
-
-  //STUDENTS EVENT LISTENERS---------------------------------------------
+$('document').ready(function () {
 
   if (document.body.classList.contains('students')) {
 
-    console.log('students js loaded!');
+    console.log('students.js loaded!');
 
     $('#student-new').on('click', function (event) {
       event.preventDefault();
@@ -29580,6 +29506,7 @@ $('document').ready(function () {
 
     $('#student-post').on('click', function (event) {
       event.preventDefault();
+      $('#student-post').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
       $('#message-student-post').text('').toggleClass('hidden', true);
@@ -29599,30 +29526,37 @@ $('document').ready(function () {
             $('#new-student-identification').val("");
             $('#new-student-advisor').val("");
             $('#new-student-gradyear').val("");
+            $('#student-post').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
+          $('#student-post').prop('disabled', false);
           location.href = "/sorry";
         } else {
           $('#message-student-post').text(result.message).toggleClass('hidden', false);
+          $('#student-post').prop('disabled', false);
         };
       });
     });
 
     $('#new-students-done').on('click', function (event) {
       event.preventDefault();
+      $('#new-students-done').prop('disabled', true);
       //check to see if the form has data
       if ($('#edit-student-firstname').val().length > 0 || $('#new-student-lastname').val().length > 0 || $('#new-student-email').val().length > 0 || $('#new-student-identification').val().length > 0 || $('#new-student-advisor').val().length > 0 || $('#new-student-gradyear').val().length > 0) {
         if (window.confirm('There is unsubmitted data in the form.\r\nDo you want to add the student?') === true) {
           $('#student-post').click();
           setTimeout(function () {
+            $('#new-students-done').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
           }, 1000);
         } else {
+          $('#new-students-done').prop('disabled', false);
           location.href = "#close";
           location.href = "/dashboard";
         }
       } else {
+        $('#new-students-done').prop('disabled', false);
         location.href = "#close";
         location.href = "/dashboard";
       }
@@ -29655,6 +29589,7 @@ $('document').ready(function () {
 
     $('#student-patch').on('click', function (event) {
       event.preventDefault();
+      $('#student-patch').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
       $('#message-student-patch').text('').toggleClass('hidden', true);
@@ -29667,19 +29602,23 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
+            $('#student-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
           }, 1000);
         } else if (result.message === 'sorry') {
+          $('#student-patch').prop('disabled', false);
           location.href = "/sorry";
         } else {
           $('#message-student-patch').text(result.message).toggleClass('hidden', false);
+          $('#student-patch').prop('disabled', false);
         };
       });
     });
 
     $('#student-delete').on('click', function (event) {
       event.preventDefault();
+      $('#student-delete').prop('disabled', true);
       if (window.confirm("Are you sure you want to delete this student?\r\nThis will also delete all scores for this student.\r\nIt cannot be undone.") === true) {
         $('#message-student-delete').text('').toggleClass('hidden', true);
         $.ajax({
@@ -29695,13 +29634,143 @@ $('document').ready(function () {
           } else {
             $('#message-student-delete').text(result.message).toggleClass('hidden', false);
           };
+          $('#student-delete').prop('disabled', false);
         });
       };
     });
   };
 });
 
-},{"jQuery":28,"react":158,"react-dom":29}],160:[function(require,module,exports){
+},{"jQuery":28}],164:[function(require,module,exports){
+var $ = require('jQuery');
+
+$('document').ready(function () {
+
+  if (document.body.classList.contains('users')) {
+
+    console.log('users.js loaded!');
+
+    $('#user-post').on('click', function (event) {
+      event.preventDefault();
+      $('#user-post').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-post').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users',
+        method: 'post',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          location.href = "/dashboard";
+        } else {
+          $('#message-user-post').text(result.message).toggleClass('hidden', false);
+        };
+        $('#user-post').prop('disabled', false);
+      });
+    });
+
+    $('#user-edit').on('click', function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/users/edit',
+        method: 'get',
+        contentType: 'application/json'
+      }).done(function (result) {
+        if (result.user) {
+          var user = result.user;
+          $('#edit-user-firstname').val(user.first_name);
+          $('#edit-user-lastname').val(user.last_name);
+          $('#edit-user-email').val(user.email);
+          location.href = "#editProfileModal";
+        } else if (result.message == 'sorry') {
+          location.href = "/sorry";
+        }
+      });
+    });
+
+    $('#user-patch').on('click', function (event) {
+      event.preventDefault();
+      $('#user-patch').prop('disabled', true);
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      $('#message-user-patch').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users',
+        method: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          location.href = "#close";
+          location.href = "/dashboard";
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          $('#message-user-patch').text(result.message).toggleClass('hidden', false);
+        }
+        $('#user-patch').prop('disabled', false);
+      });
+    });
+
+    $('#user-delete').on('click', function (event) {
+      event.preventDefault();
+      $('#user-delete').prop('disabled', true);
+      if (window.confirm("Are you sure you want to delete your profile?\r\nThis will also delete all your data and log you out.\r\nIt cannot be undone.") === true) {
+        $('#message-user-delete').text('').toggleClass('hidden', true);
+        $.ajax({
+          url: '/users',
+          method: 'delete',
+          dataType: 'json'
+        }).done(function (result) {
+          if (result.message === 'ok') {
+            location.href = "/logout";
+          } else if (result.message === 'sorry') {
+            location.href = "/sorry";
+          } else {
+            $('#message-user-delete').text(result.message).toggleClass('hidden', false);
+          }
+          $('#user-delete').prop('disabled', false);
+        });
+      } else {
+        $('#user-delete').prop('disabled', false);
+      }
+    });
+
+    $('#user-password').on('click', function (event) {
+      event.preventDefault();
+      var $form = $(event.target.parentNode);
+      var data = $form.serializeArray();
+      console.log('form serialized');
+      $('#message-user-password').text('').toggleClass('hidden', true);
+      $.ajax({
+        url: '/users/password',
+        type: 'patch',
+        data: data,
+        dataType: 'json'
+      }).done(function (result) {
+        if (result.message === 'ok') {
+          $('#message-user-password').text("Password updated successfully").toggleClass('green', true).toggleClass('hidden', false);
+          setTimeout(function () {
+            location.href = "#close";
+            location.href = "/dashboard";
+            $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
+          }, 1000);
+        } else if (result.message === 'sorry') {
+          location.href = "/sorry";
+        } else {
+          $('#edit-old-password').val("");
+          $('#edit-new-password').val("");
+          $('#edit-confirm-new-password').val("");
+          $('#message-user-password').text(result.message).toggleClass('hidden', false);
+        };
+      });
+    });
+  };
+});
+
+},{"jQuery":28}],165:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -29794,4 +29863,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[159]);
+},{}]},{},[159,160,161,162,163,164]);
