@@ -51,8 +51,8 @@ $('document').ready(function() {
             $('#student-post').prop('disabled', false);
           }, 1000);    
         } else if (result.message === 'sorry') {
-          $('#student-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#student-post').prop('disabled', false);
         } else {
           $('#message-student-post').text(result.message).toggleClass('hidden', false);
           $('#student-post').prop('disabled', false);
@@ -73,19 +73,19 @@ $('document').ready(function() {
         if (window.confirm('There is unsubmitted data in the form.\r\nDo you want to add the student?') === true) {
           $('#student-post').click();
           setTimeout(function() {
-            $('#new-students-done').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#new-students-done').prop('disabled', false);
           }, 1000);
         } else {
-          $('#new-students-done').prop('disabled', false);
           location.href = "#close";
           location.href = "/dashboard";
+          $('#new-students-done').prop('disabled', false);
         }
       } else {
-        $('#new-students-done').prop('disabled', false);
         location.href = "#close";
         location.href = "/dashboard";
+        $('#new-students-done').prop('disabled', false);
       }
     });
 
@@ -129,13 +129,13 @@ $('document').ready(function() {
         if (result.message === 'ok') {
           $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            $('#student-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#student-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#student-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#student-patch').prop('disabled', false);
         } else {
           $('#message-student-patch').text(result.message).toggleClass('hidden', false);
           $('#student-patch').prop('disabled', false);

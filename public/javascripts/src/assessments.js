@@ -49,13 +49,13 @@ $('document').ready(function() {
         if (result.message === 'ok') {
           $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            $('#assessment-post').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#assessment-post').prop('disabled', false);
           }, 1000); 
         } else if (result.message === 'sorry') {
-          $('#assessment-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#assessment-post').prop('disabled', false);
         } else {
           $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
           $('#assessment-post').prop('disabled', false);
@@ -112,13 +112,13 @@ $('document').ready(function() {
         if (result.message === 'ok') {
           $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            $('#assessment-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#assessment-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#assessment-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#assessment-patch').prop('disabled', false);
         } else {
           $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
           $('#assessment-patch').prop('disabled', false);

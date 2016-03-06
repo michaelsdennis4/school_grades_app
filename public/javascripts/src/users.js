@@ -98,6 +98,7 @@ $('document').ready(function() {
 
     $('#user-password').on('click', function(event) {
       event.preventDefault();
+      $('#user-password').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
       console.log('form serialized');
@@ -114,16 +115,19 @@ $('document').ready(function() {
             location.href = "#close";
             location.href = "/dashboard";
             $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
+            $('#user-password').prop('disabled', false);
           }, 1000);    
         } 
         else if (result.message === 'sorry') {
           location.href = "/sorry";
+          $('#user-password').prop('disabled', false);
         } 
         else {
           $('#edit-old-password').val("");
           $('#edit-new-password').val("");
           $('#edit-confirm-new-password').val("");
           $('#message-user-password').text(result.message).toggleClass('hidden', false);
+          $('#user-password').prop('disabled', false);
         };
       });
     });

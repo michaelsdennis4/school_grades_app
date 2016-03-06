@@ -28188,13 +28188,13 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-assessment-post').text("Assessment created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            $('#assessment-post').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#assessment-post').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#assessment-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#assessment-post').prop('disabled', false);
         } else {
           $('#message-assessment-post').text(result.message).toggleClass('hidden', false);
           $('#assessment-post').prop('disabled', false);
@@ -28255,13 +28255,13 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-assessment-patch').text("Assessment updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            $('#assessment-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#assessment-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#assessment-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#assessment-patch').prop('disabled', false);
         } else {
           $('#message-assessment-patch').text(result.message).toggleClass('hidden', false);
           $('#assessment-patch').prop('disabled', false);
@@ -28320,14 +28320,14 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
-            $('#course-post').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
+            $('#course-post').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#course-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#course-post').prop('disabled', false);
         } else {
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
           $('#course-post').prop('disabled', false);
@@ -28380,13 +28380,13 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            $('#course-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#course-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#course-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#course-patch').prop('disabled', false);
         } else {
           $('#message-course-patch').text(result.message).toggleClass('hidden', false);
           $('#course-patch').prop('disabled', false);
@@ -28551,10 +28551,10 @@ $('document').ready(function () {
           } else {
             $('#message-courses-copy').toggleClass('green', true).toggleClass('hidden', false).text('Course(s) copied successfully!');
             setTimeout(function () {
-              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
-              $('#courses-copy').prop('disabled', false);
               location.href = "#close";
               location.href = "/dashboard";
+              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
+              $('#courses-copy').prop('disabled', false);
             }, 1000);
           }
         });
@@ -28564,10 +28564,10 @@ $('document').ready(function () {
       } else {
         $('#message-courses-copy').toggleClass('red', true).toggleClass('hidden', false).text('No courses copied.');
         setTimeout(function () {
-          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
-          $('#courses-copy').prop('disabled', false);
           location.href = "#close";
           location.href = "/dashboard";
+          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
+          $('#courses-copy').prop('disabled', false);
         }, 1000);
       }
     });
@@ -29529,8 +29529,8 @@ $('document').ready(function () {
             $('#student-post').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#student-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#student-post').prop('disabled', false);
         } else {
           $('#message-student-post').text(result.message).toggleClass('hidden', false);
           $('#student-post').prop('disabled', false);
@@ -29546,19 +29546,19 @@ $('document').ready(function () {
         if (window.confirm('There is unsubmitted data in the form.\r\nDo you want to add the student?') === true) {
           $('#student-post').click();
           setTimeout(function () {
-            $('#new-students-done').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#new-students-done').prop('disabled', false);
           }, 1000);
         } else {
-          $('#new-students-done').prop('disabled', false);
           location.href = "#close";
           location.href = "/dashboard";
+          $('#new-students-done').prop('disabled', false);
         }
       } else {
-        $('#new-students-done').prop('disabled', false);
         location.href = "#close";
         location.href = "/dashboard";
+        $('#new-students-done').prop('disabled', false);
       }
     });
 
@@ -29602,13 +29602,13 @@ $('document').ready(function () {
         if (result.message === 'ok') {
           $('#message-student-patch').text("Student updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function () {
-            $('#student-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#student-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#student-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#student-patch').prop('disabled', false);
         } else {
           $('#message-student-patch').text(result.message).toggleClass('hidden', false);
           $('#student-patch').prop('disabled', false);
@@ -29740,6 +29740,7 @@ $('document').ready(function () {
 
     $('#user-password').on('click', function (event) {
       event.preventDefault();
+      $('#user-password').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
       console.log('form serialized');
@@ -29756,14 +29757,17 @@ $('document').ready(function () {
             location.href = "#close";
             location.href = "/dashboard";
             $('#message-user-password').text("").toggleClass('green', false).toggleClass('hidden', true);
+            $('#user-password').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
           location.href = "/sorry";
+          $('#user-password').prop('disabled', false);
         } else {
           $('#edit-old-password').val("");
           $('#edit-new-password').val("");
           $('#edit-confirm-new-password').val("");
           $('#message-user-password').text(result.message).toggleClass('hidden', false);
+          $('#user-password').prop('disabled', false);
         };
       });
     });

@@ -21,14 +21,14 @@ $('document').ready(function() {
         if (result.message === 'ok') {
           $('#message-course-post').text("Course created!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
-            $('#course-post').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#message-course-post').text("").toggleClass('hidden', true).toggleClass('green', false);
+            $('#course-post').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#course-post').prop('disabled', false);
           location.href = "/sorry";
+          $('#course-post').prop('disabled', false);
         } else {
           $('#message-course-post').text(result.message).toggleClass('hidden', false);
           $('#course-post').prop('disabled', false);
@@ -79,13 +79,13 @@ $('document').ready(function() {
         if (result.message === 'ok') {
           $('#message-course-patch').text("Course updated!").toggleClass('hidden', false).toggleClass('green', true);
           setTimeout(function() {
-            $('#course-patch').prop('disabled', false);
             location.href = "#close";
             location.href = "/dashboard";
+            $('#course-patch').prop('disabled', false);
           }, 1000);
         } else if (result.message === 'sorry') {
-          $('#course-patch').prop('disabled', false);
           location.href = "/sorry";
+          $('#course-patch').prop('disabled', false);
         } else {
           $('#message-course-patch').text(result.message).toggleClass('hidden', false);
           $('#course-patch').prop('disabled', false);
@@ -247,10 +247,10 @@ $('document').ready(function() {
           } else {
             $('#message-courses-copy').toggleClass('green', true).toggleClass('hidden', false).text('Course(s) copied successfully!');
             setTimeout(function() {
-              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
-              $('#courses-copy').prop('disabled', false);
               location.href = "#close";
               location.href = "/dashboard";
+              $('#message-courses-copy').toggleClass('green', false).toggleClass('hidden', true).text('');
+              $('#courses-copy').prop('disabled', false);
             }, 1000); 
           }
         });
@@ -260,10 +260,10 @@ $('document').ready(function() {
       } else {
         $('#message-courses-copy').toggleClass('red', true).toggleClass('hidden', false).text('No courses copied.');
         setTimeout(function() {
-          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
-          $('#courses-copy').prop('disabled', false);
           location.href = "#close";
           location.href = "/dashboard";
+          $('#message-courses-copy').toggleClass('red', false).toggleClass('hidden', false).text('');
+          $('#courses-copy').prop('disabled', false);
         }, 1000); 
       }
     });
