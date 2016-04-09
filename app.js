@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+var connect        = require('connect');
 var methodOverride = require('method-override');
 app.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
@@ -35,9 +36,12 @@ app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 app.use(session({secret: 'enifohqeni'}));  
 app.use(express.static('public'));
+app.set('view engine', 'ejs');
+
 
 var session;
 
