@@ -4,8 +4,6 @@ $('document').ready(function() {
 
   if (document.body.classList.contains('index')) {
 
-    console.log('index.js loaded!');
-
     $('#login').on('click', function(event) {
       event.preventDefault();
       $('#login').prop('disabled', true);

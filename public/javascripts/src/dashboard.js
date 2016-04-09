@@ -7,8 +7,6 @@ $('document').ready(function() {
 
   if (document.body.classList.contains('dashboard')) {
 
-    console.log('dashboard.js loaded!');
-
 // DASHBOARD REACT --------------------------------------------------------
 
     var CoursesTable = React.createClass({

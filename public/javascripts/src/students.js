@@ -4,8 +4,6 @@ $('document').ready(function() {
 
   if (document.body.classList.contains('students')) {
 
-    console.log('students.js loaded!');
-
     $('#student-new').on('click', function(event){
       event.preventDefault();
       $.ajax({

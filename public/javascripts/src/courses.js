@@ -4,8 +4,6 @@ $('document').ready(function() {
   
   if (document.body.classList.contains('courses')) {
 
-    console.log('courses.js loaded!');
-
     $('#course-post').on('click', function(event) {
       event.preventDefault();
       $('#course-post').prop('disabled', true);

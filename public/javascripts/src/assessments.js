@@ -4,8 +4,6 @@ $('document').ready(function() {
 
   if (document.body.classList.contains('assessments')) {
 
-    console.log('assessments.js loaded!');
-
     $('#assessment-new').on('click', function(event) {
       event.preventDefault();
       if ($('#current-course-id').val().length == 0) { 

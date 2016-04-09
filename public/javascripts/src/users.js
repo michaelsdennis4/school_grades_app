@@ -4,8 +4,6 @@ $('document').ready(function() {
 
   if (document.body.classList.contains('users')) {
 
-    console.log('users.js loaded!');
-
     $('#user-post').on('click', function(event) {
       event.preventDefault();
       $('#user-post').prop('disabled', true);
@@ -101,7 +99,6 @@ $('document').ready(function() {
       $('#user-password').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
-      console.log('form serialized');
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',

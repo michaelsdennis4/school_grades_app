@@ -28139,8 +28139,6 @@ $('document').ready(function () {
 
   if (document.body.classList.contains('assessments')) {
 
-    console.log('assessments.js loaded!');
-
     $('#assessment-new').on('click', function (event) {
       event.preventDefault();
       if ($('#current-course-id').val().length == 0) {
@@ -28302,8 +28300,6 @@ var $ = require('jQuery');
 $('document').ready(function () {
 
   if (document.body.classList.contains('courses')) {
-
-    console.log('courses.js loaded!');
 
     $('#course-post').on('click', function (event) {
       event.preventDefault();
@@ -28608,8 +28604,6 @@ var ReactDOM = require('react-dom');
 $('document').ready(function () {
 
   if (document.body.classList.contains('dashboard')) {
-
-    console.log('dashboard.js loaded!');
 
     // DASHBOARD REACT --------------------------------------------------------
 
@@ -29287,6 +29281,7 @@ $('document').ready(function () {
             url: '/current_student/' + cells[0].textContent,
             method: 'post'
           }).done(function () {
+            debugger;
             //update current student in the DOM
             $('#current-student-id').val(cells[0].textContent);
             $('#current-student').val(cells[2].textContent + ', ' + cells[3].textContent);
@@ -29448,8 +29443,6 @@ $('document').ready(function () {
 
   if (document.body.classList.contains('index')) {
 
-    console.log('index.js loaded!');
-
     $('#login').on('click', function (event) {
       event.preventDefault();
       $('#login').prop('disabled', true);
@@ -29479,8 +29472,6 @@ var $ = require('jQuery');
 $('document').ready(function () {
 
   if (document.body.classList.contains('students')) {
-
-    console.log('students.js loaded!');
 
     $('#student-new').on('click', function (event) {
       event.preventDefault();
@@ -29648,8 +29639,6 @@ $('document').ready(function () {
 
   if (document.body.classList.contains('users')) {
 
-    console.log('users.js loaded!');
-
     $('#user-post').on('click', function (event) {
       event.preventDefault();
       $('#user-post').prop('disabled', true);
@@ -29743,7 +29732,6 @@ $('document').ready(function () {
       $('#user-password').prop('disabled', true);
       var $form = $(event.target.parentNode);
       var data = $form.serializeArray();
-      console.log('form serialized');
       $('#message-user-password').text('').toggleClass('hidden', true);
       $.ajax({
         url: '/users/password',
