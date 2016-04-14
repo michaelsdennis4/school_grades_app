@@ -29244,10 +29244,12 @@ $('document').ready(function () {
               $.ajax({
                 url: '/current_student/0',
                 method: 'post'
-              }).done(function () {
-                $('#current-student').val("");
-                $('#current-student-id').val("");
-                $('.data-table#students').find('.data-row').toggleClass('selected', false);
+              }).done(function (result) {
+                if (result.id === cells[0].textContent) {
+                  $('#current-student').val("");
+                  $('#current-student-id').val("");
+                  $('.data-table#students').find('.data-row').toggleClass('selected', false);
+                }
                 students_table.loadStudentsFromServer();
                 $('#score').val("");
                 $('#points').val("");
@@ -29262,13 +29264,15 @@ $('document').ready(function () {
           $.ajax({
             url: '/current_assessment/' + cells[0].textContent,
             method: 'post'
-          }).done(function () {
-            //update current assessment in the DOM
-            $('#current-assessment-id').val(cells[0].textContent);
-            $('#current-assessment').val(cells[1].textContent + ' (' + cells[2].textContent + ')');
-            $('#points').val(cells[3].textContent);
-            $('#weight').val(cells[4].textContent);
-            $(row).toggleClass('selected', true);
+          }).done(function (result) {
+            if (result.id === cells[0].textContent) {
+              //update current assessment in the DOM
+              $('#current-assessment-id').val(cells[0].textContent);
+              $('#current-assessment').val(cells[1].textContent + ' (' + cells[2].textContent + ')');
+              $('#points').val(cells[3].textContent);
+              $('#weight').val(cells[4].textContent);
+              $(row).toggleClass('selected', true);
+            }
             students_table.loadStudentsFromServer();
             setTimeout(function () {
               $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
@@ -29280,18 +29284,47 @@ $('document').ready(function () {
           $.ajax({
             url: '/current_student/' + cells[0].textContent,
             method: 'post'
-          }).done(function () {
-            debugger;
+          }).done(function (result) {
             //update current student in the DOM
-            $('#current-student-id').val(cells[0].textContent);
-            $('#current-student').val(cells[2].textContent + ', ' + cells[3].textContent);
-            $('#score').val(cells[5].textContent);
-            $(row).toggleClass('selected', true);
+            if (result.id === cells[0].textContent) {
+              $('#current-student-id').val(cells[0].textContent);
+              $('#current-student').val(cells[2].textContent + ', ' + cells[3].textContent);
+              $('#score').val(cells[5].textContent);
+              $(row).toggleClass('selected', true);
+            }
+            students_table.loadStudentsFromServer();
+            assessments_table.loadAssessmentsFromServer();
+            courses_table.loadCoursesFromServer();
+            $('#score').toggleClass('green', false);
             updateInputState();
           });
         }
       }
     });
+
+    var cancelRed = function () {
+      $('#score').toggleClass('red', false);
+      $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
+      updateInputState();
+    };
+
+    var select_next_row = function () {
+      var current_student_id = $('#current-student-id').val();
+      var data_rows = document.querySelector('table#students').rows;
+      for (var i = 1; i < data_rows.length; i++) {
+        var cell = data_rows[i].children[0];
+        if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
+          data_rows[i + 1].children[1].click();
+          break;
+        } else if (i === data_rows.length - 1) {
+          $('#score').toggleClass('green', false);
+          students_table.loadStudentsFromServer();
+          assessments_table.loadAssessmentsFromServer();
+          courses_table.loadCoursesFromServer();
+          updateInputState();
+        }
+      };
+    };
 
     $('#score').on('keydown', function (event) {
       if (event.keyCode === 13) {
@@ -29306,11 +29339,6 @@ $('document').ready(function () {
           };
           var points = parseInt($('#points').val());
           var weight = parseInt($('#weight').val());
-          var cancelRed = function () {
-            $('#score').toggleClass('red', false);
-            $('#score').val($('.data-table#students').find('.data-row.selected').find('td:nth-child(6)').text());
-            updateInputState();
-          };
           if (score === null || score === 'X' || !isNaN(score)) {
             var data = { score: score, points: points, weight: weight };
             $.ajax({
@@ -29322,41 +29350,21 @@ $('document').ready(function () {
             }).done(function (result) {
               if (result && result.status === false) {
                 $('#score').toggleClass('red', true);
-                console.log('post grade error -- server response false');
                 $('#score').focus().select();
                 setTimeout(cancelRed, 100);
               } else {
                 $('#score').toggleClass('green', true);
                 $('#score').focus().select();
-                students_table.loadStudentsFromServer();
-                assessments_table.loadAssessmentsFromServer();
-                courses_table.loadCoursesFromServer();
-                //select next row in table
-                var select_next_row = function () {
-                  var current_student_id = $('#current-student-id').val();
-                  var data_rows = document.querySelector('table#students').rows;
-                  for (var i = 1; i < data_rows.length; i++) {
-                    var cell = data_rows[i].children[0];
-                    if (cell.textContent.toString() == current_student_id.toString() && i < data_rows.length - 1) {
-                      data_rows[i + 1].children[1].click();
-                      break;
-                    };
-                  };
-                  $('#score').toggleClass('green', false);
-                  updateInputState();
-                };
                 setTimeout(select_next_row, 100);
               };
             });
           } else {
             $('#score').toggleClass('red', true);
-            console.log('post grade error -- bad score entered');
             updateInputState();
             setTimeout(cancelRed, 100);
           };
         } else {
           $('#score').toggleClass('red', true);
-          console.log('post grade error -- could not find course/assessment/student');
           updateInputState();
           setTimeout(cancelRed, 100);
         };

@@ -91,10 +91,10 @@ MongoClient.connect(mongoUri, function(error, db) {
   app.get('/logout',function(req, res) {
     req.session.user_id = null;
     req.session.username = null;
-    req.session.current_term = null;
-    req.session.current_course_id = null;
-    req.session.current_assessment_id = null;
-    req.session.current_student_id = null;
+    req.session.current_term = "";
+    req.session.current_course_id = "";
+    req.session.current_assessment_id = "";
+    req.session.current_student_id = "";
     req.session.destroy(function(err) {
       if (err) {
         console.log(err);
@@ -294,8 +294,6 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         term = req.session.current_term;
       };
-      console.log('the term is '+term);
-      console.log(req.query);
       db.collection('users').find({_id: ObjectId(req.session.user_id)}).toArray(function(error, results) { 
         var courses = [];
         if ((!error) && (results) && (results.length > 0) && (results[0].courses) && (results[0].courses.length > 0)) {
@@ -440,9 +438,8 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_course_id = req.params.id;
       };
-      //clear current assessment and student when changing current course
-      res.json({});
     };
+    res.json({id: req.session.current_course_id});
   });
 
   app.get('/enrollment', function(req, res) {
@@ -735,8 +732,8 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_assessment_id = req.params.id;
       }; 
-      res.json({});
     };
+    res.json({id: req.session.current_assessment_id});
   });
 
 
@@ -941,8 +938,8 @@ MongoClient.connect(mongoUri, function(error, db) {
       } else {
         req.session.current_student_id = req.params.id;
       }; 
-      res.json({});
     };
+    res.json({id: req.session.current_student_id});
   });
 
   app.patch('/students/:id/enroll', function(req, res) {
