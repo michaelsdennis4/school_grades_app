@@ -42,8 +42,6 @@ app.set('view engine', 'ejs');
 app.use(session({secret: 'enifohqeni'}));  
 app.use(express.static('public'));
 
-var session;
-
 console.log('connecting to MongoDB');
 MongoClient.connect(mongoUri, function(error, db) {
   if (error) throw error;
