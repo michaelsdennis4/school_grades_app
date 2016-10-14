@@ -104,7 +104,7 @@ input[type=text], input[type=password] {
 	border: solid gray 1px;
 	margin-top: 10px;
 	margin-bottom: 15px;
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 }
 
 input[type=number] {
@@ -114,7 +114,7 @@ input[type=number] {
 	margin-top: 10px;
 	margin-bottom: 15px;
 	text-align: right;
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 }
 
 input[type=submit] {
@@ -277,7 +277,7 @@ select {
 	width: 100%;
 	height: 25px;
 	color: black;
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 	background-color: rgba(0,0,0,0.05);
 	border-top: solid white 1px;
 	border-bottom: solid white 1px;
@@ -334,14 +334,13 @@ select {
 	height: 31px;
 	line-height: 31px;
 	float: left;
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 }
 
 #grade-box {
 	width: 30%;
 	height: 96px;
-	float: left;
-	margin-left: 20px;
+	float: right;
 	margin-top: 10px;
 	padding: 2px 10px;
 	border-top: solid gray 2px;
@@ -391,7 +390,7 @@ input.grade {
 	width: 100%;
 	height: 35px;
 	margin-top: 5px;
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 	font-size: 32px;	
 	font-weight: 900;
 	text-align: right;
@@ -501,7 +500,7 @@ input.dash-button {
 	border: solid gray 1px;
 	padding: 5px;
 	background-color: rgba(255,255,255,0.5);
-	font-family: 'Courier';
+	font-family: 'Courier', sans-serif;
 	text-align: left;
 	overflow-y: scroll;
 }
